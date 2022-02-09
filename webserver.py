@@ -2,6 +2,8 @@ import sys
 sys.path.insert(0, '../')
 from flask import Flask, request, jsonify
 import json
+from datetime import datetime
+import wiki as wiki
 
 app = Flask(__name__)
 
@@ -9,21 +11,37 @@ app = Flask(__name__)
 def hello():
 	return '''Hello world !'''
 
-@app.route('/hello', methods=['OPTIONS', 'GET', 'POST'])
-def hello():
-    
-    name = request.args.get("name")
+@app.route('/list', methods=['OPTIONS', 'GET', 'POST'])
+def get_list():
+   
+    str_markets = request.args.get("markets")
+    print(str_markets)
+    markets = str_markets.split(',')
 
     start = datetime.now()
-    result = "Hello " + name
-    end = datetime.now()
 
+    result_for_response = {}
+    for market in markets:
+        if market in ["cac", "cac40", "CAC", "CAC40"]:
+            result_for_response[market] = wiki.get_list_CAC().to_json()
+        elif market in ["dax", "DAX"]:
+            result_for_response[market] = wiki.get_list_DAX().to_json()
+        elif market in ["nasdaq", "nasdaq100", "NASDAQ", "NASDAQ100"]:
+            result_for_response[market] = wiki.get_list_NASDAQ100().to_json()
+        elif market in ["dji", "DJI"]:
+            result_for_response[market] = wiki.get_list_DJI().to_json()
+        elif market in ["sp500", "SP500"]:
+            result_for_response[market] = wiki.get_list_SP500().to_json()
+
+    end = datetime.now()
     elapsed_time = str(end - start)
+    print(elapsed_time)
 
     response = {
-        "result":result,
+        "result":result_for_response,
         "elapsed_time":elapsed_time
     }
+    print(response)
 
     response = jsonify(response)
     response.headers.add("Access-Control-Allow-Origin", "*")
@@ -33,4 +51,4 @@ def hello():
     return response
 
 if __name__ == "__main__":
-	app.run(debug=False, host= '0.0.0.0')
+	app.run(debug=False, host= '0.0.0.0', port=5002)
