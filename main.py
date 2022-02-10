@@ -15,7 +15,6 @@ def hello():
 def get_list():
    
     str_markets = request.args.get("markets")
-    print(str_markets)
     markets = str_markets.split(',')
 
     start = datetime.now()
@@ -35,13 +34,11 @@ def get_list():
 
     end = datetime.now()
     elapsed_time = str(end - start)
-    print(elapsed_time)
 
     response = {
         "result":result_for_response,
         "elapsed_time":elapsed_time
     }
-    print(response)
 
     response = jsonify(response)
     response.headers.add("Access-Control-Allow-Origin", "*")
