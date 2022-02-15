@@ -3,7 +3,7 @@ sys.path.insert(0, '../')
 from flask import Flask, request, jsonify
 import json
 from datetime import datetime
-import wiki as wiki
+from src import wiki
 
 app = Flask(__name__)
 
@@ -37,6 +37,7 @@ def get_list():
 
     response = {
         "result":result_for_response,
+        "status":"ok",
         "elapsed_time":elapsed_time
     }
 
