@@ -1,0 +1,31 @@
+,symbol,name,isin,sector,industry,country,exchange
+0,MMM,3M,,,Conglomerate,united state,NYSE
+1,AXP,American Express,,,Financial services,united state,NYSE
+2,AMGN,Amgen,,,Biopharmaceutical,united state,NASDAQ
+3,AAPL,Apple,,,Information technology,united state,NASDAQ
+4,BA,Boeing,,,Aerospace and defense,united state,NYSE
+5,CAT,Caterpillar,,,Construction and Mining,united state,NYSE
+6,CVX,Chevron,,,Petroleum industry,united state,NYSE
+7,CSCO,Cisco,,,Information technology,united state,NASDAQ
+8,KO,Coca-Cola,,,Soft Drink,united state,NYSE
+9,DIS,Disney,,,Broadcasting and entertainment,united state,NYSE
+10,DOW,Dow,,,Chemical industry,united state,NYSE
+11,GS,Goldman Sachs,,,Financial services,united state,NYSE
+12,HD,Home Depot,,,Home Improvement,united state,NYSE
+13,HON,Honeywell,,,Conglomerate,united state,NASDAQ
+14,IBM,IBM,,,Information technology,united state,NYSE
+15,INTC,Intel,,,Semiconductor industry,united state,NASDAQ
+16,JNJ,Johnson & Johnson,,,Pharmaceutical industry,united state,NYSE
+17,JPM,JPMorgan Chase,,,Financial services,united state,NYSE
+18,MCD,McDonald's,,,Food industry,united state,NYSE
+19,MRK,Merck,,,Pharmaceutical industry,united state,NYSE
+20,MSFT,Microsoft,,,Information technology,united state,NASDAQ
+21,NKE,Nike,,,Apparel,united state,NYSE
+22,PG,Procter & Gamble,,,Fast-moving consumer goods,united state,NYSE
+23,CRM,Salesforce,,,Information technology,united state,NYSE
+24,TRV,Travelers,,,Insurance,united state,NYSE
+25,UNH,UnitedHealth,,,Managed health care,united state,NYSE
+26,VZ,Verizon,,,Telecommunication,united state,NYSE
+27,V,Visa,,,Financial services,united state,NYSE
+28,WBA,Walgreens Boots Alliance,,,Retailing,united state,NASDAQ
+29,WMT,Walmart,,,Retailing,united state,NYSE

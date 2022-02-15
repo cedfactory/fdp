@@ -1,0 +1,41 @@
+,symbol,name,isin,sector,industry,country,exchange
+0,AI.PA,Air Liquide,,Basic Materials,Industrial Gases,France,Euronext
+1,AIR.PA,Airbus,,Industrials,Aerospace & Defense,France,Euronext
+2,ALO.PA,Alstom,,Industrials,Rail Transport,France,Euronext
+3,MT.AS,ArcelorMittal,,Basic Materials,Steel,France,Euronext
+4,CS.PA,AXA,,Financial Services,Life & Health Insurance,France,Euronext
+5,BNP.PA,BNP Paribas,,Financial Services,Diversified Banks,France,Euronext
+6,EN.PA,Bouygues,,Industrials,Construction & Engineering,France,Euronext
+7,CAP.PA,Capgemini,,Technology,IT Consulting & Other Services,France,Euronext
+8,CA.PA,Carrefour,,Consumer Defensive,Hypermarkets & Super Centers,France,Euronext
+9,ACA.PA,Crédit Agricole,,Financial Services,Regional Banks,France,Euronext
+10,BN.PA,Danone,,Consumer Defensive,Packaged Foods & Meats,France,Euronext
+11,DSY.PA,Dassault Systèmes,,Technology,Application Software,France,Euronext
+12,ENGI.PA,Engie,,Utilities,Gas Utilities,France,Euronext
+13,EL.PA,EssilorLuxottica,,Healthcare,"Apparel, Accessories & Luxury Goods",France,Euronext
+14,ERF.PA,Eurofins Scientific,,Healthcare,Biotechnologies,France,Euronext
+15,RMS.PA,Hermès,,Consumer Cyclical,"Apparel, Accessories & Luxury Goods",France,Euronext
+16,KER.PA,Kering,,Consumer Cyclical,"Apparel, Accessories & Luxury Goods",France,Euronext
+17,OR.PA,L'Oréal,,Consumer Defensive,Personal Products,France,Euronext
+18,LR.PA,Legrand,,Industrials,Electrical Components & Equipment,France,Euronext
+19,MC.PA,LVMH,,Consumer Cyclical,"Apparel, Accessories & Luxury Goods",France,Euronext
+20,ML.PA,Michelin,,Industrials,Tires & Rubber,France,Euronext
+21,ORA.PA,Orange,,Communication Services,Integrated Telecommunication Services,France,Euronext
+22,RI.PA,Pernod Ricard,,Consumer Defensive,Distillers & Vintners,France,Euronext
+23,PUB.PA,Publicis,,Communication Services,Advertising,France,Euronext
+24,RNO.PA,Renault,,Consumer Cyclical,Automobile Manufacturers,France,Euronext
+25,SAF.PA,Safran,,Industrials,Aerospace & Defense,France,Euronext
+26,SGO.PA,Saint-Gobain,,Industrials,Building Products,France,Euronext
+27,SAN.PA,Sanofi,,Healthcare,Pharmaceuticals,France,Euronext
+28,SU.PA,Schneider Electric,,Industrials,Electrical Components & Equipment,France,Euronext
+29,GLE.PA,Société Générale,,Financial Services,Diversified Banks,France,Euronext
+30,STLA.PA,Stellantis,,Consumer Cyclical,Automobile Manufacturers,France,Euronext
+31,STM.PA,STMicroelectronics,,Technology,Semiconductors,France,Euronext
+32,TEP.PA,Teleperformance,,Communication Services,Outsourcing,France,Euronext
+33,HO.PA,Thales,,Industrials,Aerospace & Defense,France,Euronext
+34,TTE.PA,TotalEnergies,,Energy,Integrated Oil & Gas,France,Euronext
+35,URW.AS,Unibail-Rodamco-Westfield,,Real Estate,Retail REITs,France,Euronext
+36,VIE.PA,Veolia,,Industrials,Multi-Utilities,France,Euronext
+37,DG.PA,Vinci,,Industrials,Construction & Engineering,France,Euronext
+38,VIV.PA,Vivendi,,Communication Services,Movies & Entertainment,France,Euronext
+39,WLN.PA,Worldline,,Technology,Data Processing & Outsourced Services,France,Euronext
