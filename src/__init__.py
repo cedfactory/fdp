@@ -1,3 +1,3 @@
-__all__ = ["wiki","yahoo"]
+__all__ = ["utils","wiki","yahoo"]
 __version__ = '0.1'
 __author__ = 'cedfactory'

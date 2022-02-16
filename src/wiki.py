@@ -1,14 +1,6 @@
 import pandas as pd
 
-def make_df_stock_info(list_stock, list_company_name, list_isin,list_sectors, list_industry, list_country, list_exchange):
-    return (pd.DataFrame({'symbol': list_stock,
-                          'name': list_company_name,
-                          'isin': list_isin,
-                          'sector': list_sectors,
-                          'industry': list_industry,
-                          'country': list_country,
-                          'exchange': list_exchange,
-                          }))
+from . import utils
 
 def get_list_CAC():
     df_html = pd.read_html('https://en.wikipedia.org/wiki/CAC_40')
@@ -23,7 +15,7 @@ def get_list_CAC():
     list_country = ['France'] * n
     list_exchange = ['Euronext'] * n
 
-    df = make_df_stock_info(list_cac, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
+    df = utils.make_df_stock_info(list_cac, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
 
     return df
 
@@ -40,7 +32,7 @@ def get_list_DAX():
     list_country = ['Germany'] * n
     list_exchange = ['Euronext'] * n
 
-    df = make_df_stock_info(list_dax, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
+    df = utils.make_df_stock_info(list_dax, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
 
     return df
 
@@ -57,7 +49,7 @@ def get_list_NASDAQ100():
     list_country = ['united state'] * n
     list_exchange = ['NASDAQ'] * n
 
-    df = make_df_stock_info(list_nasdaq, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
+    df = utils.make_df_stock_info(list_nasdaq, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
 
     return df
 
@@ -74,7 +66,7 @@ def get_list_DJI():
     list_isin = [''] * n
     list_country = ['united state'] * n
 
-    df = make_df_stock_info(list_dji, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
+    df = utils.make_df_stock_info(list_dji, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
 
     return df
 
@@ -92,6 +84,6 @@ def get_list_SP500():
     list_country = ['united state'] * n
     list_exchange = ['SP500'] * n
 
-    df = make_df_stock_info(list_sp500, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
+    df = utils.make_df_stock_info(list_sp500, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
 
     return df

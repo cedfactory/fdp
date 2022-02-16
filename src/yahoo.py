@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 import requests
 from yahoo_fin import stock_info as si
 
-from . import wiki
+from . import wiki,utils
 
 def print_exception_info(exception):
     caller = getframeinfo(stack()[2][0])
@@ -24,37 +24,37 @@ def get_from_si(si_call):
 def get_list_NASDAQ():
     list_nasdaq = si.tickers_nasdaq()
     n = len(list_nasdaq)
-    df = wiki.make_df_stock_info(list_nasdaq, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
+    df = utils.make_df_stock_info(list_nasdaq, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
     return df
 
 def get_list_yahoo_SP500():
     list_sp500 = si.tickers_sp500()
     n = len(list_sp500)
-    df = wiki.make_df_stock_info(list_sp500, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
+    df = utils.make_df_stock_info(list_sp500, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
     return df
 
 def get_list_DOW():
     list_dow = si.tickers_dow()
     n = len(list_dow)
-    df = wiki.make_df_stock_info(list_dow, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
+    df = utils.make_df_stock_info(list_dow, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
     return df
 
 def get_list_FTSE100():
     list_ftse = si.tickers_ftse100()
     n = len(list_ftse)
-    df = wiki.make_df_stock_info(list_ftse, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
+    df = utils.make_df_stock_info(list_ftse, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
     return df
 
 def get_list_FTSE250():
     list_ftse = si.tickers_ftse250()
     n = len(list_ftse)
-    df = wiki.make_df_stock_info(list_ftse, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
+    df = utils.make_df_stock_info(list_ftse, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
     return df
 
 def get_list_IBOVESPA():
     list_ibovespa = si.tickers_ibovespa()
     n = len(list_ibovespa)
-    df = wiki.make_df_stock_info(list_ibovespa, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
+    df = utils.make_df_stock_info(list_ibovespa, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
     return df
 
 def get_list_NIFTY50():
@@ -62,13 +62,13 @@ def get_list_NIFTY50():
     if isinstance(list_nifty, pd.DataFrame) == False:
         return None
     n = len(list_nifty)
-    df = wiki.make_df_stock_info(list_nifty, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
+    df = utils.make_df_stock_info(list_nifty, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
     return df
 
 def get_list_NIFTY_BANK():
     list_nifty = si.tickers_niftybank()
     n = len(list_nifty)
-    df = wiki.make_df_stock_info(list_nifty, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
+    df = utils.make_df_stock_info(list_nifty, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
     return df
 
 def get_list_EURONEXT():
@@ -87,7 +87,7 @@ def get_list_EURONEXT():
     list_industry = ['' for i in range(len(list_euronext))]
     list_sectors = ['' for i in range(len(list_euronext))]
 
-    df = wiki.make_df_stock_info(list_euronext, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
+    df = utils.make_df_stock_info(list_euronext, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
     return df
 
 def get_list_undervalued():
@@ -97,7 +97,7 @@ def get_list_undervalued():
 
     list_undervalued = df_day_undervalued['Symbol'].tolist()
     n = len(df_day_undervalued)
-    df = wiki.make_df_stock_info(list_undervalued, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
+    df = utils.make_df_stock_info(list_undervalued, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
     return df
 
 def get_list_losers():
@@ -107,7 +107,7 @@ def get_list_losers():
 
     list_losers = df_day_losers['Symbol'].tolist()
     n = len(list_losers)
-    df = wiki.make_df_stock_info(list_losers, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
+    df = utils.make_df_stock_info(list_losers, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
     return df
 
 def get_list_gainers():
@@ -117,7 +117,7 @@ def get_list_gainers():
 
     list_gainers = df_day_gainers['Symbol'].tolist()
     n = len(list_gainers)
-    df = wiki.make_df_stock_info(list_gainers, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
+    df = utils.make_df_stock_info(list_gainers, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
     return df
 
 def get_list_most_actives():
@@ -148,7 +148,7 @@ def get_list_trending_tickers():
     list_country = ['' for i in range(len(list_trending))]
     list_exchange = ['' for i in range(len(list_trending))]
 
-    df = wiki.make_df_stock_info(list_trending, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
+    df = utils.make_df_stock_info(list_trending, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
 
     return df
 
