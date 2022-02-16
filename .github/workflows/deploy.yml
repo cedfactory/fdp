@@ -31,6 +31,11 @@ jobs:
       - name: Coverage report
         run: bash <(curl -s https://codecov.io/bash)
 
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   setup-build-publish-deploy:
     name: Setup, Build, Publish and Deploy
