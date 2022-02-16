@@ -3,6 +3,7 @@ sys.path.insert(0, '../')
 from flask import Flask, request, jsonify
 import json
 from datetime import datetime
+import pandas as pd
 from src import wiki
 
 app = Flask(__name__)
@@ -21,16 +22,26 @@ def get_list():
 
     result_for_response = {}
     for market in markets:
+        df = None
         if market in ["cac", "cac40", "CAC", "CAC40"]:
-            result_for_response[market] = wiki.get_list_cac().to_json()
+            df = wiki.get_list_cac()
         elif market in ["dax", "DAX"]:
-            result_for_response[market] = wiki.get_list_dax().to_json()
+            df = wiki.get_list_dax()
         elif market in ["nasdaq", "nasdaq100", "NASDAQ", "NASDAQ100"]:
-            result_for_response[market] = wiki.get_list_nasdaq100().to_json()
+            df = wiki.get_list_nasdaq100()
         elif market in ["dji", "DJI"]:
-            result_for_response[market] = wiki.get_list_dji().to_json()
+            df = wiki.get_list_dji()
         elif market in ["sp500", "SP500"]:
-            result_for_response[market] = wiki.get_list_sp500().to_json()
+            df = wiki.get_list_sp500()
+
+        current_result = {}
+        if isinstance(df, pd.DataFrame) == True:
+            current_result["dataframe"] = df.to_json()
+            current_result["status"] = "ok"
+        else:
+            current_result["status"] = "ko"
+
+        result_for_response[market] = current_result
 
     end = datetime.now()
     elapsed_time = str(end - start)
