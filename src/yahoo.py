@@ -23,116 +23,52 @@ def get_from_si(si_call):
 
 def get_list_NASDAQ():
     list_nasdaq = si.tickers_nasdaq()
-
-    list_sectors = ['' for i in range(len(list_nasdaq))]
-    list_industry = ['' for i in range(len(list_nasdaq))]
-    list_company_name = ['' for i in range(len(list_nasdaq))]
-
-    list_isin = ['' for i in range(len(list_nasdaq))]
-    list_country = ['' for i in range(len(list_nasdaq))]
-    list_exchange = ['' for i in range(len(list_nasdaq))]
-
-    df = wiki.make_df_stock_info(list_nasdaq, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
+    n = len(list_nasdaq)
+    df = wiki.make_df_stock_info(list_nasdaq, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
     return df
 
 def get_list_yahoo_SP500():
     list_sp500 = si.tickers_sp500()
-
-    list_sectors = ['' for i in range(len(list_sp500))]
-    list_industry = ['' for i in range(len(list_sp500))]
-    list_company_name = ['' for i in range(len(list_sp500))]
-
-    list_isin = ['' for i in range(len(list_sp500))]
-    list_country = ['' for i in range(len(list_sp500))]
-    list_exchange = ['' for i in range(len(list_sp500))]
-
-    df = wiki.make_df_stock_info(list_sp500, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
+    n = len(list_sp500)
+    df = wiki.make_df_stock_info(list_sp500, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
     return df
 
 def get_list_DOW():
     list_dow = si.tickers_dow()
-
-    list_sectors = ['' for i in range(len(list_dow))]
-    list_industry = ['' for i in range(len(list_dow))]
-    list_company_name = ['' for i in range(len(list_dow))]
-
-    list_isin = ['' for i in range(len(list_dow))]
-    list_country = ['' for i in range(len(list_dow))]
-    list_exchange = ['' for i in range(len(list_dow))]
-
-    df = wiki.make_df_stock_info(list_dow, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
+    n = len(list_dow)
+    df = wiki.make_df_stock_info(list_dow, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
     return df
 
 def get_list_FTSE100():
     list_ftse = si.tickers_ftse100()
-
-    list_sectors = ['' for i in range(len(list_ftse))]
-    list_industry = ['' for i in range(len(list_ftse))]
-    list_company_name = ['' for i in range(len(list_ftse))]
-
-    list_isin = ['' for i in range(len(list_ftse))]
-    list_country = ['' for i in range(len(list_ftse))]
-    list_exchange = ['' for i in range(len(list_ftse))]
-
-    df = wiki.make_df_stock_info(list_ftse, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
+    n = len(list_ftse)
+    df = wiki.make_df_stock_info(list_ftse, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
     return df
 
 def get_list_FTSE250():
     list_ftse = si.tickers_ftse250()
-
-    list_sectors = ['' for i in range(len(list_ftse))]
-    list_industry = ['' for i in range(len(list_ftse))]
-    list_company_name = ['' for i in range(len(list_ftse))]
-
-    list_isin = ['' for i in range(len(list_ftse))]
-    list_country = ['' for i in range(len(list_ftse))]
-    list_exchange = ['' for i in range(len(list_ftse))]
-
-    df = wiki.make_df_stock_info(list_ftse, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
+    n = len(list_ftse)
+    df = wiki.make_df_stock_info(list_ftse, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
     return df
 
 def get_list_IBOVESPA():
     list_ibovespa = si.tickers_ibovespa()
-
-    list_sectors = ['' for i in range(len(list_ibovespa))]
-    list_industry = ['' for i in range(len(list_ibovespa))]
-    list_company_name = ['' for i in range(len(list_ibovespa))]
-
-    list_isin = ['' for i in range(len(list_ibovespa))]
-    list_country = ['' for i in range(len(list_ibovespa))]
-    list_exchange = ['' for i in range(len(list_ibovespa))]
-
-    df = wiki.make_df_stock_info(list_ibovespa, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
+    n = len(list_ibovespa)
+    df = wiki.make_df_stock_info(list_ibovespa, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
     return df
 
 def get_list_NIFTY50():
     list_nifty = get_from_si(si.tickers_nifty50)
     if isinstance(list_nifty, pd.DataFrame) == False:
         return None
-
-    list_sectors = ['' for i in range(len(list_nifty))]
-    list_industry = ['' for i in range(len(list_nifty))]
-    list_company_name = ['' for i in range(len(list_nifty))]
-
-    list_isin = ['' for i in range(len(list_nifty))]
-    list_country = ['' for i in range(len(list_nifty))]
-    list_exchange = ['' for i in range(len(list_nifty))]
-
-    df = wiki.make_df_stock_info(list_nifty, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
+    n = len(list_nifty)
+    df = wiki.make_df_stock_info(list_nifty, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
     return df
 
 def get_list_NIFTY_BANK():
     list_nifty = si.tickers_niftybank()
-
-    list_sectors = ['' for i in range(len(list_nifty))]
-    list_industry = ['' for i in range(len(list_nifty))]
-    list_company_name = ['' for i in range(len(list_nifty))]
-
-    list_isin = ['' for i in range(len(list_nifty))]
-    list_country = ['' for i in range(len(list_nifty))]
-    list_exchange = ['' for i in range(len(list_nifty))]
-
-    df = wiki.make_df_stock_info(list_nifty, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
+    n = len(list_nifty)
+    df = wiki.make_df_stock_info(list_nifty, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
     return df
 
 def get_list_EURONEXT():
@@ -160,16 +96,8 @@ def get_list_undervalued():
         return None
 
     list_undervalued = df_day_undervalued['Symbol'].tolist()
-
-    list_sectors = ['' for i in range(len(list_undervalued))]
-    list_industry = ['' for i in range(len(list_undervalued))]
-    list_company_name = ['' for i in range(len(list_undervalued))]
-
-    list_isin = ['' for i in range(len(list_undervalued))]
-    list_country = ['' for i in range(len(list_undervalued))]
-    list_exchange = ['' for i in range(len(list_undervalued))]
-
-    df = wiki.make_df_stock_info(list_undervalued, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
+    n = len(df_day_undervalued)
+    df = wiki.make_df_stock_info(list_undervalued, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
     return df
 
 def get_list_losers():
@@ -178,16 +106,8 @@ def get_list_losers():
         return None
 
     list_losers = df_day_losers['Symbol'].tolist()
-
-    list_sectors = ['' for i in range(len(list_losers))]
-    list_industry = ['' for i in range(len(list_losers))]
-    list_company_name = ['' for i in range(len(list_losers))]
-
-    list_isin = ['' for i in range(len(list_losers))]
-    list_country = ['' for i in range(len(list_losers))]
-    list_exchange = ['' for i in range(len(list_losers))]
-
-    df = wiki.make_df_stock_info(list_losers, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
+    n = len(list_losers)
+    df = wiki.make_df_stock_info(list_losers, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
     return df
 
 def get_list_gainers():
@@ -196,16 +116,8 @@ def get_list_gainers():
         return None
 
     list_gainers = df_day_gainers['Symbol'].tolist()
-
-    list_sectors = ['' for i in range(len(list_gainers))]
-    list_industry = ['' for i in range(len(list_gainers))]
-    list_company_name = ['' for i in range(len(list_gainers))]
-
-    list_isin = ['' for i in range(len(list_gainers))]
-    list_country = ['' for i in range(len(list_gainers))]
-    list_exchange = ['' for i in range(len(list_gainers))]
-
-    df = wiki.make_df_stock_info(list_gainers, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
+    n = len(list_gainers)
+    df = wiki.make_df_stock_info(list_gainers, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
     return df
 
 def get_list_most_actives():
@@ -214,17 +126,8 @@ def get_list_most_actives():
         return None
 
     list_actives = df_day_most_active['Symbol'].tolist()
-
-    list_sectors = ['' for i in range(len(list_actives))]
-    list_industry = ['' for i in range(len(list_actives))]
-    list_company_name = ['' for i in range(len(list_actives))]
-
-    list_isin = ['' for i in range(len(list_actives))]
-    list_country = ['' for i in range(len(list_actives))]
-    list_exchange = ['' for i in range(len(list_actives))]
-
-    df = wiki.make_df_stock_info(list_actives, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
-
+    n = len(list_actives)
+    df = wiki.make_df_stock_info(list_actives, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
     return df
 
 def get_list_trending_tickers():
