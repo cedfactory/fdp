@@ -18,9 +18,10 @@ def get_list_CAC():
     list_industry = df_cac["GICS Sub-Industry"].tolist()
     list_company_name = df_cac["Company"].tolist()
 
-    list_isin = ['' for i in range(len(list_cac))]
-    list_country = ['France' for i in range(len(list_cac))]
-    list_exchange = ['Euronext' for i in range(len(list_cac))]
+    n = len(list_cac)
+    list_isin = [''] * n
+    list_country = ['France'] * n
+    list_exchange = ['Euronext'] * n
 
     df = make_df_stock_info(list_cac, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
 
@@ -34,9 +35,10 @@ def get_list_DAX():
     list_company_name = df_dax["Company"].tolist()
     list_sectors = df_dax["Prime Standard Sector"].tolist()
 
-    list_isin = ['' for i in range(len(list_dax))]
-    list_country = ['Germany' for i in range(len(list_dax))]
-    list_exchange = ['Euronext' for i in range(len(list_dax))]
+    n = len(list_dax)
+    list_isin = [''] * n
+    list_country = ['Germany'] * n
+    list_exchange = ['Euronext'] * n
 
     df = make_df_stock_info(list_dax, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
 
@@ -50,9 +52,10 @@ def get_list_NASDAQ100():
     list_industry = df_NASDAQ["GICS Sub-Industry"].tolist()
     list_company_name = df_NASDAQ["Company"].tolist()
 
-    list_isin = ['' for i in range(len(list_nasdaq))]
-    list_country = ['united state' for i in range(len(list_nasdaq))]
-    list_exchange = ['NASDAQ' for i in range(len(list_nasdaq))]
+    n = len(list_nasdaq)
+    list_isin = [''] * n
+    list_country = ['united state'] * n
+    list_exchange = ['NASDAQ'] * n
 
     df = make_df_stock_info(list_nasdaq, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
 
@@ -66,9 +69,10 @@ def get_list_DJI():
     list_company_name = df_dji["Company"].tolist()
     list_exchange = df_dji["Exchange"].tolist()
 
-    list_sectors = ['' for i in range(len(list_dji))]
-    list_isin = ['' for i in range(len(list_dji))]
-    list_country = ['united state' for i in range(len(list_dji))]
+    n = len(list_dji)
+    list_sectors = [''] * n
+    list_isin = [''] * n
+    list_country = ['united state'] * n
 
     df = make_df_stock_info(list_dji, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
 
@@ -83,9 +87,10 @@ def get_list_SP500():
     list_industry = df_sp500["GICS Sub-Industry"].tolist()
     list_company_name = df_sp500["Security"].tolist()
 
-    list_isin = ['' for i in range(len(list_sp500))]
-    list_country = ['united state' for i in range(len(list_sp500))]
-    list_exchange = ['SP500' for i in range(len(list_sp500))]
+    n = len(list_sp500)
+    list_isin = [''] * n
+    list_country = ['united state'] * n
+    list_exchange = ['SP500'] * n
 
     df = make_df_stock_info(list_sp500, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
 
