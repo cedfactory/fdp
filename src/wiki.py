@@ -23,11 +23,11 @@ def get_list_dax():
     df_html = pd.read_html('https://en.wikipedia.org/wiki/DAX')
     df_dax = df_html[3]
     list_dax = df_dax["Ticker symbol"].tolist()
-    list_industry = ['' for i in range(len(list_dax))]
     list_company_name = df_dax["Company"].tolist()
     list_sectors = df_dax["Prime Standard Sector"].tolist()
 
     n = len(list_dax)
+    list_industry = [''] * n
     list_isin = [''] * n
     list_country = ['Germany'] * n
     list_exchange = ['Euronext'] * n
@@ -38,11 +38,11 @@ def get_list_dax():
 
 def get_list_nasdaq100():
     df_html = pd.read_html('https://en.wikipedia.org/wiki/Nasdaq-100')
-    df_NASDAQ = df_html[3]
-    list_nasdaq = df_NASDAQ["Ticker"].tolist()
-    list_sectors = df_NASDAQ["GICS Sector"].tolist()
-    list_industry = df_NASDAQ["GICS Sub-Industry"].tolist()
-    list_company_name = df_NASDAQ["Company"].tolist()
+    df_nasdaq = df_html[3]
+    list_nasdaq = df_nasdaq["Ticker"].tolist()
+    list_sectors = df_nasdaq["GICS Sector"].tolist()
+    list_industry = df_nasdaq["GICS Sub-Industry"].tolist()
+    list_company_name = df_nasdaq["Company"].tolist()
 
     n = len(list_nasdaq)
     list_isin = [''] * n

@@ -75,12 +75,12 @@ def get_list_euronext():
     list stock EURONEXT downloaded:
         https://live.euronext.com/en/products/equities/list
     """
-    df_EURONEXT = pd.read_csv("./data/Euronext_Equities.csv")
+    df_euronext = pd.read_csv("./data/Euronext_Equities.csv")
 
-    list_euronext = df_EURONEXT["symbol"].tolist()
-    list_exchange = df_EURONEXT["market"].tolist()
-    list_isin = df_EURONEXT["ISIN"].tolist()
-    list_company_name = df_EURONEXT["name"].tolist()
+    list_euronext = df_euronext["symbol"].tolist()
+    list_exchange = df_euronext["market"].tolist()
+    list_isin = df_euronext["ISIN"].tolist()
+    list_company_name = df_euronext["name"].tolist()
 
     n = len(list_euronext)
     list_country = [''] * n
@@ -148,7 +148,7 @@ def get_list_trending_tickers():
     list_isin = [''] * n
     list_country = [''] * n
     list_exchange = [''] * n
-    
+
     df = utils.make_df_stock_info(list_trending, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
 
     return df
