@@ -2,6 +2,29 @@ import pandas as pd
 from datetime import datetime
 from . import wiki,yahoo
 
+map_market_function = {
+    "w_cac":                wiki.get_list_cac,
+    "w_dax":                wiki.get_list_dax,
+    "w_nasdaq":             wiki.get_list_nasdaq100,
+    "w_dji":                wiki.get_list_dji,
+    "w_sp500":              wiki.get_list_sp500,
+    
+    "y_nasdaq":             yahoo.get_list_nasdaq,
+    "y_sp500":              yahoo.get_list_yahoo_sp500,
+    "y_dow":                yahoo.get_list_dow,
+    "y_ftse100":            yahoo.get_list_ftse100,
+    "y_ftse250":            yahoo.get_list_ftse250,
+    "y_ibovespa":           yahoo.get_list_ibovespa,
+    "y_nifty50":            yahoo.get_list_nifty50,
+    "y_nifty_bank":         yahoo.get_list_nifty_bank,
+    "y_euronext":           yahoo.get_list_euronext,
+    "y_undervalued":        yahoo.get_list_undervalued,
+    "y_losers":             yahoo.get_list_losers,
+    "y_gainers":            yahoo.get_list_gainers,
+    "y_most_actives":       yahoo.get_list_most_actives,
+    "y_trending_tickers":   yahoo.get_list_trending_tickers
+}
+
 def api_list(markets):
     start = datetime.now()
 
@@ -9,45 +32,8 @@ def api_list(markets):
 
     for market in markets:
         df = None
-        if market in ["w_cac", "w_cac40", "w_CAC", "w_CAC40"]:
-            df = wiki.get_list_cac()
-        elif market in ["dax", "DAX"]:
-            df = wiki.get_list_dax()
-        elif market in ["w_nasdaq", "w_nasdaq100", "w_NASDAQ", "w_NASDAQ100"]:
-            df = wiki.get_list_nasdaq100()
-        elif market in ["w_dji", "w_DJI"]:
-            df = wiki.get_list_dji()
-        elif market in ["w_sp500", "w_SP500"]:
-            df = wiki.get_list_sp500()
-        
-        elif market in ["y_nasdaq"]:
-            df = yahoo.get_list_nasdaq()
-        elif market in ["y_sp500"]:
-            df = yahoo.get_list_yahoo_sp500()
-        elif market in ["y_dow"]:
-            df = yahoo.get_list_dow()
-        elif market in ["y_ftse100"]:
-            df = yahoo.get_list_ftse100
-        elif market in ["y_ftse250"]:
-            df = yahoo.get_list_ftse250()
-        elif market in ["y_ibovespa"]:
-            df = yahoo.get_list_ibovespa()
-        elif market in ["y_nifty50"]:
-            df = yahoo.get_list_nifty50()
-        elif market in ["y_nifty_bank"]:
-            df = yahoo.get_list_nifty_bank()
-        elif market in ["y_euronext"]:
-            df = yahoo.get_list_euronext()
-        elif market in ["y_undervalued"]:
-            df = yahoo.get_list_undervalued()
-        elif market in ["y_losers"]:
-            df = yahoo.get_list_losers()
-        elif market in ["y_gainers"]:
-            df = yahoo.get_list_gainers()
-        elif market in ["y_most_actives"]:
-            df = yahoo.get_list_most_actives()
-        elif market in ["y_trending_tickers"]:
-            df = yahoo.get_list_trending_tickers()
+        if market in map_market_function.keys():
+            df = map_market_function[market]()
 
         current_result = {}
         if isinstance(df, pd.DataFrame) == True:
