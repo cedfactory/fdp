@@ -14,39 +14,39 @@ class TestScrapingYahoo:
         assert_frame_equal(df_generated, df_ref)
 
     def test_get_list_nasdaq(self):
-        df = yahoo.get_list_NASDAQ()
+        df = yahoo.get_list_nasdaq()
         self.check_expectations(df, "yahoo_list_nasdaq.csv")
 
     def test_get_list_yahoo_sp500(self):
-        df = yahoo.get_list_yahoo_SP500()
+        df = yahoo.get_list_yahoo_sp500()
         self.check_expectations(df, "yahoo_list_sp500.csv")
 
     def test_get_list_dow(self):
-        df = yahoo.get_list_DOW()
+        df = yahoo.get_list_dow()
         self.check_expectations(df, "yahoo_list_dow.csv")
        
     def test_get_list_ftse100(self):
-        df = yahoo.get_list_FTSE100()
+        df = yahoo.get_list_ftse100()
         self.check_expectations(df, "yahoo_list_ftse100.csv")
 
     def test_get_list_ftse250(self):
-        df = yahoo.get_list_FTSE250()
+        df = yahoo.get_list_ftse250()
         self.check_expectations(df, "yahoo_list_ftse250.csv")
 
     def test_get_list_ibovespa(self):
-        df = yahoo.get_list_IBOVESPA()
+        df = yahoo.get_list_ibovespa()
         self.check_expectations(df, "yahoo_list_ibovespa.csv")
 
     def test_get_list_nifty50(self):
-        df = yahoo.get_list_NIFTY50()
+        df = yahoo.get_list_nifty50()
         #self.check_expectations(df, "yahoo_list_nifty50.csv")
 
     def test_get_list_nifty_bank(self):
-        df = yahoo.get_list_NIFTY_BANK()
+        df = yahoo.get_list_nifty_bank()
         self.check_expectations(df, "yahoo_list_nifty_bank.csv")
 
     def test_get_list_euronext(self):
-        df = yahoo.get_list_EURONEXT()
+        df = yahoo.get_list_euronext()
         self.check_expectations(df, "yahoo_list_euronext.csv")
 
     def test_get_list_undervalued(self):

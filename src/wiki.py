@@ -2,7 +2,7 @@ import pandas as pd
 
 from . import utils
 
-def get_list_CAC():
+def get_list_cac():
     df_html = pd.read_html('https://en.wikipedia.org/wiki/CAC_40')
     df_cac = df_html[3]
     list_cac = df_cac["Ticker"].tolist()
@@ -19,7 +19,7 @@ def get_list_CAC():
 
     return df
 
-def get_list_DAX():
+def get_list_dax():
     df_html = pd.read_html('https://en.wikipedia.org/wiki/DAX')
     df_dax = df_html[3]
     list_dax = df_dax["Ticker symbol"].tolist()
@@ -36,7 +36,7 @@ def get_list_DAX():
 
     return df
 
-def get_list_NASDAQ100():
+def get_list_nasdaq100():
     df_html = pd.read_html('https://en.wikipedia.org/wiki/Nasdaq-100')
     df_NASDAQ = df_html[3]
     list_nasdaq = df_NASDAQ["Ticker"].tolist()
@@ -53,7 +53,7 @@ def get_list_NASDAQ100():
 
     return df
 
-def get_list_DJI():
+def get_list_dji():
     df_html = pd.read_html('https://en.wikipedia.org/wiki/Dow_Jones_Industrial_Average')
     df_dji = df_html[1]
     list_dji = df_dji["Symbol"].tolist()
@@ -71,7 +71,7 @@ def get_list_DJI():
     return df
 
 
-def get_list_SP500():
+def get_list_sp500():
     df_html = pd.read_html('https://en.wikipedia.org/wiki/List_of_S%26P_500_companies')
     df_sp500 = df_html[0]
     list_sp500 = df_sp500["Symbol"].to_list()

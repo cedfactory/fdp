@@ -22,15 +22,15 @@ def get_list():
     result_for_response = {}
     for market in markets:
         if market in ["cac", "cac40", "CAC", "CAC40"]:
-            result_for_response[market] = wiki.get_list_CAC().to_json()
+            result_for_response[market] = wiki.get_list_cac().to_json()
         elif market in ["dax", "DAX"]:
-            result_for_response[market] = wiki.get_list_DAX().to_json()
+            result_for_response[market] = wiki.get_list_dax().to_json()
         elif market in ["nasdaq", "nasdaq100", "NASDAQ", "NASDAQ100"]:
-            result_for_response[market] = wiki.get_list_NASDAQ100().to_json()
+            result_for_response[market] = wiki.get_list_nasdaq100().to_json()
         elif market in ["dji", "DJI"]:
-            result_for_response[market] = wiki.get_list_DJI().to_json()
+            result_for_response[market] = wiki.get_list_dji().to_json()
         elif market in ["sp500", "SP500"]:
-            result_for_response[market] = wiki.get_list_SP500().to_json()
+            result_for_response[market] = wiki.get_list_sp500().to_json()
 
     end = datetime.now()
     elapsed_time = str(end - start)

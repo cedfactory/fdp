@@ -14,21 +14,21 @@ class TestScrapingWiki:
         assert_frame_equal(df_generated, df_ref)
 
     def test_get_list_cac(self):
-        df = wiki.get_list_CAC()
+        df = wiki.get_list_cac()
         self.check_expectations(df, "wiki_list_cac.csv")
 
     def test_get_list_dax(self):
-        df = wiki.get_list_DAX()
+        df = wiki.get_list_dax()
         self.check_expectations(df, "wiki_list_dax.csv")
 
     def test_get_list_nasdaq100(self):
-        df = wiki.get_list_NASDAQ100()
+        df = wiki.get_list_nasdaq100()
         self.check_expectations(df, "wiki_list_nasdaq100.csv")
 
     def test_get_list_dji(self):
-        df = wiki.get_list_DJI()
+        df = wiki.get_list_dji()
         self.check_expectations(df, "wiki_list_dji.csv")
 
     def test_wiki_get_list_sp500(self):
-        df = wiki.get_list_SP500()
+        df = wiki.get_list_sp500()
         self.check_expectations(df, "wiki_list_sp500.csv")
