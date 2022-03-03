@@ -24,5 +24,19 @@ def get_list():
     response.headers.add("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers")
     return response
 
+@app.route('/value', methods=['OPTIONS', 'GET', 'POST'])
+def get_value():
+   
+    str_values = request.args.get("values")
+
+    response = api.api_value(str_values)
+
+    response = jsonify(response)
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Allow-Credentials", "true")
+    response.headers.add("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT")
+    response.headers.add("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers")
+    return response
+
 if __name__ == "__main__":
 	app.run(debug=False, host= '0.0.0.0', port=5000)

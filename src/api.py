@@ -1,6 +1,6 @@
 import pandas as pd
 from datetime import datetime
-from . import wiki,yahoo
+from . import wiki,yahoo,yf_wrapper
 
 map_market_function = {
     "w_cac":                wiki.get_list_cac,
@@ -62,3 +62,29 @@ def api_list(str_markets):
     }
 
     return final_response
+
+def api_value(str_values):
+    if str_values == None:
+        return {"result":{}, "status":"ko", "reason":"no values", "elapsed_time":"0"}
+
+    start = datetime.now()
+
+    result_for_response = {}
+
+    values = str_values.split(',')
+    for value in values:
+        value_info = yf_wrapper.get_info(value)
+        print(value_info)
+        result_for_response[value] = value_info
+
+    end = datetime.now()
+    elapsed_time = str(end - start)
+
+    final_response = {
+        "result":result_for_response,
+        "status":"ok",
+        "elapsed_time":elapsed_time
+    }
+
+    return final_response
+   
