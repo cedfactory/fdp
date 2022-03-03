@@ -14,9 +14,8 @@ def hello():
 def get_list():
    
     str_markets = request.args.get("markets")
-    markets = str_markets.split(',')
 
-    response = api.api_list(markets)
+    response = api.api_list(str_markets)
 
     response = jsonify(response)
     response.headers.add("Access-Control-Allow-Origin", "*")

@@ -25,15 +25,22 @@ map_market_function = {
     "y_trending_tickers":   yahoo.get_list_trending_tickers
 }
 
-def api_list(markets):
+def api_list(str_markets):
+    if str_markets == None:
+        return {"result":{}, "status":"ko", "reason":"no market", "elapsed_time":"0"}
+
     start = datetime.now()
 
     result_for_response = {}
 
+    markets = str_markets.split(',')
     for market in markets:
         df = None
         if market in map_market_function.keys():
             df = map_market_function[market]()
+        else:
+            result_for_response[market] = {"dataframe":"", "status":"ko", "reason":"unknown market"}
+            continue
 
         current_result = {}
         if isinstance(df, pd.DataFrame) == True:
@@ -41,6 +48,7 @@ def api_list(markets):
             current_result["status"] = "ok"
         else:
             current_result["status"] = "ko"
+            current_result["reason"] = "invalid dataframe"
 
         result_for_response[market] = current_result
 
