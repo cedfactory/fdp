@@ -44,26 +44,36 @@ class TestScrapingYahoo:
         test_utils.check_expectations(df, "yahoo_list_euronext.csv")
 
     def test_get_list_undervalued(self):
-        pass
-        #df = yahoo.get_list_undervalued()
-        #test_utils.check_expectations(df, "yahoo_list_undervalued.csv")
+        df = yahoo.get_list_undervalued()
+
+        # can't compare with a reference since it changes
+        assert(isinstance(df, pd.DataFrame))
+        assert(df.size == 700)
 
     def test_get_list_losers(self):
-        pass
-        #df = scrap_yahoo_list.get_list_losers()
-        #test_utils.check_expectations(df, "yahoo_list_losers.csv")
+        df = yahoo.get_list_losers()
+ 
+        # can't compare with a reference since it changes
+        assert(isinstance(df, pd.DataFrame))
+        assert(df.size == 700)
 
     def test_get_list_gainers(self):
-        pass
-        #df = yahoo.get_list_gainers()
-        #test_utils.check_expectations(df, "yahoo_list_gainers.csv")
+        df = yahoo.get_list_gainers()
+
+        # can't compare with a reference since it changes
+        assert(isinstance(df, pd.DataFrame))
+        assert(df.size == 700)
 
     def test_get_list_most_actives(self):
-        pass
-        #df = yahoo.get_list_most_actives()
-        #test_utils.check_expectations(df, "yahoo_list_most_actives.csv")
+        df = yahoo.get_list_most_actives()
+
+        # can't compare with a reference since it changes
+        assert(isinstance(df, pd.DataFrame))
+        assert(df.size == 700)
 
     def test_get_list_trending_tickers(self):
-        pass
-        #df = yahoo.get_list_trending_tickers()
-        #test_utils.check_expectations(df, "yahoo_list_trending_tickers.csv")
+        df = yahoo.get_list_trending_tickers()
+
+        # can't compare with a reference since it changes
+        assert(isinstance(df, pd.DataFrame))
+        assert(df.size == 210)
