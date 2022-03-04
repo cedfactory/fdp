@@ -6,8 +6,6 @@ class TestScrapingYfWrapper:
 
     def test_get_info(self):
         result = yf_wrapper.get_info("AI.PA")
-        print(type(result))
-        print(result)
         assert("status" in result)
         assert(result["status"] == "ok")
         assert("info" in result)
