@@ -74,7 +74,6 @@ def api_value(str_values):
     values = str_values.split(',')
     for value in values:
         value_info = yf_wrapper.get_info(value)
-        print(value_info)
         result_for_response[value] = value_info
 
     end = datetime.now()
