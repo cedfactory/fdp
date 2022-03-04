@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 import requests
 from yahoo_fin import stock_info as si
 
-from . import wiki,utils
+from . import utils
 
 def print_exception_info(exception):
     caller = getframeinfo(stack()[2][0])
