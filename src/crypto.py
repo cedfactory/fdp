@@ -2,8 +2,8 @@ import pandas as pd
 import ccxt
 from . import utils
 
-def get_ohlcv(symbol, tf):
-    df = pd.DataFrame(exchange.fetch_ohlcv(symbol, tf, limit=5000))
+def _get_ohlcv(exchange, symbol, tf):
+    df = pd.DataFrame(exchange.fetch_ohlcv(symbol, tf, limit=100))
     df = df.rename(columns={0: 'timestamp', 1: 'open', 2: 'high', 3: 'low', 4: 'close', 5: 'volume'})
     df = df.set_index(df['timestamp'])
     df.index = pd.to_datetime(df.index, unit='ms')
@@ -11,48 +11,56 @@ def get_ohlcv(symbol, tf):
     return df
 
 def custom_filter(symbol):
-    if(
-        symbol[-4:] == "/USD"
-        and "BULL" not in symbol
-        and "HALF" not in symbol
-        and "EDGE" not in symbol
-        and "BEAR" not in symbol
-    ):
-        return True
+    return symbol[-4:] == "/USD" and "BULL" not in symbol and "HALF" not in symbol and "EDGE" not in symbol and "BEAR" not in symbol
 
-def get_list_ftx():
-    exchange = ccxt.ftx()
+def _get_exchange(exchange_market):
+    exchange = None
+    if exchange_market == "hitbtc":
+        exchange = ccxt.hitbtc()
+    elif exchange_market == "bitmex":
+        exchange = ccxt.bitmex()
+    return exchange
+
+def get_list_symbols(exchange_market):
+    exchange = _get_exchange(exchange_market)
+    if exchange == None:
+        return []
+
+    exchange.load_markets()
     symbols = exchange.symbols
+    #symbols = list(filter(custom_filter, symbols))
 
-    symbols = list(filter(custom_filter, symbols))
+    n = len(symbols)
+    df = utils.make_df_stock_info(symbols, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
 
-    df_symbol = pd.DataFrame(symbols, columns=['Symbols'])
+    return df
 
-    return df_symbol
+def get_list_symbols_hitbtc():
+    return get_list_symbols("hitbtc")
 
-def get_list_ftx_clean():
-    exchange = ccxt.ftx()
-    symbols = exchange.symbols
-    df_list = {}
+def get_list_symbols_bitmex():
+    return get_list_symbols("bitmex")
 
-    symbols = list(filter(custom_filter, symbols))
+def get_symbol_ticker(exchange_market, symbol):
+    exchange = _get_exchange(exchange_market)
+    if exchange == None:
+        return []
 
-    # Remove Crypto with low volume
-    for symbol in symbols:
-        ohlcv = get_ohlcv(symbol, "1h")
-        if ohlcv["volume"].mean() > 10000:
-            df_list[symbol] = ohlcv
+    exchange.load_markets()
+    if symbol not in exchange.symbols:
+        return {}
 
-    df_list_origin = df_list.copy()
-    # Remove Crypto with missing data
-    for symbol in df_list_origin:
-        if len(df_list[symbol]) < 5000:
-            del df_list[symbol]
+    ticker = exchange.fetch_ticker(symbol)
+    return ticker
 
-    full_df = pd.DataFrame()
-    for symbol in df_list:
-        full_df[symbol] = df_list[symbol]['close']
+def get_symbol_ohlcv(exchange_market, symbol):
+    exchange = _get_exchange(exchange_market)
+    if exchange == None:
+        return {}
 
-    df_symbol = pd.DataFrame(full_df.columns, columns=['Symbols'])
+    exchange.load_markets()
+    if symbol not in exchange.symbols:
+        return {}
 
-    return df_symbol
+    ohlcv = _get_ohlcv(exchange, symbol, "1d")
+    return ohlcv

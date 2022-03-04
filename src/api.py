@@ -24,8 +24,8 @@ map_market_function = {
     "y_most_actives":       yahoo.get_list_most_actives,
     "y_trending_tickers":   yahoo.get_list_trending_tickers,
 
-    "c_ftx":                crypto.get_list_ftx,
-    "c_ftx_clean":          crypto.get_list_ftx_clean
+    "c_hitbtc":             crypto.get_list_symbols_hitbtc,
+    "c_bitmex":             crypto.get_list_symbols_bitmex
 }
 
 def api_list(str_markets):
