@@ -12,7 +12,7 @@ def _get_ohlcv(exchange, symbol, tf):
 
 def _custom_filter(symbol):
     #return symbol[-4:] == "/USD" and "BULL" not in symbol and "HALF" not in symbol and "EDGE" not in symbol and "BEAR" not in symbol
-    return "BTC" in symbol or "ETH" in symbol
+    return ("BTC" in symbol or "ETH" in symbol) and ("EUR" in symbol or "USD" in symbol)
 
 def _get_exchange(exchange_market):
     exchange = None
