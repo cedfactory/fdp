@@ -2,6 +2,14 @@ import pandas as pd
 import ccxt
 from . import utils
 
+def get_ohlcv(symbol, tf):
+    df = pd.DataFrame(exchange.fetch_ohlcv(symbol, tf, limit=5000))
+    df = df.rename(columns={0: 'timestamp', 1: 'open', 2: 'high', 3: 'low', 4: 'close', 5: 'volume'})
+    df = df.set_index(df['timestamp'])
+    df.index = pd.to_datetime(df.index, unit='ms')
+    del df['timestamp']
+    return df
+
 def custom_filter(symbol):
     if(
         symbol[-4:] == "/USD"
