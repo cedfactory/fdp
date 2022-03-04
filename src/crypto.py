@@ -10,8 +10,9 @@ def _get_ohlcv(exchange, symbol, tf):
     del df['timestamp']
     return df
 
-def custom_filter(symbol):
-    return symbol[-4:] == "/USD" and "BULL" not in symbol and "HALF" not in symbol and "EDGE" not in symbol and "BEAR" not in symbol
+def _custom_filter(symbol):
+    #return symbol[-4:] == "/USD" and "BULL" not in symbol and "HALF" not in symbol and "EDGE" not in symbol and "BEAR" not in symbol
+    return "BTC" in symbol or "ETH" in symbol
 
 def _get_exchange(exchange_market):
     exchange = None
@@ -28,7 +29,7 @@ def get_list_symbols(exchange_market):
 
     exchange.load_markets()
     symbols = exchange.symbols
-    #symbols = list(filter(custom_filter, symbols))
+    symbols = list(filter(_custom_filter, symbols))
 
     n = len(symbols)
     df = utils.make_df_stock_info(symbols, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)

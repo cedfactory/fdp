@@ -7,7 +7,7 @@ class TestCrypto:
 
     def test_get_list_symbols(self):
         symbols = crypto.get_list_symbols("hitbtc")
-        assert(len(symbols) == 1425)
+        assert(len(symbols) == 869)
 
     def test_get_symbol_ticker(self):
         info = crypto.get_symbol_ticker("hitbtc", "BTC/EURS")
