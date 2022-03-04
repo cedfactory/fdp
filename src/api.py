@@ -1,6 +1,6 @@
 import pandas as pd
 from datetime import datetime
-from . import wiki,yahoo,yf_wrapper
+from . import wiki,yahoo,yf_wrapper,crypto
 
 map_market_function = {
     "w_cac":                wiki.get_list_cac,
@@ -22,7 +22,10 @@ map_market_function = {
     "y_losers":             yahoo.get_list_losers,
     "y_gainers":            yahoo.get_list_gainers,
     "y_most_actives":       yahoo.get_list_most_actives,
-    "y_trending_tickers":   yahoo.get_list_trending_tickers
+    "y_trending_tickers":   yahoo.get_list_trending_tickers,
+
+    "c_ftx":                crypto.get_list_ftx,
+    "c_ftx_clean":          crypto.get_list_ftx_clean
 }
 
 def api_list(str_markets):
