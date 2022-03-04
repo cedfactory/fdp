@@ -7,7 +7,7 @@ from . import test_utils
 class TestApi:
 
     def test_api_list_cac(self):
-        response = api.api_list(["w_cac"])
+        response = api.api_list("w_cac")
         print(response)
         assert(response["status"] == "ok")
         assert("w_cac" in response["result"])
