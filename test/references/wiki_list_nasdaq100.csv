@@ -15,89 +15,89 @@
 13,AAPL,Apple,,Information Technology,"Technology Hardware, Storage & Peripherals",united state,NASDAQ
 14,AMAT,Applied Materials,,Information Technology,Semiconductor Equipment,united state,NASDAQ
 15,ASML,ASML,,Information Technology,Semiconductor Equipment,united state,NASDAQ
-16,TEAM,Atlassian,,Information Technology,Application Software,united state,NASDAQ
-17,ADSK,Autodesk,,Information Technology,Application Software,united state,NASDAQ
-18,BIDU,Baidu,,Communication Services,Interactive Media & Services,united state,NASDAQ
-19,BIIB,Biogen,,Health Care,Biotechnology,united state,NASDAQ
-20,BKNG,Booking Holdings,,Consumer Discretionary,Internet & Direct Marketing Retail,united state,NASDAQ
-21,AVGO,Broadcom,,Information Technology,Semiconductors,united state,NASDAQ
-22,CDNS,Cadence,,Information Technology,Application Software,united state,NASDAQ
-23,CHTR,Charter Communications,,Communication Services,Cable & Satellite,united state,NASDAQ
-24,CTAS,Cintas,,Industrials,Diversified Support Services,united state,NASDAQ
-25,CSCO,Cisco,,Information Technology,Communications Equipment,united state,NASDAQ
-26,CTSH,Cognizant,,Information Technology,IT Consulting & Other Services,united state,NASDAQ
-27,CMCSA,Comcast,,Communication Services,Cable & Satellite,united state,NASDAQ
-28,CEG,Constellation,,Utilities,Multi-Utilities,united state,NASDAQ
-29,CPRT,Copart,,Industrials,Diversified Support Services,united state,NASDAQ
-30,COST,Costco,,Consumer Staples,Hypermarkets & Super Centers,united state,NASDAQ
-31,CRWD,CrowdStrike,,Information Technology,Application Software,united state,NASDAQ
-32,CSX,CSX,,Industrials,Railroads,united state,NASDAQ
-33,DDOG,Datadog,,Information Technology,Application Software,united state,NASDAQ
-34,DXCM,DexCom,,Health Care,Health Care Equipment,united state,NASDAQ
-35,DOCU,DocuSign,,Information Technology,Application Software,united state,NASDAQ
-36,DLTR,Dollar Tree,,Consumer Discretionary,General Merchandise Stores,united state,NASDAQ
-37,EBAY,eBay,,Consumer Discretionary,Internet & Direct Marketing Retail,united state,NASDAQ
-38,EA,Electronic Arts,,Communication Services,Interactive Home Entertainment,united state,NASDAQ
-39,EXC,Exelon,,Utilities,Multi-Utilities,united state,NASDAQ
-40,FAST,Fastenal,,Industrials,Building Products,united state,NASDAQ
-41,FISV,Fiserv,,Information Technology,Data Processing & Outsourced Services,united state,NASDAQ
-42,FTNT,Fortinet,,Information Technology,Systems Software,united state,NASDAQ
-43,GILD,Gilead,,Health Care,Biotechnology,united state,NASDAQ
-44,HON,Honeywell,,Industrials,Industrial Conglomerates,united state,NASDAQ
-45,IDXX,Idexx Laboratories,,Health Care,Health Care Equipment,united state,NASDAQ
-46,ILMN,Illumina,,Health Care,Life Sciences Tools & Services,united state,NASDAQ
-47,INTC,Intel,,Information Technology,Semiconductors,united state,NASDAQ
-48,INTU,Intuit,,Information Technology,Application Software,united state,NASDAQ
-49,ISRG,Intuitive Surgical,,Health Care,Health Care Equipment,united state,NASDAQ
-50,JD,JD.com,,Consumer Discretionary,Internet & Direct Marketing Retail,united state,NASDAQ
-51,KDP,Keurig Dr Pepper,,Consumer Staples,Soft Drinks,united state,NASDAQ
-52,KLAC,KLA,,Information Technology,Semiconductor Equipment,united state,NASDAQ
-53,KHC,Kraft Heinz,,Consumer Staples,Packaged Foods & Meats,united state,NASDAQ
-54,LRCX,Lam Research,,Information Technology,Semiconductor Equipment,united state,NASDAQ
-55,LCID,Lucid,,Consumer Discretionary,Automobile Manufacturers,united state,NASDAQ
-56,LULU,Lululemon,,Consumer Discretionary,"Apparel, Accessories & Luxury Goods",united state,NASDAQ
-57,MAR,Marriott International,,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",united state,NASDAQ
-58,MRVL,Marvell,,Information Technology,Application Software,united state,NASDAQ
-59,MTCH,Match Group,,Communication Services,Interactive Media & Services,united state,NASDAQ
-60,MELI,MercadoLibre,,Consumer Discretionary,Internet & Direct Marketing Retail,united state,NASDAQ
-61,FB,Meta,,Communication Services,Interactive Media & Services,united state,NASDAQ
-62,MCHP,Microchip,,Information Technology,Semiconductors,united state,NASDAQ
-63,MU,Micron,,Information Technology,Semiconductors,united state,NASDAQ
-64,MSFT,Microsoft,,Information Technology,Systems Software,united state,NASDAQ
-65,MRNA,Moderna,,Health Care,Biotechnology,united state,NASDAQ
-66,MDLZ,Mondelēz International,,Consumer Staples,Packaged Foods & Meats,united state,NASDAQ
-67,MNST,Monster Beverage,,Consumer Staples,Soft Drinks,united state,NASDAQ
-68,NTES,NetEase,,Communication Services,Interactive Home Entertainment,united state,NASDAQ
-69,NFLX,Netflix,,Communication Services,Movies & Entertainment,united state,NASDAQ
-70,NVDA,Nvidia,,Information Technology,Semiconductors,united state,NASDAQ
-71,NXPI,NXP,,Information Technology,Semiconductors,united state,NASDAQ
-72,ORLY,O'Reilly Automotive,,Consumer Discretionary,Specialty Stores,united state,NASDAQ
-73,OKTA,Okta,,Information Technology,Application Software,united state,NASDAQ
-74,ODFL,Old Dominion Freight Line,,Industrials,Trucking,united state,NASDAQ
-75,PCAR,Paccar,,Industrials,Construction Machinery & Heavy Trucks,united state,NASDAQ
-76,PANW,Palo Alto Networks,,Information Technology,Application Software,united state,NASDAQ
-77,PAYX,Paychex,,Information Technology,Data Processing & Outsourced Services,united state,NASDAQ
-78,PYPL,PayPal,,Information Technology,Data Processing & Outsourced Services,united state,NASDAQ
-79,PEP,PepsiCo,,Consumer Staples,Soft Drinks,united state,NASDAQ
-80,PDD,Pinduoduo,,Consumer Discretionary,Internet & Direct Marketing Retail,united state,NASDAQ
-81,QCOM,Qualcomm,,Information Technology,Semiconductors,united state,NASDAQ
-82,REGN,Regeneron,,Health Care,Biotechnology,united state,NASDAQ
-83,ROST,Ross Stores,,Consumer Discretionary,Apparel Retail,united state,NASDAQ
-84,SGEN,Seagen,,Health Care,Biotechnology,united state,NASDAQ
-85,SIRI,Sirius XM,,Communication Services,Broadcasting,united state,NASDAQ
-86,SWKS,Skyworks,,Information Technology,Semiconductors,united state,NASDAQ
-87,SPLK,Splunk,,Information Technology,Application Software,united state,NASDAQ
-88,SBUX,Starbucks,,Consumer Discretionary,Restaurants,united state,NASDAQ
-89,SNPS,Synopsys,,Information Technology,Application Software,united state,NASDAQ
-90,TMUS,T-Mobile,,Communication Services,Wireless Telecommunication Services,united state,NASDAQ
-91,TSLA,Tesla,,Consumer Discretionary,Automobile Manufacturers,united state,NASDAQ
-92,TXN,Texas Instruments,,Information Technology,Semiconductors,united state,NASDAQ
-93,VRSN,Verisign,,Information Technology,Internet Services & Infrastructure,united state,NASDAQ
-94,VRSK,Verisk,,Industrials,Research & Consulting Services,united state,NASDAQ
-95,VRTX,Vertex,,Health Care,Biotechnology,united state,NASDAQ
-96,WBA,Walgreens Boots Alliance,,Consumer Staples,Drug Retail,united state,NASDAQ
-97,WDAY,Workday,,Information Technology,Application Software,united state,NASDAQ
-98,XEL,Xcel Energy,,Utilities,Multi-Utilities,united state,NASDAQ
-99,XLNX,Xilinx,,Information Technology,Semiconductors,united state,NASDAQ
+16,AZN,AstraZeneca,,Health Care,Pharmaceuticals,united state,NASDAQ
+17,TEAM,Atlassian,,Information Technology,Application Software,united state,NASDAQ
+18,ADSK,Autodesk,,Information Technology,Application Software,united state,NASDAQ
+19,BIDU,Baidu,,Communication Services,Interactive Media & Services,united state,NASDAQ
+20,BIIB,Biogen,,Health Care,Biotechnology,united state,NASDAQ
+21,BKNG,Booking Holdings,,Consumer Discretionary,Internet & Direct Marketing Retail,united state,NASDAQ
+22,AVGO,Broadcom,,Information Technology,Semiconductors,united state,NASDAQ
+23,CDNS,Cadence,,Information Technology,Application Software,united state,NASDAQ
+24,CHTR,Charter Communications,,Communication Services,Cable & Satellite,united state,NASDAQ
+25,CTAS,Cintas,,Industrials,Diversified Support Services,united state,NASDAQ
+26,CSCO,Cisco,,Information Technology,Communications Equipment,united state,NASDAQ
+27,CTSH,Cognizant,,Information Technology,IT Consulting & Other Services,united state,NASDAQ
+28,CMCSA,Comcast,,Communication Services,Cable & Satellite,united state,NASDAQ
+29,CEG,Constellation,,Utilities,Multi-Utilities,united state,NASDAQ
+30,CPRT,Copart,,Industrials,Diversified Support Services,united state,NASDAQ
+31,COST,Costco,,Consumer Staples,Hypermarkets & Super Centers,united state,NASDAQ
+32,CRWD,CrowdStrike,,Information Technology,Application Software,united state,NASDAQ
+33,CSX,CSX,,Industrials,Railroads,united state,NASDAQ
+34,DDOG,Datadog,,Information Technology,Application Software,united state,NASDAQ
+35,DXCM,DexCom,,Health Care,Health Care Equipment,united state,NASDAQ
+36,DOCU,DocuSign,,Information Technology,Application Software,united state,NASDAQ
+37,DLTR,Dollar Tree,,Consumer Discretionary,General Merchandise Stores,united state,NASDAQ
+38,EBAY,eBay,,Consumer Discretionary,Internet & Direct Marketing Retail,united state,NASDAQ
+39,EA,Electronic Arts,,Communication Services,Interactive Home Entertainment,united state,NASDAQ
+40,EXC,Exelon,,Utilities,Multi-Utilities,united state,NASDAQ
+41,FAST,Fastenal,,Industrials,Building Products,united state,NASDAQ
+42,FISV,Fiserv,,Information Technology,Data Processing & Outsourced Services,united state,NASDAQ
+43,FTNT,Fortinet,,Information Technology,Systems Software,united state,NASDAQ
+44,GILD,Gilead,,Health Care,Biotechnology,united state,NASDAQ
+45,HON,Honeywell,,Industrials,Industrial Conglomerates,united state,NASDAQ
+46,IDXX,Idexx Laboratories,,Health Care,Health Care Equipment,united state,NASDAQ
+47,ILMN,Illumina,,Health Care,Life Sciences Tools & Services,united state,NASDAQ
+48,INTC,Intel,,Information Technology,Semiconductors,united state,NASDAQ
+49,INTU,Intuit,,Information Technology,Application Software,united state,NASDAQ
+50,ISRG,Intuitive Surgical,,Health Care,Health Care Equipment,united state,NASDAQ
+51,JD,JD.com,,Consumer Discretionary,Internet & Direct Marketing Retail,united state,NASDAQ
+52,KDP,Keurig Dr Pepper,,Consumer Staples,Soft Drinks,united state,NASDAQ
+53,KLAC,KLA,,Information Technology,Semiconductor Equipment,united state,NASDAQ
+54,KHC,Kraft Heinz,,Consumer Staples,Packaged Foods & Meats,united state,NASDAQ
+55,LRCX,Lam Research,,Information Technology,Semiconductor Equipment,united state,NASDAQ
+56,LCID,Lucid,,Consumer Discretionary,Automobile Manufacturers,united state,NASDAQ
+57,LULU,Lululemon,,Consumer Discretionary,"Apparel, Accessories & Luxury Goods",united state,NASDAQ
+58,MAR,Marriott International,,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",united state,NASDAQ
+59,MRVL,Marvell,,Information Technology,Application Software,united state,NASDAQ
+60,MTCH,Match Group,,Communication Services,Interactive Media & Services,united state,NASDAQ
+61,MELI,MercadoLibre,,Consumer Discretionary,Internet & Direct Marketing Retail,united state,NASDAQ
+62,FB,Meta,,Communication Services,Interactive Media & Services,united state,NASDAQ
+63,MCHP,Microchip,,Information Technology,Semiconductors,united state,NASDAQ
+64,MU,Micron,,Information Technology,Semiconductors,united state,NASDAQ
+65,MSFT,Microsoft,,Information Technology,Systems Software,united state,NASDAQ
+66,MRNA,Moderna,,Health Care,Biotechnology,united state,NASDAQ
+67,MDLZ,Mondelēz International,,Consumer Staples,Packaged Foods & Meats,united state,NASDAQ
+68,MNST,Monster Beverage,,Consumer Staples,Soft Drinks,united state,NASDAQ
+69,NTES,NetEase,,Communication Services,Interactive Home Entertainment,united state,NASDAQ
+70,NFLX,Netflix,,Communication Services,Movies & Entertainment,united state,NASDAQ
+71,NVDA,Nvidia,,Information Technology,Semiconductors,united state,NASDAQ
+72,NXPI,NXP,,Information Technology,Semiconductors,united state,NASDAQ
+73,ORLY,O'Reilly Automotive,,Consumer Discretionary,Specialty Stores,united state,NASDAQ
+74,OKTA,Okta,,Information Technology,Application Software,united state,NASDAQ
+75,ODFL,Old Dominion Freight Line,,Industrials,Trucking,united state,NASDAQ
+76,PCAR,Paccar,,Industrials,Construction Machinery & Heavy Trucks,united state,NASDAQ
+77,PANW,Palo Alto Networks,,Information Technology,Application Software,united state,NASDAQ
+78,PAYX,Paychex,,Information Technology,Data Processing & Outsourced Services,united state,NASDAQ
+79,PYPL,PayPal,,Information Technology,Data Processing & Outsourced Services,united state,NASDAQ
+80,PEP,PepsiCo,,Consumer Staples,Soft Drinks,united state,NASDAQ
+81,PDD,Pinduoduo,,Consumer Discretionary,Internet & Direct Marketing Retail,united state,NASDAQ
+82,QCOM,Qualcomm,,Information Technology,Semiconductors,united state,NASDAQ
+83,REGN,Regeneron,,Health Care,Biotechnology,united state,NASDAQ
+84,ROST,Ross Stores,,Consumer Discretionary,Apparel Retail,united state,NASDAQ
+85,SGEN,Seagen,,Health Care,Biotechnology,united state,NASDAQ
+86,SIRI,Sirius XM,,Communication Services,Broadcasting,united state,NASDAQ
+87,SWKS,Skyworks,,Information Technology,Semiconductors,united state,NASDAQ
+88,SPLK,Splunk,,Information Technology,Application Software,united state,NASDAQ
+89,SBUX,Starbucks,,Consumer Discretionary,Restaurants,united state,NASDAQ
+90,SNPS,Synopsys,,Information Technology,Application Software,united state,NASDAQ
+91,TMUS,T-Mobile,,Communication Services,Wireless Telecommunication Services,united state,NASDAQ
+92,TSLA,Tesla,,Consumer Discretionary,Automobile Manufacturers,united state,NASDAQ
+93,TXN,Texas Instruments,,Information Technology,Semiconductors,united state,NASDAQ
+94,VRSN,Verisign,,Information Technology,Internet Services & Infrastructure,united state,NASDAQ
+95,VRSK,Verisk,,Industrials,Research & Consulting Services,united state,NASDAQ
+96,VRTX,Vertex,,Health Care,Biotechnology,united state,NASDAQ
+97,WBA,Walgreens Boots Alliance,,Consumer Staples,Drug Retail,united state,NASDAQ
+98,WDAY,Workday,,Information Technology,Application Software,united state,NASDAQ
+99,XEL,Xcel Energy,,Utilities,Multi-Utilities,united state,NASDAQ
 100,ZM,Zoom,,Information Technology,Application Software,united state,NASDAQ
 101,ZS,Zscaler,,Information Technology,Application Software,united state,NASDAQ
