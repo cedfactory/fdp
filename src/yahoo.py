@@ -127,7 +127,7 @@ def get_list_most_actives():
 
     list_actives = df_day_most_active['Symbol'].tolist()
     n = len(list_actives)
-    df = wiki.make_df_stock_info(list_actives, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
+    df = utils.make_df_stock_info(list_actives, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
     return df
 
 def get_list_trending_tickers():
