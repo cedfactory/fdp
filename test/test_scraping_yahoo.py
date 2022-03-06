@@ -76,4 +76,3 @@ class TestScrapingYahoo:
 
         # can't compare with a reference since it changes
         assert(isinstance(df, pd.DataFrame))
-        assert(df.size == 210)
