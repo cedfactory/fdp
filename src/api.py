@@ -76,7 +76,12 @@ def api_value(str_values):
 
     values = str_values.split(',')
     for value in values:
-        value_info = yf_wrapper.get_info(value)
+        if '_' in value:
+            # crypto
+            value = value.replace("_", "/")
+            value_info = crypto.get_symbol_ticker("hitbtc", value)
+        else:
+            value_info = yf_wrapper.get_info(value)
         result_for_response[value] = value_info
 
     end = datetime.now()
