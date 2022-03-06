@@ -79,7 +79,8 @@ def api_value(str_values):
         if '_' in value:
             # crypto
             value = value.replace("_", "/")
-            value_info = crypto.get_symbol_ticker("hitbtc", value)
+            info = crypto.get_symbol_ticker("hitbtc", value)
+            value_info = {"status": "ok", "info": info}
         else:
             value_info = yf_wrapper.get_info(value)
         result_for_response[value] = value_info
