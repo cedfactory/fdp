@@ -94,4 +94,28 @@ def api_value(str_values):
     }
 
     return final_response
+
+def api_history(str_source, str_symbol, str_start=None, start_end=None):
+    if str_source == None or str_symbol == None:
+        return {"result":{}, "status":"ko", "reason":"unknown source or symbol", "elapsed_time":"0"}
+
+    start = datetime.now()
+
+    result_for_response = {}
+
+    if '_' in str_symbol:
+        # crypto ('_' stands for '/')
+        df = crypto.get_symbol_ohlcv(str_source, str_symbol.replace("_", "/"))
+        result_for_response[str_symbol] = {"status": "ok", "info": df.to_json()}
+
+    end = datetime.now()
+    elapsed_time = str(end - start)
+
+    final_response = {
+        "result":result_for_response,
+        "status":"ok",
+        "elapsed_time":elapsed_time
+    }
+
+    return final_response
    
