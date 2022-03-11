@@ -45,9 +45,11 @@ def get_history():
     str_source = request.args.get("source")
     str_symbol = request.args.get("symbol")
     str_start = request.args.get("start")
-    str_end = request.args.get("end")
+    length = request.args.get("length")
+    if length != None:
+        length = int(length)
 
-    response = api.api_history(str_source, str_symbol, str_start, str_end)
+    response = api.api_history(str_source, str_symbol, str_start, length)
     response = jsonify(response)
     response = add_headers(response)
     

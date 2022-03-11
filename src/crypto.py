@@ -1,9 +1,16 @@
 import pandas as pd
 import ccxt
+import time
+from datetime import datetime
 from . import utils
 
-def _get_ohlcv(exchange, symbol, tf, limit=100):
-    df = pd.DataFrame(exchange.fetch_ohlcv(symbol, tf, limit=limit))
+'''
+format for since : dd_mm_yyyy
+'''
+def _get_ohlcv(exchange, symbol, start, timeframe, length=100):
+    if start != None:
+        start = int(time.mktime(datetime.strptime(start, "%d_%m_%Y").timetuple()))*1000
+    df = pd.DataFrame(exchange.fetch_ohlcv(symbol=symbol, timeframe=timeframe, since=start, limit=length))
     df = df.rename(columns={0: 'timestamp', 1: 'open', 2: 'high', 3: 'low', 4: 'close', 5: 'volume'})
     df = df.set_index(df['timestamp'])
     df.index = pd.to_datetime(df.index, unit='ms')
@@ -54,7 +61,7 @@ def get_symbol_ticker(exchange_market, symbol):
     ticker = exchange.fetch_ticker(symbol)
     return ticker
 
-def get_symbol_ohlcv(exchange_market, symbol, period="1d", length=200):
+def get_symbol_ohlcv(exchange_market, symbol, start=None, timeframe="1d", length=100):
     exchange = _get_exchange(exchange_market)
     if exchange == None:
         return {}
@@ -63,5 +70,5 @@ def get_symbol_ohlcv(exchange_market, symbol, period="1d", length=200):
     if symbol not in exchange.symbols or exchange.has['fetchOHLCV'] == False:
         return {}
 
-    ohlcv = _get_ohlcv(exchange, symbol, period, length)
+    ohlcv = _get_ohlcv(exchange, symbol, start, timeframe, length)
     return ohlcv
