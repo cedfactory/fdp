@@ -7,7 +7,7 @@
 5,CAT,Caterpillar,,,Construction and Mining,united state,NYSE
 6,CVX,Chevron,,,Petroleum industry,united state,NYSE
 7,CSCO,Cisco,,,Information technology,united state,NASDAQ
-8,KO,Coca-Cola,,,Soft Drink,united state,NYSE
+8,KO,Coca-Cola,,,Drink industry,united state,NYSE
 9,DIS,Disney,,,Broadcasting and entertainment,united state,NYSE
 10,DOW,Dow,,,Chemical industry,united state,NYSE
 11,GS,Goldman Sachs,,,Financial services,united state,NYSE
@@ -20,7 +20,7 @@
 18,MCD,McDonald's,,,Food industry,united state,NYSE
 19,MRK,Merck,,,Pharmaceutical industry,united state,NYSE
 20,MSFT,Microsoft,,,Information technology,united state,NASDAQ
-21,NKE,Nike,,,Apparel,united state,NYSE
+21,NKE,Nike,,,Clothing industry,united state,NYSE
 22,PG,Procter & Gamble,,,Fast-moving consumer goods,united state,NYSE
 23,CRM,Salesforce,,,Information technology,united state,NYSE
 24,TRV,Travelers,,,Insurance,united state,NYSE
