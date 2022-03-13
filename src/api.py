@@ -104,9 +104,12 @@ def api_history(str_source, str_symbol, str_start=None, length=100):
     result_for_response = {}
 
     if '_' in str_symbol:
-        # crypto ('_' stands for '/')
-        df = crypto.get_symbol_ohlcv(str_source, str_symbol.replace("_", "/"), str_start, "1d", length)
-        result_for_response[str_symbol] = {"status": "ok", "info": df.to_json()}
+        if length > 1000:
+            result_for_response[str_symbol] = {"status": "ko", "reason": "length must be in [1, 1000]", "info": ""}
+        else:
+            # crypto ('_' stands for '/')
+            df = crypto.get_symbol_ohlcv(str_source, str_symbol.replace("_", "/"), str_start, "1d", length)
+            result_for_response[str_symbol] = {"status": "ok", "info": df.to_json()}
 
     end = datetime.now()
     elapsed_time = str(end - start)
