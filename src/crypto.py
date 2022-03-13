@@ -64,11 +64,11 @@ def get_symbol_ticker(exchange_market, symbol):
 def get_symbol_ohlcv(exchange_market, symbol, start=None, timeframe="1d", length=100):
     exchange = _get_exchange(exchange_market)
     if exchange == None:
-        return {}
+        return "exchange not found"
 
     exchange.load_markets()
     if symbol not in exchange.symbols or exchange.has['fetchOHLCV'] == False:
-        return {}
+        return "symbol not found"
 
     ohlcv = _get_ohlcv(exchange, symbol, start, timeframe, length)
     return ohlcv
