@@ -45,7 +45,7 @@ def get_history():
     str_source = request.args.get("source")
     str_symbol = request.args.get("symbol")
     str_start = request.args.get("start")
-    length = request.args.get("length")
+    length = request.args.get("length", 100)
     if length != None:
         length = int(length)
 

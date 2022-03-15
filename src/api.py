@@ -25,7 +25,9 @@ map_market_function = {
     "y_trending_tickers":   yahoo.get_list_trending_tickers,
 
     "c_hitbtc":             crypto.get_list_symbols_hitbtc,
-    "c_bitmex":             crypto.get_list_symbols_bitmex
+    "c_bitmex":             crypto.get_list_symbols_bitmex,
+    "c_binance":            crypto.get_list_symbols_binance,
+    "c_ftx":                crypto.get_list_symbols_ftx
 }
 
 def api_list(str_markets):
@@ -95,24 +97,21 @@ def api_value(str_values):
 
     return final_response
 
-def api_history(str_source, str_symbol, str_start=None, length=100):
+def api_history(str_source, str_symbol, str_start, length):
     if str_source == None or str_symbol == None:
-        return {"result":{}, "status":"ko", "reason":"unknown source or symbol", "elapsed_time":"0"}
+        return {"result":{}, "status":"ko", "reason":"source or symbol not specified", "elapsed_time":"0"}
 
     start = datetime.now()
 
     result_for_response = {}
 
     if '_' in str_symbol:
-        if length > 1000:
-            result_for_response[str_symbol] = {"status": "ko", "reason": "length must be in [1, 1000]", "info": ""}
+        # crypto ('_' stands for '/')
+        df = crypto.get_symbol_ohlcv(str_source, str_symbol.replace("_", "/"), str_start, "1d", length)
+        if isinstance(df, pd.DataFrame):
+            result_for_response[str_symbol] = {"status": "ok", "info": df.to_json()}
         else:
-            # crypto ('_' stands for '/')
-            df = crypto.get_symbol_ohlcv(str_source, str_symbol.replace("_", "/"), str_start, "1d", length)
-            if isinstance(df, pd.DataFrame):
-                result_for_response[str_symbol] = {"status": "ok", "info": df.to_json()}
-            else:
-                result_for_response[str_symbol] = {"status": "ko", "reason": df, "info": ""}
+            result_for_response[str_symbol] = {"status": "ko", "reason": df, "info": ""}
 
     end = datetime.now()
     elapsed_time = str(end - start)

@@ -19,7 +19,7 @@ def _get_ohlcv(exchange, symbol, start, timeframe, length=100):
 
 def _custom_filter(symbol):
     #return symbol[-4:] == "/USD" and "BULL" not in symbol and "HALF" not in symbol and "EDGE" not in symbol and "BEAR" not in symbol
-    return ("BTC" in symbol or "ETH" in symbol) and ("EUR" in symbol or "USD" in symbol)
+    return ("BTC" in symbol or "ETH" in symbol or "BNB" in symbol) and ("EUR" in symbol or "USD" in symbol)
 
 def _get_exchange(exchange_market):
     exchange = None
@@ -27,6 +27,10 @@ def _get_exchange(exchange_market):
         exchange = ccxt.hitbtc()
     elif exchange_market == "bitmex":
         exchange = ccxt.bitmex()
+    elif exchange_market == "binance":
+        exchange = ccxt.binance()
+    elif exchange_market == "ftx":
+        exchange = ccxt.ftx()
     return exchange
 
 def get_list_symbols(exchange_market):
@@ -49,6 +53,12 @@ def get_list_symbols_hitbtc():
 def get_list_symbols_bitmex():
     return get_list_symbols("bitmex")
 
+def get_list_symbols_binance():
+    return get_list_symbols("binance")
+
+def get_list_symbols_ftx():
+    return get_list_symbols("ftx")
+
 def get_symbol_ticker(exchange_market, symbol):
     exchange = _get_exchange(exchange_market)
     if exchange == None:
@@ -62,6 +72,10 @@ def get_symbol_ticker(exchange_market, symbol):
     return ticker
 
 def get_symbol_ohlcv(exchange_market, symbol, start=None, timeframe="1d", length=100):
+    # manage some errors
+    if exchange_market == "hitbtc" and length > 1000:
+        return "for hitbtc, length must be in [1, 1000]"
+
     exchange = _get_exchange(exchange_market)
     if exchange == None:
         return "exchange not found"
