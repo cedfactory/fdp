@@ -55,7 +55,7 @@ class TestScrapingYahoo:
  
         # can't compare with a reference since it changes
         assert(isinstance(df, pd.DataFrame))
-        assert(df.size == 700)
+        assert(df.size > 100)
 
     def test_get_list_gainers(self):
         df = yahoo.get_list_gainers()
