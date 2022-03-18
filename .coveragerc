@@ -1,0 +1,2 @@
+[run]
+omit = ./check_perf.py
