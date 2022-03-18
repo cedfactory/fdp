@@ -55,5 +55,19 @@ def get_history():
     
     return response
 
+@app.route('/recommendations', methods=['OPTIONS', 'GET'])
+def get_recommendations():
+   
+    screener = request.args.get("screener")
+    exchange = request.args.get("exchange")
+    symbol = request.args.get("symbol")
+    interval = request.args.get("interval", "1h")
+
+    response = api.api_recommendations(screener, exchange, symbol, interval)
+    response = jsonify(response)
+    response = add_headers(response)
+    
+    return response
+
 if __name__ == "__main__":
 	app.run(debug=False, host= '0.0.0.0', port=5000)
