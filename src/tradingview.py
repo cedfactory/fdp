@@ -30,10 +30,10 @@ def insert_tradingview_data(df, screener, exchange, symbol, interval, summary):
     df.loc[symbol, 'exchange'] = exchange
     df.loc[symbol, 'screener'] = screener
     df.loc[symbol, recommendation] = summary['RECOMMENDATION']
-    sum = summary['BUY'] + summary['SELL'] + summary['NEUTRAL']
-    df.loc[symbol, 'buy_' + interval] = int(100 * summary['BUY'] / sum)
-    df.loc[symbol, 'sell_' + interval] = int(100 * summary['SELL'] / sum)
-    df.loc[symbol, 'neutral_' + interval] = int(100 * summary['NEUTRAL'] / sum)
+    tot = summary['BUY'] + summary['SELL'] + summary['NEUTRAL']
+    df.loc[symbol, 'buy_' + interval] = int(100 * summary['BUY'] / tot)
+    df.loc[symbol, 'sell_' + interval] = int(100 * summary['SELL'] / tot)
+    df.loc[symbol, 'neutral_' + interval] = int(100 * summary['NEUTRAL'] / tot)
 
     return df
 
