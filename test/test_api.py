@@ -46,12 +46,11 @@ class TestApi:
         ohlcv = pd.read_json(df_data)
         assert(isinstance(ohlcv, pd.DataFrame))
 
-    def test_api_recommendations(self):
+    def test_api_recommendations_for_symbol(self):
         screener = "crypto"
         exchange = "ftx"
         symbol = "1INCHUSD"
         response = api.api_recommendations(screener, exchange, symbol, "1h")
-        print(response)
         assert("status" in response)
         assert(response["status"] == "ok")
         assert("result" in response)
@@ -61,3 +60,19 @@ class TestApi:
         assert(response["result"][symbol]["status"] == "ok")
         assert("RECOMMENDATION" in response["result"][symbol])
         assert(response["result"][symbol]["RECOMMENDATION"] in ["STRONG_BUY", "BUY", "NEUTRAL", "SELL", "STRONG_SELL"])
+
+    def test_api_recommendations_for_exchange(self):
+        screener = "crypto"
+        exchange = "ftx"
+        symbol = None
+        response = api.api_recommendations(screener, exchange, symbol, "1h")
+        arbitrary_symbol = "BNBUSD"
+        assert("status" in response)
+        assert(response["status"] == "ok")
+        assert("result" in response)
+        assert(arbitrary_symbol in response["result"])
+        assert(response["result"][arbitrary_symbol]["status"] == "ok")
+        assert("status" in response["result"][arbitrary_symbol])
+        assert(response["result"][arbitrary_symbol]["status"] == "ok")
+        assert("RECOMMENDATION" in response["result"][arbitrary_symbol])
+        assert(response["result"][arbitrary_symbol]["RECOMMENDATION"] in ["STRONG_BUY", "BUY", "NEUTRAL", "SELL", "STRONG_SELL"])

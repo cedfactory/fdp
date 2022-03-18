@@ -136,7 +136,18 @@ def api_recommendations(screener, exchange, str_symbols = None, interval = "1h")
 
     start = datetime.now()
     
-    result_for_response = tradingview.get_recommendations_from_list(screener, exchange, str_symbols.split(','), interval)
+    if str_symbols != None:
+        # look for recommendations for the symbols provided as argument
+        symbols = str_symbols.split(',')
+        result_for_response = tradingview.get_recommendations_from_list(screener, exchange, symbols, interval)
+    else:
+        # look for recommendations for all the symbols managed by the exchange
+        if exchange in map_market_function.keys():
+            symbols = map_market_function[exchange]()
+            symbols = [symbol.replace("/", "") for symbol in symbols]
+            result_for_response = tradingview.get_recommendations_from_list(screener, exchange, symbols, interval)
+        else:
+            result_for_response = {"symbols":"", "status":"ko", "message":"unknown exchange"}
 
     end = datetime.now()
     elapsed_time = str(end - start)
