@@ -12,9 +12,11 @@ class TestApi:
         assert("w_cac" in response["result"])
         assert(response["result"]["w_cac"]["status"] == "ok")
         
-        df_data = response["result"]["w_cac"]["dataframe"]
-        df = pd.read_json(df_data)
-        test_utils.check_expectations(df, "wiki_list_cac.csv")
+        symbols = response["result"]["w_cac"]["symbols"]
+        df = pd.read_csv("./test/references/wiki_list_cac.csv")
+        symbols_reference = df["symbol"].to_list()
+        symbols_reference = ','.join(symbols_reference)
+        assert(symbols == symbols_reference)
 
     def test_api_value(self):
         symbol = "AI.PA"

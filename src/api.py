@@ -24,10 +24,10 @@ map_market_function = {
     "y_most_actives":       yahoo.get_list_most_actives,
     "y_trending_tickers":   yahoo.get_list_trending_tickers,
 
-    "c_hitbtc":             crypto.get_list_symbols_hitbtc,
-    "c_bitmex":             crypto.get_list_symbols_bitmex,
-    "c_binance":            crypto.get_list_symbols_binance,
-    "c_ftx":                crypto.get_list_symbols_ftx
+    "hitbtc":             crypto.get_list_symbols_hitbtc,
+    "bitmex":             crypto.get_list_symbols_bitmex,
+    "binance":            crypto.get_list_symbols_binance,
+    "ftx":                crypto.get_list_symbols_ftx
 }
 
 def api_list(str_markets):
@@ -40,20 +40,20 @@ def api_list(str_markets):
 
     markets = str_markets.split(',')
     for market in markets:
-        df = None
+        result = None
         if market in map_market_function.keys():
-            df = map_market_function[market]()
+            result = map_market_function[market]()
         else:
-            result_for_response[market] = {"dataframe":"", "status":"ko", "reason":"unknown market"}
+            result_for_response[market] = {"symbols":"", "status":"ko", "reason":"unknown market"}
             continue
 
-        current_result = {}
-        if isinstance(df, pd.DataFrame) == True:
-            current_result["dataframe"] = df.to_json()
-            current_result["status"] = "ok"
+        if isinstance(result, pd.DataFrame) == True:
+            symbols = result["symbol"].to_list()
         else:
-            current_result["status"] = "ko"
-            current_result["reason"] = "invalid dataframe"
+            symbols = result
+        current_result = {}
+        current_result["symbols"] = ','.join(symbols)
+        current_result["status"] = "ok"
 
         result_for_response[market] = current_result
 

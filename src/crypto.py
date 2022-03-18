@@ -33,7 +33,7 @@ def _get_exchange(exchange_market):
         exchange = ccxt.ftx()
     return exchange
 
-def get_list_symbols(exchange_market):
+def get_dataframe_symbols(exchange_market):
     exchange = _get_exchange(exchange_market)
     if exchange == None:
         return []
@@ -46,6 +46,17 @@ def get_list_symbols(exchange_market):
     df = utils.make_df_stock_info(symbols, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
 
     return df
+
+def get_list_symbols(exchange):
+    exchange = _get_exchange(exchange)
+    if exchange == None:
+        return []
+
+    exchange.load_markets()
+    symbols = exchange.symbols
+    symbols = list(filter(_custom_filter, symbols))
+
+    return symbols
 
 def get_list_symbols_hitbtc():
     return get_list_symbols("hitbtc")
