@@ -54,7 +54,7 @@ def get_recommendations_from_dataframe(df, interval):
 
     return df
 
-def get_recommendations_from_list(symbols, screener, exchange, interval):
+def get_recommendations_from_list(screener, exchange, symbols, interval):
     recommendations = {}
     for symbol in symbols:
         tv_summary = get_recommendation(screener, exchange, symbol, interval)

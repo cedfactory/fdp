@@ -136,8 +136,7 @@ def api_recommendations(screener, exchange, str_symbols = None, interval = "1h")
 
     start = datetime.now()
     
-    for symbol in str_symbols.split(','):
-        result_for_response[symbol] = tradingview.get_recommendation(screener, exchange, symbol, interval)
+    result_for_response = tradingview.get_recommendations_from_list(screener, exchange, str_symbols.split(','), interval)
 
     end = datetime.now()
     elapsed_time = str(end - start)
