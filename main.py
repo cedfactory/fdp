@@ -60,10 +60,10 @@ def get_recommendations():
    
     screener = request.args.get("screener")
     exchange = request.args.get("exchange")
-    symbol = request.args.get("symbol")
+    symbols = request.args.get("symbols")
     interval = request.args.get("interval", "1h")
 
-    response = api.api_recommendations(screener, exchange, symbol, interval)
+    response = api.api_recommendations(screener, exchange, symbols, interval)
     response = jsonify(response)
     response = add_headers(response)
     

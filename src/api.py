@@ -124,19 +124,20 @@ def api_history(str_source, str_symbol, str_start, length):
 
     return final_response
    
-def api_recommendations(screener, exchange, symbol = None, interval = "1h"):
+def api_recommendations(screener, exchange, str_symbols = None, interval = "1h"):
     result_for_response = {}
     result_for_response["result"] = {}
-    result_for_response["parameters"] = {"screener": screener, "exchange": exchange, "symbol": symbol, "interval": interval}
+    result_for_response["parameters"] = {"screener": screener, "exchange": exchange, "symbols": str_symbols, "interval": interval}
     result_for_response["elapsed_time"] = "0"
     if screener == None or exchange == None:
         result_for_response["status"] = "ko"
-        result_for_response["message"] = "missing parameter(s) among screener, exchange, symbol and interval"
+        result_for_response["message"] = "missing parameter(s) among screener, exchange. all parameters are screener, exchange, symbols and interval"
         return result_for_response
 
     start = datetime.now()
-
-    result_for_response[symbol] = tradingview.get_recommendation(screener, exchange, symbol, interval)
+    
+    for symbol in str_symbols.split(','):
+        result_for_response[symbol] = tradingview.get_recommendation(screener, exchange, symbol, interval)
 
     end = datetime.now()
     elapsed_time = str(end - start)
