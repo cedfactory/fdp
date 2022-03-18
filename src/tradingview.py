@@ -14,12 +14,13 @@ g_interval_for_ta = {
 }
 
 def get_recommendation(screener, exchange, symbol, interval):
-    tv_summary = None
+    tv_summary = {}
     data_handler = TA_Handler(symbol=symbol, screener=screener, exchange=exchange, interval=g_interval_for_ta[interval])
     try:
         tv_summary = data_handler.get_analysis().summary
+        tv_summary["status"] = "ok"
     except:
-        print("!!! exception in get_recommendation")
+        tv_summary = {"status":"ko", "message":"exception in tradvingview.get_analysis"}
 
     return tv_summary
 
@@ -46,7 +47,8 @@ def get_recommendations_from_dataframe(df, interval):
         exchange = df.loc[symbol, 'exchange']
 
         tv_summary = get_recommendation(screener, exchange, symbol, interval)
-        df = insert_tradingview_data(df, screener, exchange, symbol, interval, tv_summary)
+        if tv_summary["status"] == "ok":
+            df = insert_tradingview_data(df, screener, exchange, symbol, interval, tv_summary)
 
     df.reset_index(inplace=True, drop=True)
 
