@@ -1,6 +1,6 @@
 import pandas as pd
 from datetime import datetime
-from . import wiki,yahoo,yf_wrapper,crypto
+from . import wiki,yahoo,yf_wrapper,crypto,tradingview
 
 map_market_function = {
     "w_cac":                wiki.get_list_cac,
@@ -124,3 +124,27 @@ def api_history(str_source, str_symbol, str_start, length):
 
     return final_response
    
+def api_recommendations(screener, exchange, symbol = None, interval = "1h"):
+    result_for_response = {}
+    result_for_response["result"] = {}
+    result_for_response["parameters"] = {"screener": screener, "exchange": exchange, "symbol": symbol, "interval": interval}
+    result_for_response["elapsed_time"] = "0"
+    if screener == None or exchange == None:
+        result_for_response["status"] = "ko"
+        result_for_response["message"] = "missing parameter(s) among screener, exchange, symbol and interval"
+        return result_for_response
+
+    start = datetime.now()
+
+    result_for_response[symbol] = tradingview.get_recommendation(screener, exchange, symbol, interval)
+
+    end = datetime.now()
+    elapsed_time = str(end - start)
+
+    final_response = {
+        "result":result_for_response,
+        "status":"ok",
+        "elapsed_time":elapsed_time
+    }
+
+    return final_response

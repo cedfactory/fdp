@@ -43,3 +43,19 @@ class TestApi:
         df_data = response["result"][symbol]["info"]
         ohlcv = pd.read_json(df_data)
         assert(isinstance(ohlcv, pd.DataFrame))
+
+    def test_api_recommendations(self):
+        screener = "crypto"
+        exchange = "ftx"
+        symbol = "1INCHUSD"
+        response = api.api_recommendations(screener, exchange, symbol, "1h")
+        print(response)
+        assert("status" in response)
+        assert(response["status"] == "ok")
+        assert("result" in response)
+        assert(symbol in response["result"])
+        assert(response["result"][symbol]["status"] == "ok")
+        assert("status" in response["result"][symbol])
+        assert(response["result"][symbol]["status"] == "ok")
+        assert("RECOMMENDATION" in response["result"][symbol])
+        assert(response["result"][symbol]["RECOMMENDATION"] in ["STRONG_BUY", "BUY", "NEUTRAL", "SELL", "STRONG_SELL"])
