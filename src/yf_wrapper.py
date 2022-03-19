@@ -12,27 +12,27 @@ def get_info(value):
     info["symbol"] = value
     try:
         info["isin"] = yf_value.isin
-    except:
+    except BaseException as e:
         info["isin"] = '-'
     try:
         info["industry"] = yf_value.info['industry']
-    except:
+    except BaseException as e:
         pass
     try:
         info["sector"] = yf_value.info['sector']
-    except:
+    except BaseException as e:
         pass
     try:
         info["short_name"] = yf_value.info['shortName']
-    except:
+    except BaseException as e:
         pass
     try:
         info["country"] = yf_value.info['country']
-    except:
+    except BaseException as e:
         pass
     try:
         info["exchange"] = yf_value.info['exchange']
-    except:
+    except BaseException as e:
         pass    
 
     return {"status":"ok", "info":info}
