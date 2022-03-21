@@ -1,4 +1,3 @@
-# from selenium import webdriver
 import pandas as pd
 from inspect import getframeinfo, stack
 from bs4 import BeautifulSoup
