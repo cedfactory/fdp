@@ -20,30 +20,31 @@ def get_info(value):
     except BaseException as e:
         info["isin"] = '-'
         print_exception_info(e)
+        raise e
     try:
         info["industry"] = yf_value.info['industry']
     except BaseException as e:
         print_exception_info(e)
-        pass
+        raise e
     try:
         info["sector"] = yf_value.info['sector']
     except BaseException as e:
         print_exception_info(e)
-        pass
+        raise e
     try:
         info["short_name"] = yf_value.info['shortName']
     except BaseException as e:
         print_exception_info(e)
-        pass
+        raise e
     try:
         info["country"] = yf_value.info['country']
     except BaseException as e:
         print_exception_info(e)
-        pass
+        raise e
     try:
         info["exchange"] = yf_value.info['exchange']
     except BaseException as e:
         print_exception_info(e)
-        pass    
+        raise e 
 
     return {"status":"ok", "info":info}
