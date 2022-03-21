@@ -98,3 +98,9 @@ def get_symbol_ohlcv(exchange_market, symbol, start=None, timeframe="1d", length
 
     ohlcv = _get_ohlcv(exchange, symbol, start, timeframe, length)
     return ohlcv
+
+def apply_filter_on_symbol_with_volume_gt_threshold(symbols, markets, threshold):
+    return [symbol for symbol in symbols if float(markets[symbol]['info']['quoteVolume24h']) > threshold]
+
+def apply_filter_on_symbol_with_name_ending_with(symbols, end):
+    return [symbol for symbol in symbols if (symbol[-len(end):] == end and "BULL" not in symbol and "HALF" not in symbol and "EDGE" not in symbol and "BEAR" not in symbol)]
