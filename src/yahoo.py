@@ -1,21 +1,15 @@
 import pandas as pd
-from inspect import getframeinfo, stack
 from bs4 import BeautifulSoup
 import requests
 from yahoo_fin import stock_info as si
-
 from . import utils
-
-def print_exception_info(exception):
-    caller = getframeinfo(stack()[2][0])
-    print("[{}:{}] - {}".format(caller.filename, caller.lineno, exception))
 
 def get_from_si(si_call):
     df = None
     try:
         df = si_call()
     except BaseException as exception:
-        print_exception_info(exception)
+        utils.print_exception_info(exception)
         raise exception
 
     return df
