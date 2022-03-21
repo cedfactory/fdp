@@ -34,38 +34,30 @@ def _get_exchange(exchange_market):
         exchange = ccxt.ftx()
     return exchange
 
-def get_dataframe_symbols(exchange_market):
-    exchange = _get_exchange(exchange_market)
+def get_markets(exchange_name):
+    exchange = _get_exchange(exchange_name)
     if exchange == None:
-        return []
+        return {}
 
     exchange.load_markets()
-    symbols = exchange.symbols
+    return exchange
+
+def get_list_symbols(exchange):
+    markets = get_markets(exchange)
+    if bool(markets) == False:
+        return []
+
+    symbols = markets.symbols
     symbols = list(filter(_custom_filter, symbols))
 
+    return symbols
+
+def get_dataframe_symbols(exchange):
+    symbols = get_list_symbols(exchange)
     n = len(symbols)
     df = utils.make_df_stock_info(symbols, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
 
     return df
-
-def get_list_markets(exchange):
-    exchange = _get_exchange(exchange)
-    if exchange == None:
-        return {}
-
-    markets = exchange.load_markets()
-    return markets
-
-def get_list_symbols(exchange):
-    exchange = _get_exchange(exchange)
-    if exchange == None:
-        return []
-
-    exchange.load_markets()
-    symbols = exchange.symbols
-    symbols = list(filter(_custom_filter, symbols))
-
-    return symbols
 
 def get_list_symbols_hitbtc():
     return get_list_symbols("hitbtc")
