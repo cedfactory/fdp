@@ -34,20 +34,20 @@ def _get_exchange(exchange_market):
         exchange = ccxt.ftx()
     return exchange
 
-def get_markets(exchange_name):
+def get_exchange_and_markets(exchange_name):
     exchange = _get_exchange(exchange_name)
     if exchange == None:
-        return {}
+        return None, {}
 
-    exchange.load_markets()
-    return exchange
+    markets = exchange.load_markets()
+    return exchange, markets
 
-def get_list_symbols(exchange):
-    markets = get_markets(exchange)
-    if bool(markets) == False:
+def get_list_symbols(exchange_name):
+    exchange, markets = get_exchange_and_markets(exchange_name)
+    if bool(exchange) == False:
         return []
 
-    symbols = markets.symbols
+    symbols = exchange.symbols
     symbols = list(filter(_custom_filter, symbols))
 
     return symbols
