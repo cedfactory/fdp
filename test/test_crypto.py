@@ -5,9 +5,17 @@ from src import crypto
 
 class TestCrypto:
 
+    def test_get_dataframe_symbols(slef):
+        df_symbols = crypto.get_dataframe_symbols("binance")
+        assert(len(df_symbols.index) == 3)
+
     def test_get_list_symbols(self):
         symbols = crypto.get_list_symbols("hitbtc")
         assert(len(symbols) == 2)
+
+    def test_get_list_symbols_bad_exchange(self):
+        symbols = crypto.get_list_symbols("foobar")
+        assert(len(symbols) == 0)
 
     def test_get_symbol_ticker(self):
         info = crypto.get_symbol_ticker("hitbtc", "BTC/EURS")
