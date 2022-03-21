@@ -48,6 +48,14 @@ def get_dataframe_symbols(exchange_market):
 
     return df
 
+def get_list_markets(exchange):
+    exchange = _get_exchange(exchange)
+    if exchange == None:
+        return {}
+
+    markets = exchange.load_markets()
+    return markets
+
 def get_list_symbols(exchange):
     exchange = _get_exchange(exchange)
     if exchange == None:
