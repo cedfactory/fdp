@@ -16,6 +16,7 @@ def get_from_si(si_call):
         df = si_call()
     except BaseException as exception:
         print_exception_info(exception)
+        raise exception
 
     return df
 
