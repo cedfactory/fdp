@@ -19,8 +19,9 @@ def get_recommendation(screener, exchange, symbol, interval):
     try:
         tv_summary = data_handler.get_analysis().summary
         tv_summary["status"] = "ok"
-    except:
+    except BaseException as e:
         tv_summary = {"status":"ko", "message":"exception in tradvingview.get_analysis"}
+        raise e
 
     return tv_summary
 
