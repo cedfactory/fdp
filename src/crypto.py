@@ -104,3 +104,39 @@ def apply_filter_on_symbol_with_volume_gt_threshold(symbols, markets, threshold)
 
 def apply_filter_on_symbol_with_name_ending_with(symbols, end):
     return [symbol for symbol in symbols if (symbol[-len(end):] == end and "BULL" not in symbol and "HALF" not in symbol and "EDGE" not in symbol and "BEAR" not in symbol)]
+
+
+###
+### gainers
+###
+def _get_top_gainers_for_change(symbols, markets, change, n):
+    df = pd.DataFrame(symbols, columns=['symbol'])
+    df['symbol'] = df['symbol'].astype("string")
+    df = df.set_index('symbol', drop=False)
+    symbols = df['symbol'].to_list()
+
+    for symbol in symbols:
+        df.loc[symbol, change] = float(markets[symbol]['info'][change]) * 100
+
+    df.sort_values(by=[change], ascending=False, inplace=True)
+    df.reset_index(inplace=True, drop=True)
+    df['rank_'+change] = df.index
+    df = df.head(n)
+    return df
+
+def get_top_gainers(n):
+    exchange, markets = get_exchange_and_markets("ftx")
+    symbols = exchange.symbols
+
+    # filters on symbols
+    symbols = apply_filter_on_symbol_with_name_ending_with(symbols, '/USD')
+    symbols = apply_filter_on_symbol_with_volume_gt_threshold(symbols, markets, 10000)
+
+    # get the gainers
+    gainers1h = _get_top_gainers_for_change(symbols, markets, "change1h", n)
+    gainers24h = _get_top_gainers_for_change(symbols, markets, "change24h", n)
+
+    # merge
+    df = pd.merge(gainers1h, gainers24h)
+
+    return df
