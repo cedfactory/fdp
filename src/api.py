@@ -1,6 +1,6 @@
 import pandas as pd
 from datetime import datetime
-from . import wiki,yahoo,yf_wrapper,crypto,tradingview
+from . import wiki,yahoo,yf_wrapper,crypto,tradingview,portfolio
 
 map_market_function = {
     "w_cac":                wiki.get_list_cac,
@@ -148,6 +148,25 @@ def api_recommendations(screener, exchange, str_symbols = None, interval = "1h")
             result_for_response = tradingview.get_recommendations_from_list(screener, exchange, symbols, interval)
         else:
             result_for_response = {"symbols":"", "status":"ko", "message":"unknown exchange"}
+
+    end = datetime.now()
+    elapsed_time = str(end - start)
+
+    final_response = {
+        "result":result_for_response,
+        "status":"ok",
+        "elapsed_time":elapsed_time
+    }
+
+    return final_response
+
+def api_portfolio():
+    start = datetime.now()
+
+    result_for_response = {"symbols":"", "status":"ko", "message":"unknown exchange"}
+
+    symbols = portfolio.get_portfolio()
+    result_for_response = {"symbols":','.join(symbols), "status":"ok"}
 
     end = datetime.now()
     elapsed_time = str(end - start)
