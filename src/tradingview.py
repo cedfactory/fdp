@@ -1,5 +1,6 @@
 from tradingview_ta import TA_Handler, Interval, Exchange
 import pandas as pd
+import concurrent.futures
 
 g_interval_for_ta = {
     "1m" : Interval.INTERVAL_1_MINUTE,
@@ -77,9 +78,14 @@ def filter_with_tradingview_recommendations(symbols, filter):
     df_symbol['screener'] = 'crypto'
 
     # get recommendations
-    for interval in ["15m", "30m", "1h"]:
-        df_symbol = get_recommendations_from_dataframe(df_symbol, interval)
-
+    intervals = ["15m", "30m", "1h"]
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        futures = []
+        for interval in intervals:
+            futures.append(executor.submit(get_recommendations_from_dataframe, df=df_symbol, interval=interval))
+        for future in concurrent.futures.as_completed(futures):
+            df_symbol = pd.merge(df_symbol, future.result())
+            
     # filter symbols
     df_symbol = remove_rows_where_recommendation_not_in_filter(df_symbol, filter)
 
