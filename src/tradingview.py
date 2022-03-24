@@ -61,3 +61,12 @@ def get_recommendations_from_list(screener, exchange, symbols, interval):
         recommendations[symbol] = tv_summary
 
     return recommendations
+
+def remove_rows_where_recommendation_not_in_filter(df, filter):
+    recommendations_columns = [column for column in df.columns if column.startswith('RECOMMENDATION_')]
+    print(recommendations_columns)
+    for recommendation_column in recommendations_columns:
+        indexNames = df[~df[recommendation_column].isin(filter)].index
+        df.drop(indexNames , inplace=True)
+    return df
+
