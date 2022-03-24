@@ -69,5 +69,14 @@ def get_recommendations():
     
     return response
 
+@app.route('/portfolio', methods=['OPTIONS', 'GET'])
+def get_portfolio():
+   
+    response = api.api_portfolio()
+    response = jsonify(response)
+    response = add_headers(response)
+    
+    return response
+
 if __name__ == "__main__":
 	app.run(debug=False, host= '0.0.0.0', port=5000)
