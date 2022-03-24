@@ -32,15 +32,3 @@ class TestCrypto:
         assert(df.columns.to_list() == ['symbol', 'change1h', 'rank_change1h', 'change24h', 'rank_change24h'])
         symbols = df['symbol'].to_list()
         assert(len(symbols) > 1)
-
-    def test_remove_rows_where_recommendation_not_in_filter(self):
-        df_symbol = pd.DataFrame({
-        'RECOMMENDATION_15m': ['BUY', 'BUY', 'NEUTRAL', 'STRONG_BUY', 'BUY', 'NEUTRAL'],
-        'RECOMMENDATION_30m': ['BUY', 'SELL', 'BUY', 'STRONG_BUY', 'STRONG_BUY', 'NEUTRAL'],
-        'RECOMMENDATION_1h': ['BUY', 'STRONG_BUY', 'STRONG_BUY', 'STRONG_SELL', 'STRONG_BUY', 'SELL'],
-        'foobar': ['NEUTRAL', 'NEUTRAL', 'SELL', 'SELL', 'STRONG_SELL', 'BUY'],
-        'value': [1, 2, 3, 4, 5, 6],
-        })
-        filter = ['BUY', 'STRONG_BUY']
-        df_symbol = crypto.remove_rows_where_recommendation_not_in_filter(df_symbol, filter)
-        assert(len(df_symbol.index) == 2)
