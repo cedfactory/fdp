@@ -109,6 +109,14 @@ def apply_filter_on_symbol_with_name_ending_with(symbols, end):
 ###
 ### gainers
 ###
+def remove_rows_where_recommendation_not_in_filter(df, filter):
+    recommendations_columns = [column for column in df.columns if column.startswith('RECOMMENDATION_')]
+    print(recommendations_columns)
+    for recommendation_column in recommendations_columns:
+        indexNames = df[~df[recommendation_column].isin(filter)].index
+        df.drop(indexNames , inplace=True)
+    return df
+
 def _get_top_gainers_for_change(symbols, markets, change, n):
     df = pd.DataFrame(symbols, columns=['symbol'])
     df['symbol'] = df['symbol'].astype("string")
