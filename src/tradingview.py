@@ -1,4 +1,5 @@
 from tradingview_ta import TA_Handler, Interval, Exchange
+import pandas as pd
 
 g_interval_for_ta = {
     "1m" : Interval.INTERVAL_1_MINUTE,
@@ -64,9 +65,24 @@ def get_recommendations_from_list(screener, exchange, symbols, interval):
 
 def remove_rows_where_recommendation_not_in_filter(df, filter):
     recommendations_columns = [column for column in df.columns if column.startswith('RECOMMENDATION_')]
-    print(recommendations_columns)
     for recommendation_column in recommendations_columns:
         indexNames = df[~df[recommendation_column].isin(filter)].index
         df.drop(indexNames , inplace=True)
     return df
 
+def filter_with_tradingview_recommendations(symbols, filter):
+    df_symbol = pd.DataFrame(symbols, columns =['symbol'])
+    df_symbol['symbolTV'] = df_symbol['symbol'].str.replace("/", "")
+    df_symbol['exchange'] = 'ftx'
+    df_symbol['screener'] = 'crypto'
+
+    # get recommendations
+    for interval in ["15m", "30m", "1h"]:
+        df_symbol = get_recommendations_from_dataframe(df_symbol, interval)
+
+    # filter symbols
+    df_symbol = remove_rows_where_recommendation_not_in_filter(df_symbol, filter)
+
+    filtered_symbols = df_symbol['symbol'].to_list()
+
+    return filtered_symbols
