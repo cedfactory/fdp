@@ -38,3 +38,9 @@ class TestTradingView:
         filter = ['BUY', 'STRONG_BUY']
         df_symbol = tradingview.remove_rows_where_recommendation_not_in_filter(df_symbol, filter)
         assert(len(df_symbol.index) == 2)
+
+    def test_filter_with_tradingview_recommendations(self):
+        symbols = ['AXS/USD', 'BICO/USD', 'CTX/USD', 'SLP/USD', 'STSOL/USD', 'SOL/USD']
+        filtered_symbols = tradingview.filter_with_tradingview_recommendations(symbols, ['STRONG_BUY', 'BUY', 'NEUTRAL'])
+        assert(all(item in symbols for item in filtered_symbols))
+        
