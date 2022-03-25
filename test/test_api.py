@@ -1,5 +1,6 @@
 import pytest
 import pandas as pd
+import json
 
 from src import api
 from . import test_utils
@@ -83,3 +84,6 @@ class TestApi:
         assert(response["status"] == "ok")
         assert("result" in response)
         assert("symbols" in response["result"])
+        json_data = json.loads(response["result"])
+        df = pd.read_json(json_data)
+        assert(isinstance(df, pd.DataFrame))
