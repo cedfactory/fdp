@@ -41,6 +41,15 @@ class TestTradingView:
 
     def test_filter_with_tradingview_recommendations(self):
         symbols = ['AXS/USD', 'BICO/USD', 'CTX/USD', 'SLP/USD', 'STSOL/USD', 'SOL/USD']
-        filtered_symbols = tradingview.filter_with_tradingview_recommendations(symbols, ['STRONG_BUY', 'BUY', 'NEUTRAL'])
-        assert(all(item in symbols for item in filtered_symbols))
-        
+        df_filtered_symbols = tradingview.filter_with_tradingview_recommendations(symbols, ['STRONG_BUY', 'BUY', 'NEUTRAL'])
+
+        # result is a dataframe
+        assert(isinstance(df_filtered_symbols,pd.DataFrame))
+
+        # check the columns names
+        columns = df_filtered_symbols.columns.tolist()
+        assert(any(column in ['symbol', 'RECOMMENDATION_15m', 'RECOMMENDATION_30m', 'RECOMMENDATION_1h'] for column in columns))
+
+        # check the filtered symbols
+        assert(all(symbol in symbols for symbol in df_filtered_symbols['symbol'].tolist()))
+                

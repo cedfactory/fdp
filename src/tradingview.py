@@ -88,7 +88,12 @@ def filter_with_tradingview_recommendations(symbols, filter):
             
     # filter symbols
     df_symbol = remove_rows_where_recommendation_not_in_filter(df_symbol, filter)
+ 
+    # cleaning
+    columns_to_drop = ['symbolTV', 'exchange', 'screener',
+                        'buy_1h', 'sell_1h', 'neutral_1h',
+                        'buy_15m', 'sell_15m', 'neutral_15m',
+                        'buy_30m', 'sell_30m', 'neutral_30m']
+    df_symbol.drop(columns_to_drop, axis = 1, inplace=True)
 
-    filtered_symbols = df_symbol['symbol'].to_list()
-
-    return filtered_symbols
+    return df_symbol
