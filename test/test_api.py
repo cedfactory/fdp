@@ -84,6 +84,5 @@ class TestApi:
         assert(response["status"] == "ok")
         assert("result" in response)
         assert("symbols" in response["result"])
-        json_data = json.loads(response["result"])
-        df = pd.read_json(json_data)
+        df = pd.read_json(response["result"]["symbols"])
         assert(isinstance(df, pd.DataFrame))

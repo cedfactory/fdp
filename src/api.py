@@ -163,10 +163,10 @@ def api_recommendations(screener, exchange, str_symbols = None, interval = "1h")
 def api_portfolio():
     start = datetime.now()
 
-    result_for_response = {"symbols":"", "status":"ko", "message":"unknown exchange"}
+    result_for_response = {"symbols":"{}", "status":"ko", "message":"unknown exchange"}
 
     symbols = portfolio.get_portfolio()
-    result_for_response = {"symbols":','.join(symbols), "status":"ok"}
+    result_for_response = {"symbols":symbols.to_json(), "status":"ok"}
 
     end = datetime.now()
     elapsed_time = str(end - start)
