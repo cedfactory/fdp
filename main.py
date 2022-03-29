@@ -72,7 +72,20 @@ def get_recommendations():
 @app.route('/portfolio', methods=['OPTIONS', 'GET'])
 def get_portfolio():
    
-    response = api.api_portfolio()
+    recommendations = request.args.get("recommendations")
+    if recommendations is None:
+        recommendations = ["BUY", "STRONG_BUY"]
+    else:
+        recommendations = recommendations.split(',')
+        
+    intervals = request.args.get("intervals")
+    if intervals is None:
+        intervals = ["15m", "30m", "1h"]
+    else:
+        intervals = intervals.split(',')
+    print(intervals)
+
+    response = api.api_portfolio(recommendations, intervals)
     response = jsonify(response)
     response = add_headers(response)
     
