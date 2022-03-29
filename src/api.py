@@ -160,12 +160,12 @@ def api_recommendations(screener, exchange, str_symbols = None, interval = "1h")
 
     return final_response
 
-def api_portfolio():
+def api_portfolio(recommendations=["BUY", "STRONG_BUY"], intervals=["15m", "30m", "1h"]):
     start = datetime.now()
 
     result_for_response = {"symbols":"{}", "status":"ko", "message":"unknown exchange"}
 
-    symbols = portfolio.get_portfolio()
+    symbols = portfolio.get_portfolio(recommendations, intervals)
     result_for_response = {"symbols":symbols.to_json(), "status":"ok"}
 
     end = datetime.now()
