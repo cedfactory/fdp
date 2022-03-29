@@ -71,14 +71,13 @@ def remove_rows_where_recommendation_not_in_filter(df, filter):
         df.drop(indexNames , inplace=True)
     return df
 
-def filter_with_tradingview_recommendations(symbols, filter):
+def filter_with_tradingview_recommendations(symbols, recommendations, intervals):
     df_symbol = pd.DataFrame(symbols, columns =['symbol'])
     df_symbol['symbolTV'] = df_symbol['symbol'].str.replace("/", "")
     df_symbol['exchange'] = 'ftx'
     df_symbol['screener'] = 'crypto'
 
     # get recommendations
-    intervals = ["15m", "30m", "1h"]
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = []
         for interval in intervals:
@@ -87,7 +86,7 @@ def filter_with_tradingview_recommendations(symbols, filter):
             df_symbol = pd.merge(df_symbol, future.result())
             
     # filter symbols
-    df_symbol = remove_rows_where_recommendation_not_in_filter(df_symbol, filter)
+    df_symbol = remove_rows_where_recommendation_not_in_filter(df_symbol, recommendations)
  
     # cleaning
     columns_to_drop = ['symbolTV', 'exchange', 'screener',
