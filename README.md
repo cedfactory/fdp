@@ -7,3 +7,65 @@ fdp
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=cedfactory_fdp&metric=bugs)](https://sonarcloud.io/dashboard?id=cedfactory_fdp)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=cedfactory_fdp&metric=code_smells)](https://sonarcloud.io/dashboard?id=cedfactory_fdp)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=cedfactory_fdp&metric=ncloc)](https://sonarcloud.io/dashboard?id=cedfactory_fdp)
+
+
+API
+=
+
+## list
+
+- *markets* : for crypto may be hitbtc, bitmex, binance, ftx.
+
+example :
+
+```
+localhost:5000/list?markets=ftx
+```
+
+## value
+
+- *values* : symbols separated with ',' and '/' replaced with '_'
+
+example :
+
+```
+localhost:5000/value?values=ETH_EURS
+```
+
+## history
+
+- *source* : may be hitbtc, bitmex, binance, ftx.
+- *symbol* : symbols separated with ',' and '/' replaced with '_'
+- *start* : date with format dd_mm_yyyy
+- *length* (optional) : 
+
+example :
+
+```
+localhost:5000/history?source=ftx&symbol=ETH_EUR&start=01_01_2022
+```
+
+## recommendations
+
+- *symbols* (optional) : symbols separated with ',' and '/' replaced with '_'
+- *screener* : should be crypto
+- *exchange* : may be hitbtc, bitmex, binance, ftx.
+- *interval* : may be 1m, 5m, 15m, 30m, 1h, 2h, 4h, 1d, 1W, 1M
+
+example :
+
+```
+http://localhost:5000/recommendations?symbols=ETHEUR&screener=crypto&exchange=ftx&interval=1h
+```
+
+## portfolio
+
+- *recommendations* : may be STRONG_SELL, SELL, NEUTRAL, BUY, STRONG_BUY
+- *intervals* : may be 1m, 5m, 15m, 30m, 1h, 2h, 4h, 1d, 1W, 1M
+
+example :
+
+```
+localhost:5000/portfolio?recommendations=STRONG_BUY,BUY&intervals=15m,30m,1h,2h,4h
+```
+
