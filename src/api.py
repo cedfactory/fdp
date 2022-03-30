@@ -98,7 +98,7 @@ def api_symbol(str_screener, str_exchange, str_symbols):
 
 def api_history(str_exchange, str_symbol, str_start, length):
     if str_exchange == None or str_symbol == None:
-        return {"result":{}, "status":"ko", "reason":"source or symbol not specified", "elapsed_time":"0"}
+        return {"result":{}, "status":"ko", "reason":"exchange or symbol not specified", "elapsed_time":"0"}
 
     start = datetime.now()
 
