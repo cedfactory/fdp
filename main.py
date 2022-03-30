@@ -20,20 +20,22 @@ def hello():
 @app.route('/list', methods=['OPTIONS', 'GET'])
 def get_list():
    
-    str_markets = request.args.get("markets")
+    str_exchanges = request.args.get("exchanges")
 
-    response = api.api_list(str_markets)
+    response = api.api_list(str_exchanges)
     response = jsonify(response)
     response = add_headers(response)
 
     return response
 
-@app.route('/value', methods=['OPTIONS', 'GET'])
-def get_value():
+@app.route('/symbol', methods=['OPTIONS', 'GET'])
+def get_symbol():
    
-    str_values = request.args.get("values")
+    str_screener = request.args.get("screener", "crypto")
+    str_exchange = request.args.get("exchange")
+    str_symbols = request.args.get("symbols")
 
-    response = api.api_value(str_values)
+    response = api.api_symbol(str_screener, str_exchange, str_symbols)
     response = jsonify(response)
     response = add_headers(response)
     
@@ -42,14 +44,14 @@ def get_value():
 @app.route('/history', methods=['OPTIONS', 'GET'])
 def get_history():
    
-    str_source = request.args.get("source")
+    str_exchange = request.args.get("exchange")
     str_symbol = request.args.get("symbol")
     str_start = request.args.get("start")
     length = request.args.get("length", 100)
     if length != None:
         length = int(length)
 
-    response = api.api_history(str_source, str_symbol, str_start, length)
+    response = api.api_history(str_exchange, str_symbol, str_start, length)
     response = jsonify(response)
     response = add_headers(response)
     
@@ -72,6 +74,7 @@ def get_recommendations():
 @app.route('/portfolio', methods=['OPTIONS', 'GET'])
 def get_portfolio():
    
+    exchange_name = request.args.get("exchange", "ftx")
     recommendations = request.args.get("recommendations")
     if recommendations is None:
         recommendations = ["BUY", "STRONG_BUY"]
@@ -85,7 +88,7 @@ def get_portfolio():
         intervals = intervals.split(',')
     print(intervals)
 
-    response = api.api_portfolio(recommendations, intervals)
+    response = api.api_portfolio(exchange_name, recommendations, intervals)
     response = jsonify(response)
     response = add_headers(response)
     

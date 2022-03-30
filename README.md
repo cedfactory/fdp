@@ -14,27 +14,29 @@ API
 
 ## list
 
-- *markets* : for crypto may be hitbtc, bitmex, binance, ftx.
+- *exchanges* : for crypto may be hitbtc, bitmex, binance, ftx, speratated with ','
 
 example :
 
 ```
-localhost:5000/list?markets=ftx
+localhost:5000/list?exchanges=ftx
 ```
 
 ## value
 
-- *values* : symbols separated with ',' and '/' replaced with '_'
+- *screener* : should be crypto.
+- *exchange* : may be hitbtc, bitmex, binance, ftx.
+- *symbols* : symbols separated with ',' and '/' replaced with '_'
 
 example :
 
 ```
-localhost:5000/value?values=ETH_EURS
+localhost:5000/symbol?symbols=ETH_EURS
 ```
 
 ## history
 
-- *source* : may be hitbtc, bitmex, binance, ftx.
+- *exchange* : may be hitbtc, bitmex, binance, ftx.
 - *symbol* : symbols separated with ',' and '/' replaced with '_'
 - *start* : date with format dd_mm_yyyy
 - *length* (optional) : 
@@ -60,6 +62,7 @@ http://localhost:5000/recommendations?symbols=ETHEUR&screener=crypto&exchange=ft
 
 ## portfolio
 
+- *exchange* : may be hitbtc, bitmex, binance, ftx (default).
 - *recommendations* : may be STRONG_SELL, SELL, NEUTRAL, BUY, STRONG_BUY
 - *intervals* : may be 1m, 5m, 15m, 30m, 1h, 2h, 4h, 1d, 1W, 1M
 

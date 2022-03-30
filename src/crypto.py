@@ -81,12 +81,12 @@ def get_symbol_ticker(exchange_market, symbol):
     ticker = exchange.fetch_ticker(symbol)
     return ticker
 
-def get_symbol_ohlcv(exchange_market, symbol, start=None, timeframe="1d", length=100):
+def get_symbol_ohlcv(exchange_name, symbol, start=None, timeframe="1d", length=100):
     # manage some errors
-    if exchange_market == "hitbtc" and length > 1000:
+    if exchange_name == "hitbtc" and length > 1000:
         return "for hitbtc, length must be in [1, 1000]"
 
-    exchange = _get_exchange(exchange_market)
+    exchange = _get_exchange(exchange_name)
     if exchange == None:
         return "exchange not found"
 
@@ -122,8 +122,8 @@ def _get_top_gainers_for_change(symbols, markets, change, n):
     df = df.head(n)
     return df
 
-def get_top_gainers(n):
-    exchange, markets = get_exchange_and_markets("ftx")
+def get_top_gainers(exchange_name, n):
+    exchange, markets = get_exchange_and_markets(exchange_name)
     symbols = exchange.symbols
 
     # filters on symbols

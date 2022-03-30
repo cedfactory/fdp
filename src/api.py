@@ -30,21 +30,21 @@ map_market_function = {
     "ftx":                crypto.get_list_symbols_ftx
 }
 
-def api_list(str_markets):
-    if str_markets == None:
+def api_list(str_exchanges):
+    if str_exchanges == None:
         return {"result":{}, "status":"ko", "reason":"no market", "elapsed_time":"0"}
 
     start = datetime.now()
 
     result_for_response = {}
 
-    markets = str_markets.split(',')
-    for market in markets:
+    exchanges = str_exchanges.split(',')
+    for exchange in exchanges:
         result = None
-        if market in map_market_function.keys():
-            result = map_market_function[market]()
+        if exchange in map_market_function.keys():
+            result = map_market_function[exchange]()
         else:
-            result_for_response[market] = {"symbols":"", "status":"ko", "reason":"unknown market"}
+            result_for_response[exchange] = {"symbols":"", "status":"ko", "reason":"unknown market"}
             continue
 
         if isinstance(result, pd.DataFrame) == True:
@@ -55,7 +55,7 @@ def api_list(str_markets):
         current_result["symbols"] = ','.join(symbols)
         current_result["status"] = "ok"
 
-        result_for_response[market] = current_result
+        result_for_response[exchange] = current_result
 
     end = datetime.now()
     elapsed_time = str(end - start)
@@ -68,23 +68,22 @@ def api_list(str_markets):
 
     return final_response
 
-def api_value(str_values):
-    if str_values == None:
+def api_symbol(str_screener, str_exchange, str_symbols):
+    if str_symbols == None:
         return {"result":{}, "status":"ko", "reason":"no values", "elapsed_time":"0"}
 
     start = datetime.now()
 
     result_for_response = {}
 
-    values = str_values.split(',')
-    for value in values:
-        if '_' in value:
-            # crypto
-            info = crypto.get_symbol_ticker("hitbtc", value.replace("_", "/"))
-            value_info = {"status": "ok", "info": info}
+    symbols = str_symbols.split(',')
+    for symbol in symbols:
+        if str_screener == "crypto":
+            info = crypto.get_symbol_ticker(str_exchange, symbol.replace("_", "/"))
+            symbol_info = {"status": "ok", "info": info}
         else:
-            value_info = yf_wrapper.get_info(value)
-        result_for_response[value] = value_info
+            symbol_info = yf_wrapper.get_info(symbol)
+        result_for_response[symbol] = symbol_info
 
     end = datetime.now()
     elapsed_time = str(end - start)
@@ -97,8 +96,8 @@ def api_value(str_values):
 
     return final_response
 
-def api_history(str_source, str_symbol, str_start, length):
-    if str_source == None or str_symbol == None:
+def api_history(str_exchange, str_symbol, str_start, length):
+    if str_exchange == None or str_symbol == None:
         return {"result":{}, "status":"ko", "reason":"source or symbol not specified", "elapsed_time":"0"}
 
     start = datetime.now()
@@ -107,7 +106,7 @@ def api_history(str_source, str_symbol, str_start, length):
 
     if '_' in str_symbol:
         # crypto ('_' stands for '/')
-        df = crypto.get_symbol_ohlcv(str_source, str_symbol.replace("_", "/"), str_start, "1d", length)
+        df = crypto.get_symbol_ohlcv(str_exchange, str_symbol.replace("_", "/"), str_start, "1d", length)
         if isinstance(df, pd.DataFrame):
             result_for_response[str_symbol] = {"status": "ok", "info": df.to_json()}
         else:
@@ -160,12 +159,11 @@ def api_recommendations(screener, exchange, str_symbols = None, interval = "1h")
 
     return final_response
 
-def api_portfolio(recommendations=["BUY", "STRONG_BUY"], intervals=["15m", "30m", "1h"]):
+def api_portfolio(exchange_name="ftx", recommendations=["BUY", "STRONG_BUY"], intervals=["15m", "30m", "1h"]):
     start = datetime.now()
 
-    result_for_response = {"symbols":"{}", "status":"ko", "message":"unknown exchange"}
-
-    symbols = portfolio.get_portfolio(recommendations, intervals)
+ 
+    symbols = portfolio.get_portfolio(exchange_name, recommendations, intervals)
     result_for_response = {"symbols":symbols.to_json(), "status":"ok"}
 
     end = datetime.now()

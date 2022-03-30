@@ -19,9 +19,9 @@ class TestApi:
         symbols_reference = ','.join(symbols_reference)
         assert(symbols == symbols_reference)
 
-    def test_api_value(self):
-        symbol = "AI.PA"
-        response = api.api_value(symbol)
+    def test_api_symbol(self):
+        symbol = "ETH/EUR"
+        response = api.api_symbol("crypto", "ftx", symbol)
         assert("status" in response)
         assert(response["status"] == "ok")
         assert("result" in response)

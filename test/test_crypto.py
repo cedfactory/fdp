@@ -27,7 +27,7 @@ class TestCrypto:
         assert(isinstance(ohlcv, pd.DataFrame))
 
     def test_get_top_gainers(self):
-        df = crypto.get_top_gainers(50)
+        df = crypto.get_top_gainers("ftx", 50)
         assert(isinstance(df, pd.DataFrame))
         assert(df.columns.to_list() == ['symbol', 'change1h', 'rank_change1h', 'change24h', 'rank_change24h'])
         symbols = df['symbol'].to_list()
