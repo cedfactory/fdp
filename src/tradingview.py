@@ -67,8 +67,8 @@ def get_recommendations_from_list(screener, exchange, symbols, interval):
 def remove_rows_where_recommendation_not_in_filter(df, filter):
     recommendations_columns = [column for column in df.columns if column.startswith('RECOMMENDATION_')]
     for recommendation_column in recommendations_columns:
-        indexNames = df[~df[recommendation_column].isin(filter)].index
-        df.drop(indexNames , inplace=True)
+        index_names = df[~df[recommendation_column].isin(filter)].index
+        df.drop(index_names , inplace=True)
     return df
 
 def filter_with_tradingview_recommendations(symbols, recommendations, intervals):
