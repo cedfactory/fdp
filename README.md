@@ -22,7 +22,7 @@ example :
 localhost:5000/list?exchanges=ftx
 ```
 
-## value
+## symbol
 
 - *screener* : should be crypto.
 - *exchange* : may be hitbtc, bitmex, binance, ftx.
