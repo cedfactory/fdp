@@ -104,13 +104,15 @@ def api_history(str_exchange, str_symbol, str_start, length):
 
     result_for_response = {}
 
-    if '_' in str_symbol:
-        # crypto ('_' stands for '/')
-        df = crypto.get_symbol_ohlcv(str_exchange, str_symbol.replace("_", "/"), str_start, "1d", length)
-        if isinstance(df, pd.DataFrame):
-            result_for_response[str_symbol] = {"status": "ok", "info": df.to_json()}
-        else:
-            result_for_response[str_symbol] = {"status": "ko", "reason": df, "info": ""}
+    symbols = str_symbol.split(',')
+    for symbol in symbols:
+        if '_' in symbol:
+            # crypto ('_' stands for '/')
+            df = crypto.get_symbol_ohlcv(str_exchange, symbol.replace("_", "/"), str_start, "1d", length)
+            if isinstance(df, pd.DataFrame):
+                result_for_response[symbol] = {"status": "ok", "info": df.to_json()}
+            else:
+                result_for_response[symbol] = {"status": "ko", "reason": df, "info": ""}
 
     end = datetime.now()
     elapsed_time = str(end - start)
