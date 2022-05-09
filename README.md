@@ -71,4 +71,3 @@ example :
 ```
 localhost:5000/portfolio?recommendations=STRONG_BUY,BUY&intervals=15m,30m,1h,2h,4h
 ```
-
