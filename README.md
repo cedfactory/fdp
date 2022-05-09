@@ -22,7 +22,7 @@ example :
 localhost:5000/list?exchanges=ftx
 ```
 
-## value
+## symbol
 
 - *screener* : should be crypto.
 - *exchange* : may be hitbtc, bitmex, binance, ftx.
@@ -69,5 +69,5 @@ http://localhost:5000/recommendations?symbols=ETHEUR&screener=crypto&exchange=ft
 example :
 
 ```
-localhost:5000/portfolio?recommendations=STRONG_BUY,BUY&intervals=15m,30m,1h,2h,4h
+localhost:5000/portfolio?recommendations=STRONG_BUY,BUY&intervals=15m,30m,1h
 ```
