@@ -1,31 +1,41 @@
 ,symbol,name,isin,sector,industry,country,exchange
-0,ADS.DE,Adidas,,Footwear,,Germany,Euronext
-1,ALV.DE,Allianz,,Financial Services,,Germany,Euronext
-2,BAS.DE,BASF,,Basic Materials,,Germany,Euronext
-3,BAYN.DE,Bayer,,Healthcare,,Germany,Euronext
-4,BMW.DE,BMW,,Automobile,,Germany,Euronext
-5,CON.DE,Continental,,Automotive,,Germany,Euronext
-6,1COV.DE,Covestro,,Basic Materials,,Germany,Euronext
-7,DHER.DE,Delivery Hero,,Online Food Ordering,,Germany,Euronext
-8,DBK.DE,Deutsche Bank,,Financial Services,,Germany,Euronext
-9,DB1.DE,Deutsche Börse,,Financial Services,,Germany,Euronext
-10,DPW.DE,Deutsche Post,,Industrials,,Germany,Euronext
-11,DTE.DE,Deutsche Telekom,,Communication Services,,Germany,Euronext
-12,DWNI.DE,Deutsche Wohnen,,Real Estate,,Germany,Euronext
-13,EOAN.DE,E.ON,,Utilities,,Germany,Euronext
-14,FRE.DE,Fresenius,,Healthcare,,Germany,Euronext
-15,FME.DE,Fresenius Medical Care,,Healthcare,,Germany,Euronext
-16,HEI.DE,HeidelbergCement,,Basic Materials,,Germany,Euronext
-17,HEN3.DE,Henkel,,Consumer Goods,,Germany,Euronext
-18,IFX.DE,Infineon Technologies,,Technology,,Germany,Euronext
-19,LIN.DE,Linde,,Basic Materials,,Germany,Euronext
-20,MBG.DE,Mercedes-Benz Group,,Automobile,,Germany,Euronext
-21,MRK.DE,Merck,,Healthcare,,Germany,Euronext
-22,MTX.DE,MTU Aero Engines,,Industrials,,Germany,Euronext
-23,MUV2.DE,Munich Re,,Financial Services,,Germany,Euronext
-24,RWE.DE,RWE,,Utilities,,Germany,Euronext
-25,SAP.DE,SAP,,Technology,,Germany,Euronext
-26,SIE.DE,Siemens,,Industrials,,Germany,Euronext
-27,ENR.DE,Siemens Energy,,Energy technology,,Germany,Euronext
-28,VOW3.DE,Volkswagen Group,,Automobile,,Germany,Euronext
-29,VNA.DE,Vonovia,,Real Estate,,Germany,Euronext
+0,ADS.DE,Adidas,,Textile,,Germany,Euronext
+1,AIR.DE,Airbus,,Aerospace,,Germany,Euronext
+2,ALV.DE,Allianz,,Financial Services,,Germany,Euronext
+3,BAS.DE,BASF,,Basic Materials,,Germany,Euronext
+4,BAYN.DE,Bayer,,Healthcare,,Germany,Euronext
+5,BMW.DE,BMW,,Automobile,,Germany,Euronext
+6,BNR.DE,Brenntag,,Distribution,,Germany,Euronext
+7,CON.DE,Continental,,Automotive,,Germany,Euronext
+8,1COV.DE,Covestro,,Basic Materials,,Germany,Euronext
+9,DTG.DE,Daimler Truck,,Automobile,,Germany,Euronext
+10,DHER.DE,Delivery Hero,,Online Food Ordering,,Germany,Euronext
+11,DBK.DE,Deutsche Bank,,Financial Services,,Germany,Euronext
+12,DB1.DE,Deutsche Börse,,Financial Services,,Germany,Euronext
+13,DPW.DE,Deutsche Post,,Industrials,,Germany,Euronext
+14,DTE.DE,Deutsche Telekom,,Communication Services,,Germany,Euronext
+15,EOAN.DE,E.ON,,Utilities,,Germany,Euronext
+16,FRE.DE,Fresenius,,Healthcare,,Germany,Euronext
+17,FME.DE,Fresenius Medical Care,,Healthcare,,Germany,Euronext
+18,HNR1.DE,Hannover Re,,Insurance,,Germany,Euronext
+19,HEI.DE,HeidelbergCement,,Basic Materials,,Germany,Euronext
+20,HFG.DE,HelloFresh,,Online Food Ordering,,Germany,Euronext
+21,HEN3.DE,Henkel,,Consumer Goods,,Germany,Euronext
+22,IFX.DE,Infineon Technologies,,Technology,,Germany,Euronext
+23,LIN.DE,Linde,,Basic Materials,,Germany,Euronext
+24,MBG.DE,Mercedes-Benz Group,,Automobile,,Germany,Euronext
+25,MRK.DE,Merck,,Healthcare,,Germany,Euronext
+26,MTX.DE,MTU Aero Engines,,Industrials,,Germany,Euronext
+27,MUV2.DE,Munich Re,,Financial Services,,Germany,Euronext
+28,PAH3.DE,Porsche,,Automobile,,Germany,Euronext
+29,PUM.DE,Puma,,Textile,,Germany,Euronext
+30,QIA.DE,Qiagen,,Chemicals,,Germany,Euronext
+31,RWE.DE,RWE,,Utilities,,Germany,Euronext
+32,SAP.DE,SAP,,Technology,,Germany,Euronext
+33,SRT3.DE,Sartorius,,Chemicals,,Germany,Euronext
+34,SIE.DE,Siemens,,Industrials,,Germany,Euronext
+35,SHL.DE,Siemens Healthineers,,Healthcare,,Germany,Euronext
+36,SY1.DE,Symrise,,Chemicals,,Germany,Euronext
+37,VOW3.DE,Volkswagen Group,,Automobile,,Germany,Euronext
+38,VNA.DE,Vonovia,,Real Estate,,Germany,Euronext
+39,ZAL.DE,Zalando,,E-Commerce,,Germany,Euronext
