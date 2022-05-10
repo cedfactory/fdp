@@ -1,6 +1,7 @@
 import pandas as pd
 from datetime import datetime
 from . import wiki,yahoo,yf_wrapper,crypto,tradingview,portfolio
+import concurrent.futures
 
 map_market_function = {
     "w_cac":                wiki.get_list_cac,
@@ -105,15 +106,19 @@ def api_history(str_exchange, str_symbol, str_start, length):
     result_for_response = {}
 
     symbols = str_symbol.split(',')
-    for symbol in symbols:
-        if '_' in symbol:
-            # crypto ('_' stands for '/')
-            df = crypto.get_symbol_ohlcv(str_exchange, symbol.replace("_", "/"), str_start, "1d", length)
+    real_symbols = [symbol.replace("_", "/") for symbol in symbols]
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        futures = {executor.submit(crypto.get_symbol_ohlcv, exchange_name=str_exchange, symbol=real_symbol, start=str_start, timeframe="1d", length=length): real_symbol for real_symbol in real_symbols}
+
+        for future in concurrent.futures.as_completed(futures):
+            real_symbol = futures[future]
+            symbol = real_symbol.replace('/', '_')
+            df = future.result()
             if isinstance(df, pd.DataFrame):
                 result_for_response[symbol] = {"status": "ok", "info": df.to_json()}
             else:
                 result_for_response[symbol] = {"status": "ko", "reason": df, "info": ""}
-
+              
     end = datetime.now()
     elapsed_time = str(end - start)
 
