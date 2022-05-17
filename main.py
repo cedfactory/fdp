@@ -47,11 +47,12 @@ def get_history():
     str_exchange = request.args.get("exchange")
     str_symbol = request.args.get("symbol")
     str_start = request.args.get("start")
+    str_interval = request.args.get("interval", "1d")
     length = request.args.get("length", 100)
     if length != None:
         length = int(length)
 
-    response = api.api_history(str_exchange, str_symbol, str_start, length)
+    response = api.api_history(str_exchange, str_symbol, str_start, str_interval, length)
     response = jsonify(response)
     response = add_headers(response)
     

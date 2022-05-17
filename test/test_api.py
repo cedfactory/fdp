@@ -34,7 +34,7 @@ class TestApi:
 
     def test_api_history(self):
         symbol = "BTC_EURS"
-        response = api.api_history("hitbtc", symbol, "05_12_2021", 100)
+        response = api.api_history("hitbtc", symbol, "05_12_2021", "1d", 100)
         assert("status" in response)
         assert(response["status"] == "ok")
         assert("result" in response)

@@ -97,7 +97,7 @@ def api_symbol(str_screener, str_exchange, str_symbols):
 
     return final_response
 
-def api_history(str_exchange, str_symbol, str_start, length):
+def api_history(str_exchange, str_symbol, str_start, str_interval, length):
     if str_exchange == None or str_symbol == None:
         return {"result":{}, "status":"ko", "reason":"exchange or symbol not specified", "elapsed_time":"0"}
 
@@ -108,7 +108,7 @@ def api_history(str_exchange, str_symbol, str_start, length):
     symbols = str_symbol.split(',')
     real_symbols = [symbol.replace("_", "/") for symbol in symbols]
     with concurrent.futures.ThreadPoolExecutor() as executor:
-        futures = {executor.submit(crypto.get_symbol_ohlcv, exchange_name=str_exchange, symbol=real_symbol, start=str_start, timeframe="1d", length=length): real_symbol for real_symbol in real_symbols}
+        futures = {executor.submit(crypto.get_symbol_ohlcv, exchange_name=str_exchange, symbol=real_symbol, start=str_start, timeframe=str_interval, length=length): real_symbol for real_symbol in real_symbols}
 
         for future in concurrent.futures.as_completed(futures):
             real_symbol = futures[future]
