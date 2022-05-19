@@ -7,10 +7,22 @@ from . import utils
 '''
 format for since : dd_mm_yyyy
 '''
-def _get_ohlcv(exchange, symbol, start, timeframe, length=100):
-    if start != None:
-        start = int(time.mktime(datetime.strptime(start, "%d_%m_%Y").timetuple()))*1000
-    df = pd.DataFrame(exchange.fetch_ohlcv(symbol=symbol, timeframe=timeframe, since=start, limit=length))
+def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1d", limit=None):
+    if exchange == None or symbol == None or start == None:
+        return None
+
+    since = int(datetime.strptime(start, "%d_%m_%Y").timestamp())*1000
+    if end != None:
+        start = datetime.strptime(start, '%d_%m_%Y')
+        end = datetime.strptime(end, '%d_%m_%Y')
+        delta = end - start
+        limit  = delta.days # days
+        if timeframe == "1m":
+            limit = limit * 24 * 60
+        elif timeframe == "1h":
+            limit = limit * 24
+
+    df = pd.DataFrame(exchange.fetch_ohlcv(symbol=symbol, timeframe=timeframe, since=since, limit=limit))
     df = df.rename(columns={0: 'timestamp', 1: 'open', 2: 'high', 3: 'low', 4: 'close', 5: 'volume'})
     df = df.set_index(df['timestamp'])
     df.index = pd.to_datetime(df.index, unit='ms')
@@ -81,7 +93,7 @@ def get_symbol_ticker(exchange_market, symbol):
     ticker = exchange.fetch_ticker(symbol)
     return ticker
 
-def get_symbol_ohlcv(exchange_name, symbol, start=None, timeframe="1d", length=100):
+def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d", length=None):
     # manage some errors
     if exchange_name == "hitbtc" and length > 1000:
         return "for hitbtc, length must be in [1, 1000]"
@@ -94,7 +106,7 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, timeframe="1d", length=1
     if symbol not in exchange.symbols or exchange.has['fetchOHLCV'] == False:
         return "symbol not found"
 
-    ohlcv = _get_ohlcv(exchange, symbol, start, timeframe, length)
+    ohlcv = _get_ohlcv(exchange, symbol, start, end, timeframe, length)
     return ohlcv
 
 def apply_filter_on_symbol_with_volume_gt_threshold(symbols, markets, threshold):
