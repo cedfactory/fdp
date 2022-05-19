@@ -10,6 +10,8 @@ format for since : dd_mm_yyyy
 def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1d", limit=None):
     if exchange == None or symbol == None or start == None:
         return None
+    #print("start : ", start)
+    #print("end : ", end)
 
     since = int(datetime.strptime(start, "%d_%m_%Y").timestamp())*1000
     if end != None:
@@ -22,12 +24,54 @@ def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1d", limit=None):
         elif timeframe == "1h":
             limit = limit * 24
 
-    df = pd.DataFrame(exchange.fetch_ohlcv(symbol=symbol, timeframe=timeframe, since=since, limit=limit))
-    df = df.rename(columns={0: 'timestamp', 1: 'open', 2: 'high', 3: 'low', 4: 'close', 5: 'volume'})
-    df = df.set_index(df['timestamp'])
-    df.index = pd.to_datetime(df.index, unit='ms')
-    del df['timestamp']
-    return df
+    #print("limit : ", limit)
+    
+    intervals = []
+    if (timeframe == "1d" or timeframe == "1h"): # split into requests with limit = 5000
+        offset = 5000 * 24 * 60 * 60 * 1000
+        if timeframe == "1h":
+            offset = 5000 * 60 * 60 * 1000
+        while limit > 5000:
+            since_next = since + offset
+            intervals.append({'since': since, 'limit': 5000})
+            since = since_next
+            limit = limit - 5000
+        intervals.append({'since': since, 'limit': limit})
+    #print(intervals)
+
+    df_result = pd.DataFrame()
+
+    for interval in intervals:
+        df = pd.DataFrame(exchange.fetch_ohlcv(symbol=symbol, timeframe=timeframe, since=interval["since"], limit=interval["limit"]))
+        df = df.rename(columns={0: 'timestamp', 1: 'open', 2: 'high', 3: 'low', 4: 'close', 5: 'volume'})
+        df = df.set_index(df['timestamp'])
+        df.index = pd.to_datetime(df.index, unit='ms')
+        del df['timestamp']
+        df_result = pd.concat([df_result, df])
+
+
+    '''
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        futures = {executor.submit(exchange.fetch_ohlcv(symbol=symbol, timeframe=timeframe, since=interval["since"], limit=interval["limit"])): interval["since"] for interval in intervals}
+
+        for future in concurrent.futures.as_completed(futures):
+            print(future)
+            current_since = futures[future]
+            print(current_since)
+            res = future.result()
+            print(res)
+            df = pd.DataFrame(res)
+            df = df.rename(columns={0: 'timestamp', 1: 'open', 2: 'high', 3: 'low', 4: 'close', 5: 'volume'})
+            df = df.set_index(df['timestamp'])
+            df.index = pd.to_datetime(df.index, unit='ms')
+            del df['timestamp']
+            df_result = pd.concat([df_result, df])
+    '''
+    #print(df_result)
+    #print(len(df_result.index))
+
+    return df_result
+
 
 def _custom_filter(symbol):
     return (symbol[-4:] in ["/EUR", "/USD"] or symbol[-5:] in ["/EURS"]) and ("BTC" in symbol or "ETH" in symbol or "BNB" in symbol)
