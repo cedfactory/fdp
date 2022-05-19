@@ -39,6 +39,8 @@ localhost:5000/symbol?screener=crypto&exchange=ftx&symbols=ETH_EUR
 - *exchange* : may be hitbtc, bitmex, binance, ftx.
 - *symbol* : symbols separated with ',' and '/' replaced with '_'
 - *start* : date with format dd_mm_yyyy
+- *end* (optional) : date with format dd_mm_yyyy
+- *interval* (optional) : may be 1m, 1h or 1d (default value)
 - *length* (optional) : 
 
 example :
