@@ -37,10 +37,10 @@ def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1d", limit=None):
             since = since_next
             limit = limit - 5000
         intervals.append({'since': since, 'limit': limit})
-    #print(intervals)
+    print(intervals)
 
+    '''
     df_result = pd.DataFrame()
-
     for interval in intervals:
         df = pd.DataFrame(exchange.fetch_ohlcv(symbol=symbol, timeframe=timeframe, since=interval["since"], limit=interval["limit"]))
         df = df.rename(columns={0: 'timestamp', 1: 'open', 2: 'high', 3: 'low', 4: 'close', 5: 'volume'})
@@ -48,27 +48,24 @@ def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1d", limit=None):
         df.index = pd.to_datetime(df.index, unit='ms')
         del df['timestamp']
         df_result = pd.concat([df_result, df])
-
-
     '''
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        futures = {executor.submit(exchange.fetch_ohlcv(symbol=symbol, timeframe=timeframe, since=interval["since"], limit=interval["limit"])): interval["since"] for interval in intervals}
 
+    df_results = {}
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        futures = {executor.submit(exchange.fetch_ohlcv, symbol, timeframe, interval["since"], interval["limit"]): interval["since"] for interval in intervals}
         for future in concurrent.futures.as_completed(futures):
-            print(future)
             current_since = futures[future]
             print(current_since)
             res = future.result()
-            print(res)
             df = pd.DataFrame(res)
-            df = df.rename(columns={0: 'timestamp', 1: 'open', 2: 'high', 3: 'low', 4: 'close', 5: 'volume'})
-            df = df.set_index(df['timestamp'])
-            df.index = pd.to_datetime(df.index, unit='ms')
-            del df['timestamp']
-            df_result = pd.concat([df_result, df])
-    '''
-    #print(df_result)
-    #print(len(df_result.index))
+            df_results[current_since] = df
+
+    ordered_df_results = [df_results[interval['since']] for interval in intervals]
+    df_result = pd.concat(ordered_df_results)
+    df_result = df_result.rename(columns={0: 'timestamp', 1: 'open', 2: 'high', 3: 'low', 4: 'close', 5: 'volume'})
+    df_result = df_result.set_index(df_result['timestamp'])
+    df_result.index = pd.to_datetime(df_result.index, unit='ms')
+    del df_result['timestamp']
 
     return df_result
 
