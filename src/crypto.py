@@ -38,7 +38,7 @@ def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1d", limit=None):
             since = since_next
             limit = limit - 5000
         intervals.append({'since': since, 'limit': limit})
-    print(intervals)
+    #print(intervals)
 
     '''
     df_result = pd.DataFrame()
@@ -51,15 +51,20 @@ def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1d", limit=None):
         df_result = pd.concat([df_result, df])
     '''
 
+    everything_ok = True
     df_results = {}
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = {executor.submit(exchange.fetch_ohlcv, symbol, timeframe, interval["since"], interval["limit"]): interval["since"] for interval in intervals}
         for future in concurrent.futures.as_completed(futures):
             current_since = futures[future]
-            print(current_since)
             res = future.result()
             df = pd.DataFrame(res)
+            if df.empty:
+                everything_ok = False
             df_results[current_since] = df
+
+    if not everything_ok:
+        return None
 
     ordered_df_results = [df_results[interval['since']] for interval in intervals]
     df_result = pd.concat(ordered_df_results)

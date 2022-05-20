@@ -116,8 +116,8 @@ def api_history(str_exchange, str_symbol, str_start, str_end = None, str_interva
             real_symbol = futures[future]
             symbol = real_symbol.replace('/', '_')
             df = future.result()
-            df.reset_index(inplace=True)
             if isinstance(df, pd.DataFrame):
+                df.reset_index(inplace=True)
                 result_for_response[symbol] = {"status": "ok", "info": df.to_json()}
             else:
                 result_for_response[symbol] = {"status": "ko", "reason": "", "info": ""}
