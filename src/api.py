@@ -1,6 +1,6 @@
 import pandas as pd
 from datetime import datetime
-from . import wiki,yahoo,yf_wrapper,crypto,tradingview,portfolio
+from . import wiki,yahoo,yf_wrapper,crypto,tradingview,portfolio,indicators
 import concurrent.futures
 
 map_market_function = {
@@ -98,8 +98,10 @@ def api_symbol(str_screener, str_exchange, str_symbols):
     return final_response
 
 def api_history(str_exchange, str_symbol, str_start, str_end = None, str_interval = "1d", length = None):
-    if str_exchange == None or str_symbol == None:
-        return {"result":{}, "status":"ko", "reason":"exchange or symbol not specified", "elapsed_time":"0"}
+    if str_exchange == None:
+        return {"result":{}, "status":"ko", "reason":"exchange not specified", "elapsed_time":"0"}
+    if str_symbol == None:
+        return {"result":{}, "status":"ko", "reason":"symbol not specified", "elapsed_time":"0"}
 
     start = datetime.now()
 
@@ -130,6 +132,44 @@ def api_history(str_exchange, str_symbol, str_start, str_end = None, str_interva
 
     return final_response
    
+def api_indicators(map_indicators, str_exchange, str_symbol, str_start, str_end = None, str_interval = "1d", length = None):
+    if str_exchange == None:
+        return {"result":{}, "status":"ko", "reason":"exchange not specified", "elapsed_time":"0"}
+    if str_symbol == None:
+        return {"result":{}, "status":"ko", "reason":"symbol not specified", "elapsed_time":"0"}
+    if not map_indicators or len(map_indicators) < 1:
+        return {"result":{}, "status":"ko", "reason":"no indicator", "elapsed_time":"0"}
+
+    start = datetime.now()
+
+    result_for_response = {}
+
+    symbols = str_symbol.split(',')
+    real_symbols = [symbol.replace("_", "/") for symbol in symbols]
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        futures = {executor.submit(indicators.get_symbol_indicators, map_indicators = map_indicators, exchange_name=str_exchange, symbol=real_symbol, start=str_start, end=str_end, timeframe=str_interval, length=length): real_symbol for real_symbol in real_symbols}
+
+        for future in concurrent.futures.as_completed(futures):
+            real_symbol = futures[future]
+            symbol = real_symbol.replace('/', '_')
+            df = future.result()
+            if isinstance(df, pd.DataFrame):
+                result_for_response[symbol] = {"status": "ok", "info": df.to_json()}
+            else:
+                result_for_response[symbol] = {"status": "ko", "reason": df, "info": ""}
+              
+    end = datetime.now()
+    elapsed_time = str(end - start)
+
+    final_response = {
+        "result":result_for_response,
+        "status":"ok",
+        "elapsed_time":elapsed_time
+    }
+
+    return final_response
+
+
 def api_recommendations(screener, exchange, str_symbols = None, interval = "1h"):
     result_for_response = {}
     result_for_response["result"] = {}
