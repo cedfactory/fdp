@@ -48,6 +48,24 @@ class TestApi:
         assert(isinstance(ohlcv, pd.DataFrame))
         assert(len(ohlcv.index) == 100)
 
+    def test_api_indicators(self):
+        symbol = "BTC_EURS"
+        map_indicators = {"close" : None, "high" : None}
+        response = api.api_indicators(map_indicators, "hitbtc", symbol, "05_12_2021", str_interval="1d", length=100)
+        assert("status" in response)
+        assert(response["status"] == "ok")
+        assert("result" in response)
+        assert(symbol in response["result"])
+        assert(response["result"][symbol]["status"] == "ok")
+        assert("status" in response["result"][symbol])
+        assert(response["result"][symbol]["status"] == "ok")
+        assert("info" in response["result"][symbol])
+        df_data = response["result"][symbol]["info"]
+        ohlcv = pd.read_json(df_data)
+        assert(isinstance(ohlcv, pd.DataFrame))
+        assert(len(ohlcv.index) == 100)
+        assert(list(ohlcv.columns) == ["high", "close"])
+
     def test_api_recommendations_for_symbol(self):
         screener = "crypto"
         exchange = "ftx"
