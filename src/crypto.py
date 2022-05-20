@@ -137,7 +137,7 @@ def get_symbol_ticker(exchange_market, symbol):
 
 def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d", length=None):
     # manage some errors
-    if exchange_name == "hitbtc" and length > 1000:
+    if exchange_name == "hitbtc" and length and length > 1000:
         return "for hitbtc, length must be in [1, 1000]"
 
     exchange = _get_exchange(exchange_name)

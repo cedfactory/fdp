@@ -23,8 +23,9 @@ class TestCrypto:
         assert(info["symbol"] == "BTC/EURS")
 
     def test_get_symbol_ohlcv(self):
-        ohlcv = crypto.get_symbol_ohlcv("hitbtc", "BTC/EURS")
+        ohlcv = crypto.get_symbol_ohlcv("hitbtc", "BTC/EURS", "01_03_2022", "01_05_2022")
         assert(isinstance(ohlcv, pd.DataFrame))
+        assert(len(ohlcv.index) == 61)
 
     def test_get_top_gainers(self):
         df = crypto.get_top_gainers("ftx", 50)
