@@ -3,6 +3,7 @@ import ccxt
 import time
 from datetime import datetime
 from . import utils
+import concurrent.futures
 
 '''
 format for since : dd_mm_yyyy

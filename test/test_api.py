@@ -34,7 +34,7 @@ class TestApi:
 
     def test_api_history(self):
         symbol = "BTC_EURS"
-        response = api.api_history("hitbtc", symbol, "05_12_2021", "1d", 100)
+        response = api.api_history("hitbtc", symbol, "05_12_2021", str_interval="1d", length=100)
         assert("status" in response)
         assert(response["status"] == "ok")
         assert("result" in response)
@@ -46,6 +46,7 @@ class TestApi:
         df_data = response["result"][symbol]["info"]
         ohlcv = pd.read_json(df_data)
         assert(isinstance(ohlcv, pd.DataFrame))
+        assert(len(ohlcv.index) == 100)
 
     def test_api_recommendations_for_symbol(self):
         screener = "crypto"
