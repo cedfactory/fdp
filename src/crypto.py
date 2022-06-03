@@ -1,12 +1,14 @@
 import pandas as pd
+import numpy as np
 import ccxt
 import time
 from datetime import datetime
+from datetime import date
 from . import utils
 import concurrent.futures
 
 '''
-format for since : dd_mm_yyyy
+format for since : yyyy-mm-dd
 '''
 def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1d", limit=None):
     if exchange == None or symbol == None or start == None:
@@ -14,10 +16,10 @@ def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1d", limit=None):
     #print("start : ", start)
     #print("end : ", end)
 
-    since = int(datetime.strptime(start, "%d_%m_%Y").timestamp())*1000
+    since = int(datetime.strptime(start, "%Y-%m-%d").timestamp())*1000
     if end != None:
-        start = datetime.strptime(start, '%d_%m_%Y')
-        end = datetime.strptime(end, '%d_%m_%Y')
+        start = datetime.strptime(start, '%Y-%m-%d')
+        end = datetime.strptime(end, '%Y-%m-%d')
         delta = end - start
         limit  = delta.days # days
         if timeframe == "1m":
@@ -154,6 +156,18 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d"
         return "symbol not found"
 
     ohlcv = _get_ohlcv(exchange, symbol, start, end, timeframe, length)
+
+    # add potential missing dates
+    map_timeframe_freq = {"1h": "H", "1d": "D", "1m": "M"}
+    freq = map_timeframe_freq[timeframe]
+    if end == None and length == None:
+        end = date.today()
+        end = end.strftime("%Y-%m-%d")
+
+    expected_range = pd.date_range(start=start, end=end, freq=freq, closed="left")
+    ohlcv.index = pd.DatetimeIndex(ohlcv.index)
+    ohlcv = ohlcv.reindex(expected_range, fill_value=np.nan)
+
     return ohlcv
 
 def apply_filter_on_symbol_with_volume_gt_threshold(symbols, markets, threshold):
