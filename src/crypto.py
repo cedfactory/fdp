@@ -5,6 +5,7 @@ import time
 from datetime import datetime
 from datetime import date
 from . import utils
+from . import indicators as inc_indicators
 import concurrent.futures
 
 '''
@@ -142,7 +143,7 @@ def get_symbol_ticker(exchange_market, symbol):
     ticker = exchange.fetch_ticker(symbol)
     return ticker
 
-def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d", length=None):
+def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d", length=None, indicators=[]):
     # manage some errors
     if exchange_name == "hitbtc" and length and length > 1000:
         return "for hitbtc, length must be in [1, 1000]"
@@ -167,6 +168,9 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d"
     expected_range = pd.date_range(start=start, end=end, freq=freq, closed="left")
     ohlcv.index = pd.DatetimeIndex(ohlcv.index)
     ohlcv = ohlcv.reindex(expected_range, fill_value=np.nan)
+
+    if len(indicators) != 0:
+        ohlcv = inc_indicators.compute_indicators(ohlcv, indicators)
 
     return ohlcv
 
