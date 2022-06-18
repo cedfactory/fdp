@@ -1,4 +1,4 @@
-name: cloudrun-deploy
+name: test coverage & analysis
 on:
   push:
     branches:
