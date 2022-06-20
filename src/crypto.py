@@ -72,6 +72,8 @@ def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1d", limit=None):
     ordered_df_results = [df_results[interval['since']] for interval in intervals]
     df_result = pd.concat(ordered_df_results)
     df_result = df_result.rename(columns={0: 'timestamp', 1: 'open', 2: 'high', 3: 'low', 4: 'close', 5: 'volume'})
+    if df_result.empty:
+        return "no data"
     df_result = df_result.set_index(df_result['timestamp'])
     df_result.index = pd.to_datetime(df_result.index, unit='ms')
     del df_result['timestamp']
@@ -154,11 +156,12 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d"
 
     exchange.load_markets()
     if symbol not in exchange.symbols or exchange.has['fetchOHLCV'] == False:
+        print("symbol not found")
         return "symbol not found"
 
     ohlcv = _get_ohlcv(exchange, symbol, start, end, timeframe, length)
     if not isinstance(ohlcv, pd.DataFrame):
-        return None
+        return ohlcv
 
     # remove dupicates
     ohlcv = ohlcv[~ohlcv.index.duplicated()]
