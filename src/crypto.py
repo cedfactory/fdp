@@ -62,8 +62,8 @@ def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1d", limit=None):
             current_since = futures[future]
             res = future.result()
             df = pd.DataFrame(res)
-            if df.empty:
-                everything_ok = False
+            #if df.empty:
+            #    everything_ok = False
             df_results[current_since] = df
 
     if not everything_ok:
