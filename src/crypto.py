@@ -157,6 +157,11 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d"
         return "symbol not found"
 
     ohlcv = _get_ohlcv(exchange, symbol, start, end, timeframe, length)
+    if not isinstance(ohlcv, pd.DataFrame):
+        return None
+
+    # remove dupicates
+    ohlcv = ohlcv[~ohlcv.index.duplicated()]
 
     # add potential missing dates
     map_timeframe_freq = {"1h": "H", "1d": "D", "1m": "M"}
