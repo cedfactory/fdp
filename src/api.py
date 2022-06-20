@@ -123,7 +123,7 @@ def api_history(str_exchange, str_symbol, str_start, str_end = None, str_interva
                 df.reset_index(inplace=True)
                 result_for_response[symbol] = {"status": "ok", "info": df.to_json()}
             else:
-                result_for_response[symbol] = {"status": "ko", "reason": "", "info": ""}
+                result_for_response[symbol] = {"status": "ko", "reason": "", "info": df}
               
     end = datetime.now()
     elapsed_time = str(end - start)
