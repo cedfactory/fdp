@@ -42,134 +42,134 @@
 40,APH,Amphenol,,Information Technology,Electronic Components,united state,SP500
 41,ADI,Analog Devices,,Information Technology,Semiconductors,united state,SP500
 42,ANSS,Ansys,,Information Technology,Application Software,united state,SP500
-43,ANTM,Anthem,,Health Care,Managed Health Care,united state,SP500
-44,AON,Aon,,Financials,Insurance Brokers,united state,SP500
-45,APA,APA Corporation,,Energy,Oil & Gas Exploration & Production,united state,SP500
-46,AAPL,Apple Inc.,,Information Technology,"Technology Hardware, Storage & Peripherals",united state,SP500
-47,AMAT,Applied Materials,,Information Technology,Semiconductor Equipment,united state,SP500
-48,APTV,Aptiv,,Consumer Discretionary,Auto Parts & Equipment,united state,SP500
-49,ANET,Arista Networks,,Information Technology,Communications Equipment,united state,SP500
-50,AJG,Arthur J. Gallagher & Co.,,Financials,Insurance Brokers,united state,SP500
-51,AIZ,Assurant,,Financials,Multi-line Insurance,united state,SP500
-52,T,AT&T,,Communication Services,Integrated Telecommunication Services,united state,SP500
-53,ATO,Atmos Energy,,Utilities,Gas Utilities,united state,SP500
-54,ADSK,Autodesk,,Information Technology,Application Software,united state,SP500
-55,AZO,AutoZone,,Consumer Discretionary,Specialty Stores,united state,SP500
-56,AVB,AvalonBay Communities,,Real Estate,Residential REITs,united state,SP500
-57,AVY,Avery Dennison,,Materials,Paper Packaging,united state,SP500
-58,BKR,Baker Hughes,,Energy,Oil & Gas Equipment & Services,united state,SP500
-59,BALL,Ball Corporation,,Materials,Metal & Glass Containers,united state,SP500
-60,BAC,Bank of America,,Financials,Diversified Banks,united state,SP500
-61,BBWI,"Bath & Body Works, Inc.",,Consumer Discretionary,Specialty Stores,united state,SP500
-62,BAX,Baxter International,,Health Care,Health Care Equipment,united state,SP500
-63,BDX,Becton Dickinson,,Health Care,Health Care Equipment,united state,SP500
-64,WRB,Berkley,,Financials,Property & Casualty Insurance,united state,SP500
-65,BRK.B,Berkshire Hathaway,,Financials,Multi-Sector Holdings,united state,SP500
-66,BBY,Best Buy,,Consumer Discretionary,Computer & Electronics Retail,united state,SP500
-67,BIO,Bio-Rad,,Health Care,Life Sciences Tools & Services,united state,SP500
-68,TECH,Bio-Techne,,Health Care,Life Sciences Tools & Services,united state,SP500
-69,BIIB,Biogen,,Health Care,Biotechnology,united state,SP500
-70,BLK,BlackRock,,Financials,Asset Management & Custody Banks,united state,SP500
-71,BK,BNY Mellon,,Financials,Asset Management & Custody Banks,united state,SP500
-72,BA,Boeing,,Industrials,Aerospace & Defense,united state,SP500
-73,BKNG,Booking Holdings,,Consumer Discretionary,Internet & Direct Marketing Retail,united state,SP500
-74,BWA,BorgWarner,,Consumer Discretionary,Auto Parts & Equipment,united state,SP500
-75,BXP,Boston Properties,,Real Estate,Office REITs,united state,SP500
-76,BSX,Boston Scientific,,Health Care,Health Care Equipment,united state,SP500
-77,BMY,Bristol Myers Squibb,,Health Care,Health Care Distributors,united state,SP500
-78,AVGO,Broadcom Inc.,,Information Technology,Semiconductors,united state,SP500
-79,BR,Broadridge Financial Solutions,,Information Technology,Data Processing & Outsourced Services,united state,SP500
-80,BRO,Brown & Brown,,Financials,Insurance Brokers,united state,SP500
-81,BF.B,Brown–Forman,,Consumer Staples,Distillers & Vintners,united state,SP500
-82,CHRW,C.H. Robinson,,Industrials,Air Freight & Logistics,united state,SP500
-83,CDNS,Cadence Design Systems,,Information Technology,Application Software,united state,SP500
-84,CZR,Caesars Entertainment,,Consumer Discretionary,Casinos & Gaming,united state,SP500
-85,CPT,Camden Property Trust,,Real Estate,Residential REITs,united state,SP500
-86,CPB,Campbell Soup Company,,Consumer Staples,Packaged Foods & Meats,united state,SP500
-87,COF,Capital One,,Financials,Consumer Finance,united state,SP500
-88,CAH,Cardinal Health,,Health Care,Health Care Distributors,united state,SP500
-89,KMX,CarMax,,Consumer Discretionary,Specialty Stores,united state,SP500
-90,CCL,Carnival,,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",united state,SP500
-91,CARR,Carrier Global,,Industrials,Building Products,united state,SP500
-92,CTLT,Catalent,,Health Care,Pharmaceuticals,united state,SP500
-93,CAT,Caterpillar Inc.,,Industrials,Construction Machinery & Heavy Trucks,united state,SP500
-94,CBOE,Cboe Global Markets,,Financials,Financial Exchanges & Data,united state,SP500
-95,CBRE,CBRE Group,,Real Estate,Real Estate Services,united state,SP500
-96,CDW,CDW,,Information Technology,Technology Distributors,united state,SP500
-97,CE,Celanese,,Materials,Specialty Chemicals,united state,SP500
-98,CNC,Centene Corporation,,Health Care,Managed Health Care,united state,SP500
-99,CNP,CenterPoint Energy,,Utilities,Multi-Utilities,united state,SP500
-100,CDAY,Ceridian,,Information Technology,Application Software,united state,SP500
-101,CF,CF Industries,,Materials,Fertilizers & Agricultural Chemicals,united state,SP500
-102,CRL,Charles River Laboratories,,Health Care,Life Sciences Tools & Services,united state,SP500
-103,SCHW,Charles Schwab Corporation,,Financials,Investment Banking & Brokerage,united state,SP500
-104,CHTR,Charter Communications,,Communication Services,Cable & Satellite,united state,SP500
-105,CVX,Chevron Corporation,,Energy,Integrated Oil & Gas,united state,SP500
-106,CMG,Chipotle Mexican Grill,,Consumer Discretionary,Restaurants,united state,SP500
-107,CB,Chubb Limited,,Financials,Property & Casualty Insurance,united state,SP500
-108,CHD,Church & Dwight,,Consumer Staples,Household Products,united state,SP500
-109,CI,Cigna,,Health Care,Managed Health Care,united state,SP500
-110,CINF,Cincinnati Financial,,Financials,Property & Casualty Insurance,united state,SP500
-111,CTAS,Cintas,,Industrials,Diversified Support Services,united state,SP500
-112,CSCO,Cisco,,Information Technology,Communications Equipment,united state,SP500
-113,C,Citigroup,,Financials,Diversified Banks,united state,SP500
-114,CFG,Citizens Financial Group,,Financials,Regional Banks,united state,SP500
-115,CTXS,Citrix,,Information Technology,Application Software,united state,SP500
-116,CLX,Clorox,,Consumer Staples,Household Products,united state,SP500
-117,CME,CME Group,,Financials,Financial Exchanges & Data,united state,SP500
-118,CMS,CMS Energy,,Utilities,Multi-Utilities,united state,SP500
-119,KO,The Coca-Cola Company,,Consumer Staples,Soft Drinks,united state,SP500
-120,CTSH,Cognizant,,Information Technology,IT Consulting & Other Services,united state,SP500
-121,CL,Colgate-Palmolive,,Consumer Staples,Household Products,united state,SP500
-122,CMCSA,Comcast,,Communication Services,Cable & Satellite,united state,SP500
-123,CMA,Comerica,,Financials,Diversified Banks,united state,SP500
-124,CAG,Conagra Brands,,Consumer Staples,Packaged Foods & Meats,united state,SP500
-125,COP,ConocoPhillips,,Energy,Oil & Gas Exploration & Production,united state,SP500
-126,ED,Consolidated Edison,,Utilities,Electric Utilities,united state,SP500
-127,STZ,Constellation Brands,,Consumer Staples,Distillers & Vintners,united state,SP500
-128,CEG,Constellation Energy,,Utilities,Multi-Utilities,united state,SP500
-129,COO,CooperCompanies,,Health Care,Health Care Supplies,united state,SP500
-130,CPRT,Copart,,Industrials,Diversified Support Services,united state,SP500
-131,GLW,Corning Inc.,,Information Technology,Electronic Components,united state,SP500
-132,CTVA,Corteva,,Materials,Fertilizers & Agricultural Chemicals,united state,SP500
-133,COST,Costco,,Consumer Staples,Hypermarkets & Super Centers,united state,SP500
-134,CTRA,Coterra,,Energy,Oil & Gas Exploration & Production,united state,SP500
-135,CCI,Crown Castle,,Real Estate,Specialized REITs,united state,SP500
-136,CSX,CSX,,Industrials,Railroads,united state,SP500
-137,CMI,Cummins,,Industrials,Industrial Machinery,united state,SP500
-138,CVS,CVS Health,,Health Care,Health Care Services,united state,SP500
-139,DHI,D.R. Horton,,Consumer Discretionary,Homebuilding,united state,SP500
-140,DHR,Danaher Corporation,,Health Care,Health Care Equipment,united state,SP500
-141,DRI,Darden Restaurants,,Consumer Discretionary,Restaurants,united state,SP500
-142,DVA,DaVita Inc.,,Health Care,Health Care Facilities,united state,SP500
-143,DE,John Deere,,Industrials,Agricultural & Farm Machinery,united state,SP500
-144,DAL,Delta Air Lines,,Industrials,Airlines,united state,SP500
-145,XRAY,Dentsply Sirona,,Health Care,Health Care Supplies,united state,SP500
-146,DVN,Devon Energy,,Energy,Oil & Gas Exploration & Production,united state,SP500
-147,DXCM,Dexcom,,Health Care,Health Care Equipment,united state,SP500
-148,FANG,Diamondback Energy,,Energy,Oil & Gas Exploration & Production,united state,SP500
-149,DLR,Digital Realty,,Real Estate,Specialized REITs,united state,SP500
-150,DFS,Discover Financial,,Financials,Consumer Finance,united state,SP500
-151,DISH,Dish Network,,Communication Services,Cable & Satellite,united state,SP500
-152,DIS,Disney,,Communication Services,Movies & Entertainment,united state,SP500
-153,DG,Dollar General,,Consumer Discretionary,General Merchandise Stores,united state,SP500
-154,DLTR,Dollar Tree,,Consumer Discretionary,General Merchandise Stores,united state,SP500
-155,D,Dominion Energy,,Utilities,Electric Utilities,united state,SP500
-156,DPZ,Domino's,,Consumer Discretionary,Restaurants,united state,SP500
-157,DOV,Dover Corporation,,Industrials,Industrial Machinery,united state,SP500
-158,DOW,Dow Inc.,,Materials,Commodity Chemicals,united state,SP500
-159,DTE,DTE Energy,,Utilities,Multi-Utilities,united state,SP500
-160,DUK,Duke Energy,,Utilities,Electric Utilities,united state,SP500
-161,DRE,Duke Realty,,Real Estate,Industrial REITs,united state,SP500
-162,DD,DuPont,,Materials,Specialty Chemicals,united state,SP500
-163,DXC,DXC Technology,,Information Technology,IT Consulting & Other Services,united state,SP500
-164,EMN,Eastman Chemical Company,,Materials,Diversified Chemicals,united state,SP500
-165,ETN,Eaton Corporation,,Industrials,Electrical Components & Equipment,united state,SP500
-166,EBAY,eBay,,Consumer Discretionary,Internet & Direct Marketing Retail,united state,SP500
-167,ECL,Ecolab,,Materials,Specialty Chemicals,united state,SP500
-168,EIX,Edison International,,Utilities,Electric Utilities,united state,SP500
-169,EW,Edwards Lifesciences,,Health Care,Health Care Equipment,united state,SP500
-170,EA,Electronic Arts,,Communication Services,Interactive Home Entertainment,united state,SP500
+43,AON,Aon,,Financials,Insurance Brokers,united state,SP500
+44,APA,APA Corporation,,Energy,Oil & Gas Exploration & Production,united state,SP500
+45,AAPL,Apple Inc.,,Information Technology,"Technology Hardware, Storage & Peripherals",united state,SP500
+46,AMAT,Applied Materials,,Information Technology,Semiconductor Equipment,united state,SP500
+47,APTV,Aptiv,,Consumer Discretionary,Auto Parts & Equipment,united state,SP500
+48,ANET,Arista Networks,,Information Technology,Communications Equipment,united state,SP500
+49,AJG,Arthur J. Gallagher & Co.,,Financials,Insurance Brokers,united state,SP500
+50,AIZ,Assurant,,Financials,Multi-line Insurance,united state,SP500
+51,T,AT&T,,Communication Services,Integrated Telecommunication Services,united state,SP500
+52,ATO,Atmos Energy,,Utilities,Gas Utilities,united state,SP500
+53,ADSK,Autodesk,,Information Technology,Application Software,united state,SP500
+54,AZO,AutoZone,,Consumer Discretionary,Specialty Stores,united state,SP500
+55,AVB,AvalonBay Communities,,Real Estate,Residential REITs,united state,SP500
+56,AVY,Avery Dennison,,Materials,Paper Packaging,united state,SP500
+57,BKR,Baker Hughes,,Energy,Oil & Gas Equipment & Services,united state,SP500
+58,BALL,Ball Corporation,,Materials,Metal & Glass Containers,united state,SP500
+59,BAC,Bank of America,,Financials,Diversified Banks,united state,SP500
+60,BBWI,"Bath & Body Works, Inc.",,Consumer Discretionary,Specialty Stores,united state,SP500
+61,BAX,Baxter International,,Health Care,Health Care Equipment,united state,SP500
+62,BDX,Becton Dickinson,,Health Care,Health Care Equipment,united state,SP500
+63,WRB,Berkley,,Financials,Property & Casualty Insurance,united state,SP500
+64,BRK.B,Berkshire Hathaway,,Financials,Multi-Sector Holdings,united state,SP500
+65,BBY,Best Buy,,Consumer Discretionary,Computer & Electronics Retail,united state,SP500
+66,BIO,Bio-Rad,,Health Care,Life Sciences Tools & Services,united state,SP500
+67,TECH,Bio-Techne,,Health Care,Life Sciences Tools & Services,united state,SP500
+68,BIIB,Biogen,,Health Care,Biotechnology,united state,SP500
+69,BLK,BlackRock,,Financials,Asset Management & Custody Banks,united state,SP500
+70,BK,BNY Mellon,,Financials,Asset Management & Custody Banks,united state,SP500
+71,BA,Boeing,,Industrials,Aerospace & Defense,united state,SP500
+72,BKNG,Booking Holdings,,Consumer Discretionary,Internet & Direct Marketing Retail,united state,SP500
+73,BWA,BorgWarner,,Consumer Discretionary,Auto Parts & Equipment,united state,SP500
+74,BXP,Boston Properties,,Real Estate,Office REITs,united state,SP500
+75,BSX,Boston Scientific,,Health Care,Health Care Equipment,united state,SP500
+76,BMY,Bristol Myers Squibb,,Health Care,Health Care Distributors,united state,SP500
+77,AVGO,Broadcom Inc.,,Information Technology,Semiconductors,united state,SP500
+78,BR,Broadridge Financial Solutions,,Information Technology,Data Processing & Outsourced Services,united state,SP500
+79,BRO,Brown & Brown,,Financials,Insurance Brokers,united state,SP500
+80,BF.B,Brown–Forman,,Consumer Staples,Distillers & Vintners,united state,SP500
+81,CHRW,C.H. Robinson,,Industrials,Air Freight & Logistics,united state,SP500
+82,CDNS,Cadence Design Systems,,Information Technology,Application Software,united state,SP500
+83,CZR,Caesars Entertainment,,Consumer Discretionary,Casinos & Gaming,united state,SP500
+84,CPT,Camden Property Trust,,Real Estate,Residential REITs,united state,SP500
+85,CPB,Campbell Soup Company,,Consumer Staples,Packaged Foods & Meats,united state,SP500
+86,COF,Capital One,,Financials,Consumer Finance,united state,SP500
+87,CAH,Cardinal Health,,Health Care,Health Care Distributors,united state,SP500
+88,KMX,CarMax,,Consumer Discretionary,Specialty Stores,united state,SP500
+89,CCL,Carnival,,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",united state,SP500
+90,CARR,Carrier Global,,Industrials,Building Products,united state,SP500
+91,CTLT,Catalent,,Health Care,Pharmaceuticals,united state,SP500
+92,CAT,Caterpillar Inc.,,Industrials,Construction Machinery & Heavy Trucks,united state,SP500
+93,CBOE,Cboe Global Markets,,Financials,Financial Exchanges & Data,united state,SP500
+94,CBRE,CBRE Group,,Real Estate,Real Estate Services,united state,SP500
+95,CDW,CDW,,Information Technology,Technology Distributors,united state,SP500
+96,CE,Celanese,,Materials,Specialty Chemicals,united state,SP500
+97,CNC,Centene Corporation,,Health Care,Managed Health Care,united state,SP500
+98,CNP,CenterPoint Energy,,Utilities,Multi-Utilities,united state,SP500
+99,CDAY,Ceridian,,Information Technology,Application Software,united state,SP500
+100,CF,CF Industries,,Materials,Fertilizers & Agricultural Chemicals,united state,SP500
+101,CRL,Charles River Laboratories,,Health Care,Life Sciences Tools & Services,united state,SP500
+102,SCHW,Charles Schwab Corporation,,Financials,Investment Banking & Brokerage,united state,SP500
+103,CHTR,Charter Communications,,Communication Services,Cable & Satellite,united state,SP500
+104,CVX,Chevron Corporation,,Energy,Integrated Oil & Gas,united state,SP500
+105,CMG,Chipotle Mexican Grill,,Consumer Discretionary,Restaurants,united state,SP500
+106,CB,Chubb Limited,,Financials,Property & Casualty Insurance,united state,SP500
+107,CHD,Church & Dwight,,Consumer Staples,Household Products,united state,SP500
+108,CI,Cigna,,Health Care,Managed Health Care,united state,SP500
+109,CINF,Cincinnati Financial,,Financials,Property & Casualty Insurance,united state,SP500
+110,CTAS,Cintas,,Industrials,Diversified Support Services,united state,SP500
+111,CSCO,Cisco,,Information Technology,Communications Equipment,united state,SP500
+112,C,Citigroup,,Financials,Diversified Banks,united state,SP500
+113,CFG,Citizens Financial Group,,Financials,Regional Banks,united state,SP500
+114,CTXS,Citrix,,Information Technology,Application Software,united state,SP500
+115,CLX,Clorox,,Consumer Staples,Household Products,united state,SP500
+116,CME,CME Group,,Financials,Financial Exchanges & Data,united state,SP500
+117,CMS,CMS Energy,,Utilities,Multi-Utilities,united state,SP500
+118,KO,The Coca-Cola Company,,Consumer Staples,Soft Drinks,united state,SP500
+119,CTSH,Cognizant,,Information Technology,IT Consulting & Other Services,united state,SP500
+120,CL,Colgate-Palmolive,,Consumer Staples,Household Products,united state,SP500
+121,CMCSA,Comcast,,Communication Services,Cable & Satellite,united state,SP500
+122,CMA,Comerica,,Financials,Diversified Banks,united state,SP500
+123,CAG,Conagra Brands,,Consumer Staples,Packaged Foods & Meats,united state,SP500
+124,COP,ConocoPhillips,,Energy,Oil & Gas Exploration & Production,united state,SP500
+125,ED,Consolidated Edison,,Utilities,Electric Utilities,united state,SP500
+126,STZ,Constellation Brands,,Consumer Staples,Distillers & Vintners,united state,SP500
+127,CEG,Constellation Energy,,Utilities,Multi-Utilities,united state,SP500
+128,COO,CooperCompanies,,Health Care,Health Care Supplies,united state,SP500
+129,CPRT,Copart,,Industrials,Diversified Support Services,united state,SP500
+130,GLW,Corning Inc.,,Information Technology,Electronic Components,united state,SP500
+131,CTVA,Corteva,,Materials,Fertilizers & Agricultural Chemicals,united state,SP500
+132,COST,Costco,,Consumer Staples,Hypermarkets & Super Centers,united state,SP500
+133,CTRA,Coterra,,Energy,Oil & Gas Exploration & Production,united state,SP500
+134,CCI,Crown Castle,,Real Estate,Specialized REITs,united state,SP500
+135,CSX,CSX,,Industrials,Railroads,united state,SP500
+136,CMI,Cummins,,Industrials,Industrial Machinery,united state,SP500
+137,CVS,CVS Health,,Health Care,Health Care Services,united state,SP500
+138,DHI,D.R. Horton,,Consumer Discretionary,Homebuilding,united state,SP500
+139,DHR,Danaher Corporation,,Health Care,Health Care Equipment,united state,SP500
+140,DRI,Darden Restaurants,,Consumer Discretionary,Restaurants,united state,SP500
+141,DVA,DaVita Inc.,,Health Care,Health Care Facilities,united state,SP500
+142,DE,John Deere,,Industrials,Agricultural & Farm Machinery,united state,SP500
+143,DAL,Delta Air Lines,,Industrials,Airlines,united state,SP500
+144,XRAY,Dentsply Sirona,,Health Care,Health Care Supplies,united state,SP500
+145,DVN,Devon Energy,,Energy,Oil & Gas Exploration & Production,united state,SP500
+146,DXCM,Dexcom,,Health Care,Health Care Equipment,united state,SP500
+147,FANG,Diamondback Energy,,Energy,Oil & Gas Exploration & Production,united state,SP500
+148,DLR,Digital Realty,,Real Estate,Specialized REITs,united state,SP500
+149,DFS,Discover Financial,,Financials,Consumer Finance,united state,SP500
+150,DISH,Dish Network,,Communication Services,Cable & Satellite,united state,SP500
+151,DIS,Disney,,Communication Services,Movies & Entertainment,united state,SP500
+152,DG,Dollar General,,Consumer Discretionary,General Merchandise Stores,united state,SP500
+153,DLTR,Dollar Tree,,Consumer Discretionary,General Merchandise Stores,united state,SP500
+154,D,Dominion Energy,,Utilities,Electric Utilities,united state,SP500
+155,DPZ,Domino's,,Consumer Discretionary,Restaurants,united state,SP500
+156,DOV,Dover Corporation,,Industrials,Industrial Machinery,united state,SP500
+157,DOW,Dow Inc.,,Materials,Commodity Chemicals,united state,SP500
+158,DTE,DTE Energy,,Utilities,Multi-Utilities,united state,SP500
+159,DUK,Duke Energy,,Utilities,Electric Utilities,united state,SP500
+160,DRE,Duke Realty,,Real Estate,Industrial REITs,united state,SP500
+161,DD,DuPont,,Materials,Specialty Chemicals,united state,SP500
+162,DXC,DXC Technology,,Information Technology,IT Consulting & Other Services,united state,SP500
+163,EMN,Eastman Chemical Company,,Materials,Diversified Chemicals,united state,SP500
+164,ETN,Eaton Corporation,,Industrials,Electrical Components & Equipment,united state,SP500
+165,EBAY,eBay,,Consumer Discretionary,Internet & Direct Marketing Retail,united state,SP500
+166,ECL,Ecolab,,Materials,Specialty Chemicals,united state,SP500
+167,EIX,Edison International,,Utilities,Electric Utilities,united state,SP500
+168,EW,Edwards Lifesciences,,Health Care,Health Care Equipment,united state,SP500
+169,EA,Electronic Arts,,Communication Services,Interactive Home Entertainment,united state,SP500
+170,ELV,Elevance Health,,Health Care,Managed Health Care,united state,SP500
 171,LLY,Eli Lilly and Company,,Health Care,Pharmaceuticals,united state,SP500
 172,EMR,Emerson Electric,,Industrials,Electrical Components & Equipment,united state,SP500
 173,ENPH,Enphase,,Information Technology,Electronic Components,united state,SP500
@@ -212,9 +212,9 @@
 210,FCX,Freeport-McMoRan,,Materials,Copper,united state,SP500
 211,GRMN,Garmin,,Consumer Discretionary,Consumer Electronics,united state,SP500
 212,IT,Gartner,,Information Technology,IT Consulting & Other Services,united state,SP500
-213,GE,GE,,Industrials,Industrial Conglomerates,united state,SP500
-214,GNRC,Generac,,Industrials,Electrical Components & Equipment,united state,SP500
-215,GD,General Dynamics,,Industrials,Aerospace & Defense,united state,SP500
+213,GNRC,Generac,,Industrials,Electrical Components & Equipment,united state,SP500
+214,GD,General Dynamics,,Industrials,Aerospace & Defense,united state,SP500
+215,GE,General Electric,,Industrials,Industrial Conglomerates,united state,SP500
 216,GIS,General Mills,,Consumer Staples,Packaged Foods & Meats,united state,SP500
 217,GM,General Motors,,Consumer Discretionary,Automobile Manufacturers,united state,SP500
 218,GPC,Genuine Parts Company,,Consumer Discretionary,Specialty Stores,united state,SP500
@@ -235,13 +235,13 @@
 233,HOLX,Hologic,,Health Care,Health Care Equipment,united state,SP500
 234,HD,The Home Depot,,Consumer Discretionary,Home Improvement Retail,united state,SP500
 235,HON,Honeywell,,Industrials,Industrial Conglomerates,united state,SP500
-236,HRL,Hormel,,Consumer Staples,Packaged Foods & Meats,united state,SP500
+236,HRL,Hormel Foods,,Consumer Staples,Packaged Foods & Meats,united state,SP500
 237,HST,Host Hotels & Resorts,,Real Estate,Hotel & Resort REITs,united state,SP500
 238,HWM,Howmet Aerospace,,Industrials,Aerospace & Defense,united state,SP500
 239,HPQ,HP Inc.,,Information Technology,"Technology Hardware, Storage & Peripherals",united state,SP500
 240,HUM,Humana,,Health Care,Managed Health Care,united state,SP500
-241,HII,Huntington Ingalls Industries,,Industrials,Aerospace & Defense,united state,SP500
-242,HBAN,Huntington National Bank,,Financials,Regional Banks,united state,SP500
+241,HBAN,Huntington Bancshares,,Financials,Regional Banks,united state,SP500
+242,HII,Huntington Ingalls Industries,,Industrials,Aerospace & Defense,united state,SP500
 243,IBM,IBM,,Information Technology,IT Consulting & Other Services,united state,SP500
 244,IEX,IDEX Corporation,,Industrials,Industrial Machinery,united state,SP500
 245,IDXX,Idexx Laboratories,,Health Care,Health Care Equipment,united state,SP500
@@ -257,17 +257,17 @@
 255,INTU,Intuit,,Information Technology,Application Software,united state,SP500
 256,ISRG,Intuitive Surgical,,Health Care,Health Care Equipment,united state,SP500
 257,IVZ,Invesco,,Financials,Asset Management & Custody Banks,united state,SP500
-258,IPGP,IPG Photonics,,Information Technology,Electronic Manufacturing Services,united state,SP500
-259,IQV,IQVIA,,Health Care,Life Sciences Tools & Services,united state,SP500
-260,IRM,Iron Mountain,,Real Estate,Specialized REITs,united state,SP500
-261,JBHT,J.B. Hunt,,Industrials,Trucking,united state,SP500
-262,JKHY,Jack Henry & Associates,,Information Technology,Data Processing & Outsourced Services,united state,SP500
-263,J,Jacobs Engineering Group,,Industrials,Construction & Engineering,united state,SP500
-264,JNJ,Johnson & Johnson,,Health Care,Pharmaceuticals,united state,SP500
-265,JCI,Johnson Controls,,Industrials,Building Products,united state,SP500
-266,JPM,JPMorgan Chase,,Financials,Diversified Banks,united state,SP500
-267,JNPR,Juniper Networks,,Information Technology,Communications Equipment,united state,SP500
-268,K,Kellogg's,,Consumer Staples,Packaged Foods & Meats,united state,SP500
+258,IQV,IQVIA,,Health Care,Life Sciences Tools & Services,united state,SP500
+259,IRM,Iron Mountain,,Real Estate,Specialized REITs,united state,SP500
+260,JBHT,J.B. Hunt,,Industrials,Trucking,united state,SP500
+261,JKHY,Jack Henry & Associates,,Information Technology,Data Processing & Outsourced Services,united state,SP500
+262,J,Jacobs Engineering Group,,Industrials,Construction & Engineering,united state,SP500
+263,JNJ,Johnson & Johnson,,Health Care,Pharmaceuticals,united state,SP500
+264,JCI,Johnson Controls,,Industrials,Building Products,united state,SP500
+265,JPM,JPMorgan Chase,,Financials,Diversified Banks,united state,SP500
+266,JNPR,Juniper Networks,,Information Technology,Communications Equipment,united state,SP500
+267,K,Kellogg's,,Consumer Staples,Packaged Foods & Meats,united state,SP500
+268,KDP,Keurig Dr Pepper,,Consumer Staples,Soft Drinks,united state,SP500
 269,KEY,KeyCorp,,Financials,Regional Banks,united state,SP500
 270,KEYS,Keysight,,Information Technology,Electronic Equipment & Instruments,united state,SP500
 271,KMB,Kimberly-Clark,,Consumer Staples,Household Products,united state,SP500
@@ -298,7 +298,7 @@
 296,MKTX,MarketAxess,,Financials,Financial Exchanges & Data,united state,SP500
 297,MAR,Marriott International,,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",united state,SP500
 298,MMC,Marsh McLennan,,Financials,Insurance Brokers,united state,SP500
-299,MLM,Martin Marietta,,Materials,Construction Materials,united state,SP500
+299,MLM,Martin Marietta Materials,,Materials,Construction Materials,united state,SP500
 300,MAS,Masco,,Industrials,Building Products,united state,SP500
 301,MA,Mastercard,,Information Technology,Data Processing & Outsourced Services,united state,SP500
 302,MTCH,Match Group,,Communication Services,Interactive Media & Services,united state,SP500
@@ -338,7 +338,7 @@
 336,NLSN,Nielsen Holdings,,Industrials,Research & Consulting Services,united state,SP500
 337,NKE,"Nike, Inc.",,Consumer Discretionary,"Apparel, Accessories & Luxury Goods",united state,SP500
 338,NI,NiSource,,Utilities,Multi-Utilities,united state,SP500
-339,NDSN,Nordson,,Industrials,Industrial Machinery,united state,SP500
+339,NDSN,Nordson Corporation,,Industrials,Industrial Machinery,united state,SP500
 340,NSC,Norfolk Southern Railway,,Industrials,Railroads,united state,SP500
 341,NTRS,Northern Trust,,Financials,Asset Management & Custody Banks,united state,SP500
 342,NOC,Northrop Grumman,,Industrials,Aerospace & Defense,united state,SP500
@@ -353,153 +353,152 @@
 351,OXY,Occidental Petroleum,,Energy,Oil & Gas Exploration & Production,united state,SP500
 352,ODFL,Old Dominion,,Industrials,Trucking,united state,SP500
 353,OMC,Omnicom Group,,Communication Services,Advertising,united state,SP500
-354,OKE,Oneok,,Energy,Oil & Gas Storage & Transportation,united state,SP500
-355,ORCL,Oracle Corporation,,Information Technology,Application Software,united state,SP500
-356,OGN,Organon & Co.,,Health Care,Pharmaceuticals,united state,SP500
-357,OTIS,Otis Worldwide,,Industrials,Industrial Machinery,united state,SP500
-358,PCAR,Paccar,,Industrials,Construction Machinery & Heavy Trucks,united state,SP500
-359,PKG,Packaging Corporation of America,,Materials,Paper Packaging,united state,SP500
-360,PARA,Paramount Global,,Communication Services,Movies & Entertainment,united state,SP500
-361,PH,Parker Hannifin,,Industrials,Industrial Machinery,united state,SP500
-362,PAYX,Paychex,,Information Technology,Data Processing & Outsourced Services,united state,SP500
-363,PAYC,Paycom,,Information Technology,Application Software,united state,SP500
-364,PYPL,PayPal,,Information Technology,Data Processing & Outsourced Services,united state,SP500
-365,PENN,Penn National Gaming,,Consumer Discretionary,Casinos & Gaming,united state,SP500
-366,PNR,Pentair,,Industrials,Industrial Machinery,united state,SP500
-367,PEP,PepsiCo,,Consumer Staples,Soft Drinks,united state,SP500
-368,PKI,PerkinElmer,,Health Care,Health Care Equipment,united state,SP500
-369,PFE,Pfizer,,Health Care,Pharmaceuticals,united state,SP500
-370,PM,Philip Morris International,,Consumer Staples,Tobacco,united state,SP500
-371,PSX,Phillips 66,,Energy,Oil & Gas Refining & Marketing,united state,SP500
-372,PNW,Pinnacle West,,Utilities,Multi-Utilities,united state,SP500
-373,PXD,Pioneer Natural Resources,,Energy,Oil & Gas Exploration & Production,united state,SP500
-374,PNC,PNC Financial Services,,Financials,Regional Banks,united state,SP500
-375,POOL,Pool Corporation,,Consumer Discretionary,Distributors,united state,SP500
-376,PPG,PPG Industries,,Materials,Specialty Chemicals,united state,SP500
-377,PPL,PPL Corporation,,Utilities,Electric Utilities,united state,SP500
-378,PFG,Principal Financial Group,,Financials,Life & Health Insurance,united state,SP500
-379,PG,Procter & Gamble,,Consumer Staples,Personal Products,united state,SP500
-380,PGR,Progressive Corporation,,Financials,Property & Casualty Insurance,united state,SP500
-381,PLD,Prologis,,Real Estate,Industrial REITs,united state,SP500
-382,PRU,Prudential Financial,,Financials,Life & Health Insurance,united state,SP500
-383,PEG,Public Service Enterprise Group,,Utilities,Electric Utilities,united state,SP500
-384,PTC,PTC,,Information Technology,Application Software,united state,SP500
-385,PSA,Public Storage,,Real Estate,Specialized REITs,united state,SP500
-386,PHM,PulteGroup,,Consumer Discretionary,Homebuilding,united state,SP500
-387,PVH,PVH,,Consumer Discretionary,"Apparel, Accessories & Luxury Goods",united state,SP500
-388,QRVO,Qorvo,,Information Technology,Semiconductors,united state,SP500
-389,PWR,Quanta Services,,Industrials,Construction & Engineering,united state,SP500
-390,QCOM,Qualcomm,,Information Technology,Semiconductors,united state,SP500
-391,DGX,Quest Diagnostics,,Health Care,Health Care Services,united state,SP500
-392,RL,Ralph Lauren Corporation,,Consumer Discretionary,"Apparel, Accessories & Luxury Goods",united state,SP500
-393,RJF,Raymond James,,Financials,Investment Banking & Brokerage,united state,SP500
-394,RTX,Raytheon Technologies,,Industrials,Aerospace & Defense,united state,SP500
-395,O,Realty Income,,Real Estate,Retail REITs,united state,SP500
-396,REG,Regency Centers,,Real Estate,Retail REITs,united state,SP500
-397,REGN,Regeneron,,Health Care,Biotechnology,united state,SP500
-398,RF,Regions Financial Corporation,,Financials,Regional Banks,united state,SP500
-399,RSG,Republic Services,,Industrials,Environmental & Facilities Services,united state,SP500
-400,RMD,ResMed,,Health Care,Health Care Equipment,united state,SP500
-401,RHI,Robert Half,,Industrials,Human Resource & Employment Services,united state,SP500
-402,ROK,Rockwell Automation,,Industrials,Electrical Components & Equipment,united state,SP500
-403,ROL,"Rollins, Inc.",,Industrials,Environmental & Facilities Services,united state,SP500
-404,ROP,Roper Technologies,,Industrials,Industrial Conglomerates,united state,SP500
-405,ROST,Ross Stores,,Consumer Discretionary,Apparel Retail,united state,SP500
-406,RCL,Royal Caribbean Group,,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",united state,SP500
-407,SPGI,S&P Global,,Financials,Financial Exchanges & Data,united state,SP500
-408,CRM,Salesforce,,Information Technology,Application Software,united state,SP500
-409,SBAC,SBA Communications,,Real Estate,Specialized REITs,united state,SP500
-410,SLB,Schlumberger,,Energy,Oil & Gas Equipment & Services,united state,SP500
-411,STX,Seagate Technology,,Information Technology,"Technology Hardware, Storage & Peripherals",united state,SP500
-412,SEE,Sealed Air,,Materials,Paper Packaging,united state,SP500
-413,SRE,Sempra Energy,,Utilities,Multi-Utilities,united state,SP500
-414,NOW,ServiceNow,,Information Technology,Systems Software,united state,SP500
-415,SHW,Sherwin-Williams,,Materials,Specialty Chemicals,united state,SP500
-416,SBNY,Signature Bank,,Financials,Regional Banks,united state,SP500
-417,SPG,Simon Property Group,,Real Estate,Retail REITs,united state,SP500
-418,SWKS,Skyworks Solutions,,Information Technology,Semiconductors,united state,SP500
-419,SJM,The J.M. Smucker Company,,Consumer Staples,Packaged Foods & Meats,united state,SP500
-420,SNA,Snap-on,,Industrials,Industrial Machinery,united state,SP500
-421,SEDG,SolarEdge,,Information Technology,Semiconductor Equipment,united state,SP500
-422,SO,Southern Company,,Utilities,Electric Utilities,united state,SP500
-423,LUV,Southwest Airlines,,Industrials,Airlines,united state,SP500
-424,SWK,Stanley Black & Decker,,Industrials,Industrial Machinery,united state,SP500
-425,SBUX,Starbucks,,Consumer Discretionary,Restaurants,united state,SP500
-426,STT,State Street Corporation,,Financials,Asset Management & Custody Banks,united state,SP500
-427,STE,Steris,,Health Care,Health Care Equipment,united state,SP500
-428,SYK,Stryker Corporation,,Health Care,Health Care Equipment,united state,SP500
-429,SIVB,SVB Financial,,Financials,Regional Banks,united state,SP500
-430,SYF,Synchrony Financial,,Financials,Consumer Finance,united state,SP500
-431,SNPS,Synopsys,,Information Technology,Application Software,united state,SP500
-432,SYY,Sysco,,Consumer Staples,Food Distributors,united state,SP500
-433,TMUS,T-Mobile US,,Communication Services,Wireless Telecommunication Services,united state,SP500
-434,TROW,T. Rowe Price,,Financials,Asset Management & Custody Banks,united state,SP500
-435,TTWO,Take-Two Interactive,,Communication Services,Interactive Home Entertainment,united state,SP500
-436,TPR,"Tapestry, Inc.",,Consumer Discretionary,"Apparel, Accessories & Luxury Goods",united state,SP500
-437,TGT,Target Corporation,,Consumer Discretionary,General Merchandise Stores,united state,SP500
-438,TEL,TE Connectivity,,Information Technology,Electronic Manufacturing Services,united state,SP500
-439,TDY,Teledyne,,Industrials,Aerospace & Defense,united state,SP500
-440,TFX,Teleflex,,Health Care,Health Care Equipment,united state,SP500
-441,TER,Teradyne,,Information Technology,Semiconductor Equipment,united state,SP500
-442,TSLA,"Tesla, Inc.",,Consumer Discretionary,Automobile Manufacturers,united state,SP500
-443,TXN,Texas Instruments,,Information Technology,Semiconductors,united state,SP500
-444,TXT,Textron,,Industrials,Aerospace & Defense,united state,SP500
-445,TMO,Thermo Fisher Scientific,,Health Care,Life Sciences Tools & Services,united state,SP500
-446,TJX,TJX Companies,,Consumer Discretionary,Apparel Retail,united state,SP500
-447,TSCO,Tractor Supply,,Consumer Discretionary,Specialty Stores,united state,SP500
-448,TT,Trane Technologies,,Industrials,Building Products,united state,SP500
-449,TDG,TransDigm Group,,Industrials,Aerospace & Defense,united state,SP500
-450,TRV,The Travelers Companies,,Financials,Property & Casualty Insurance,united state,SP500
-451,TRMB,Trimble Inc.,,Information Technology,Electronic Equipment & Instruments,united state,SP500
-452,TFC,Truist,,Financials,Regional Banks,united state,SP500
-453,TWTR,Twitter Inc.,,Communication Services,Interactive Media & Services,united state,SP500
-454,TYL,Tyler Technologies,,Information Technology,Application Software,united state,SP500
-455,TSN,Tyson Foods,,Consumer Staples,Packaged Foods & Meats,united state,SP500
-456,USB,U.S. Bank,,Financials,Diversified Banks,united state,SP500
-457,UDR,"UDR, Inc.",,Real Estate,Residential REITs,united state,SP500
-458,ULTA,Ulta Beauty,,Consumer Discretionary,Specialty Stores,united state,SP500
-459,UAA,Under Armour (Class A),,Consumer Discretionary,"Apparel, Accessories & Luxury Goods",united state,SP500
-460,UA,Under Armour (Class C),,Consumer Discretionary,"Apparel, Accessories & Luxury Goods",united state,SP500
-461,UNP,Union Pacific Corporation,,Industrials,Railroads,united state,SP500
-462,UAL,United Airlines Holdings,,Industrials,Airlines,united state,SP500
-463,UPS,United Parcel Service,,Industrials,Air Freight & Logistics,united state,SP500
-464,URI,United Rentals,,Industrials,Trading Companies & Distributors,united state,SP500
-465,UNH,UnitedHealth Group,,Health Care,Managed Health Care,united state,SP500
-466,UHS,Universal Health Services,,Health Care,Health Care Facilities,united state,SP500
-467,VLO,Valero Energy,,Energy,Oil & Gas Refining & Marketing,united state,SP500
-468,VTR,Ventas,,Real Estate,Health Care REITs,united state,SP500
-469,VRSN,Verisign,,Information Technology,Internet Services & Infrastructure,united state,SP500
-470,VRSK,Verisk,,Industrials,Research & Consulting Services,united state,SP500
-471,VZ,Verizon,,Communication Services,Integrated Telecommunication Services,united state,SP500
-472,VRTX,Vertex Pharmaceuticals,,Health Care,Biotechnology,united state,SP500
-473,VFC,VF Corporation,,Consumer Discretionary,"Apparel, Accessories & Luxury Goods",united state,SP500
-474,VTRS,Viatris,,Health Care,Pharmaceuticals,united state,SP500
-475,VICI,Vici Properties,,Real Estate,Hotel & Resort REITs,united state,SP500
-476,V,Visa Inc.,,Information Technology,Data Processing & Outsourced Services,united state,SP500
-477,VNO,Vornado Realty Trust,,Real Estate,Office REITs,united state,SP500
-478,VMC,Vulcan Materials Company,,Materials,Construction Materials,united state,SP500
-479,WAB,Wabtec,,Industrials,Construction Machinery & Heavy Trucks,united state,SP500
-480,WBA,Walgreens Boots Alliance,,Consumer Staples,Drug Retail,united state,SP500
-481,WMT,Walmart,,Consumer Staples,Hypermarkets & Super Centers,united state,SP500
-482,WBD,Warner Bros. Discovery,,Communication Services,Broadcasting,united state,SP500
-483,WM,Waste Management,,Industrials,Environmental & Facilities Services,united state,SP500
-484,WAT,Waters Corporation,,Health Care,Health Care Distributors,united state,SP500
-485,WEC,WEC Energy Group,,Utilities,Electric Utilities,united state,SP500
-486,WFC,Wells Fargo,,Financials,Diversified Banks,united state,SP500
-487,WELL,Welltower,,Real Estate,Health Care REITs,united state,SP500
-488,WST,West Pharmaceutical Services,,Health Care,Health Care Supplies,united state,SP500
-489,WDC,Western Digital,,Information Technology,"Technology Hardware, Storage & Peripherals",united state,SP500
-490,WRK,WestRock,,Materials,Paper Packaging,united state,SP500
-491,WY,Weyerhaeuser,,Real Estate,Specialized REITs,united state,SP500
-492,WHR,Whirlpool Corporation,,Consumer Discretionary,Household Appliances,united state,SP500
-493,WMB,Williams Companies,,Energy,Oil & Gas Storage & Transportation,united state,SP500
-494,WTW,Willis Towers Watson,,Financials,Insurance Brokers,united state,SP500
-495,GWW,W. W. Grainger,,Industrials,Industrial Machinery,united state,SP500
-496,WYNN,Wynn Resorts,,Consumer Discretionary,Casinos & Gaming,united state,SP500
-497,XEL,Xcel Energy,,Utilities,Multi-Utilities,united state,SP500
-498,XYL,Xylem Inc.,,Industrials,Industrial Machinery,united state,SP500
-499,YUM,Yum! Brands,,Consumer Discretionary,Restaurants,united state,SP500
-500,ZBRA,Zebra Technologies,,Information Technology,Electronic Equipment & Instruments,united state,SP500
-501,ZBH,Zimmer Biomet,,Health Care,Health Care Equipment,united state,SP500
-502,ZION,Zions Bancorporation,,Financials,Regional Banks,united state,SP500
-503,ZTS,Zoetis,,Health Care,Pharmaceuticals,united state,SP500
+354,ON,ON Semiconductor,,Information Technology,Semiconductors,united state,SP500
+355,OKE,Oneok,,Energy,Oil & Gas Storage & Transportation,united state,SP500
+356,ORCL,Oracle Corporation,,Information Technology,Application Software,united state,SP500
+357,OGN,Organon & Co.,,Health Care,Pharmaceuticals,united state,SP500
+358,OTIS,Otis Worldwide,,Industrials,Industrial Machinery,united state,SP500
+359,PCAR,Paccar,,Industrials,Construction Machinery & Heavy Trucks,united state,SP500
+360,PKG,Packaging Corporation of America,,Materials,Paper Packaging,united state,SP500
+361,PARA,Paramount Global,,Communication Services,Movies & Entertainment,united state,SP500
+362,PH,Parker Hannifin,,Industrials,Industrial Machinery,united state,SP500
+363,PAYX,Paychex,,Information Technology,Data Processing & Outsourced Services,united state,SP500
+364,PAYC,Paycom,,Information Technology,Application Software,united state,SP500
+365,PYPL,PayPal,,Information Technology,Data Processing & Outsourced Services,united state,SP500
+366,PENN,Penn National Gaming,,Consumer Discretionary,Casinos & Gaming,united state,SP500
+367,PNR,Pentair,,Industrials,Industrial Machinery,united state,SP500
+368,PEP,PepsiCo,,Consumer Staples,Soft Drinks,united state,SP500
+369,PKI,PerkinElmer,,Health Care,Health Care Equipment,united state,SP500
+370,PFE,Pfizer,,Health Care,Pharmaceuticals,united state,SP500
+371,PM,Philip Morris International,,Consumer Staples,Tobacco,united state,SP500
+372,PSX,Phillips 66,,Energy,Oil & Gas Refining & Marketing,united state,SP500
+373,PNW,Pinnacle West,,Utilities,Multi-Utilities,united state,SP500
+374,PXD,Pioneer Natural Resources,,Energy,Oil & Gas Exploration & Production,united state,SP500
+375,PNC,PNC Financial Services,,Financials,Regional Banks,united state,SP500
+376,POOL,Pool Corporation,,Consumer Discretionary,Distributors,united state,SP500
+377,PPG,PPG Industries,,Materials,Specialty Chemicals,united state,SP500
+378,PPL,PPL Corporation,,Utilities,Electric Utilities,united state,SP500
+379,PFG,Principal Financial Group,,Financials,Life & Health Insurance,united state,SP500
+380,PG,Procter & Gamble,,Consumer Staples,Personal Products,united state,SP500
+381,PGR,Progressive Corporation,,Financials,Property & Casualty Insurance,united state,SP500
+382,PLD,Prologis,,Real Estate,Industrial REITs,united state,SP500
+383,PRU,Prudential Financial,,Financials,Life & Health Insurance,united state,SP500
+384,PEG,Public Service Enterprise Group,,Utilities,Electric Utilities,united state,SP500
+385,PTC,PTC,,Information Technology,Application Software,united state,SP500
+386,PSA,Public Storage,,Real Estate,Specialized REITs,united state,SP500
+387,PHM,PulteGroup,,Consumer Discretionary,Homebuilding,united state,SP500
+388,PVH,PVH,,Consumer Discretionary,"Apparel, Accessories & Luxury Goods",united state,SP500
+389,QRVO,Qorvo,,Information Technology,Semiconductors,united state,SP500
+390,PWR,Quanta Services,,Industrials,Construction & Engineering,united state,SP500
+391,QCOM,Qualcomm,,Information Technology,Semiconductors,united state,SP500
+392,DGX,Quest Diagnostics,,Health Care,Health Care Services,united state,SP500
+393,RL,Ralph Lauren Corporation,,Consumer Discretionary,"Apparel, Accessories & Luxury Goods",united state,SP500
+394,RJF,Raymond James,,Financials,Investment Banking & Brokerage,united state,SP500
+395,RTX,Raytheon Technologies,,Industrials,Aerospace & Defense,united state,SP500
+396,O,Realty Income,,Real Estate,Retail REITs,united state,SP500
+397,REG,Regency Centers,,Real Estate,Retail REITs,united state,SP500
+398,REGN,Regeneron,,Health Care,Biotechnology,united state,SP500
+399,RF,Regions Financial Corporation,,Financials,Regional Banks,united state,SP500
+400,RSG,Republic Services,,Industrials,Environmental & Facilities Services,united state,SP500
+401,RMD,ResMed,,Health Care,Health Care Equipment,united state,SP500
+402,RHI,Robert Half,,Industrials,Human Resource & Employment Services,united state,SP500
+403,ROK,Rockwell Automation,,Industrials,Electrical Components & Equipment,united state,SP500
+404,ROL,"Rollins, Inc.",,Industrials,Environmental & Facilities Services,united state,SP500
+405,ROP,Roper Technologies,,Industrials,Industrial Conglomerates,united state,SP500
+406,ROST,Ross Stores,,Consumer Discretionary,Apparel Retail,united state,SP500
+407,RCL,Royal Caribbean Group,,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",united state,SP500
+408,SPGI,S&P Global,,Financials,Financial Exchanges & Data,united state,SP500
+409,CRM,Salesforce,,Information Technology,Application Software,united state,SP500
+410,SBAC,SBA Communications,,Real Estate,Specialized REITs,united state,SP500
+411,SLB,Schlumberger,,Energy,Oil & Gas Equipment & Services,united state,SP500
+412,STX,Seagate Technology,,Information Technology,"Technology Hardware, Storage & Peripherals",united state,SP500
+413,SEE,Sealed Air,,Materials,Paper Packaging,united state,SP500
+414,SRE,Sempra Energy,,Utilities,Multi-Utilities,united state,SP500
+415,NOW,ServiceNow,,Information Technology,Systems Software,united state,SP500
+416,SHW,Sherwin-Williams,,Materials,Specialty Chemicals,united state,SP500
+417,SBNY,Signature Bank,,Financials,Regional Banks,united state,SP500
+418,SPG,Simon Property Group,,Real Estate,Retail REITs,united state,SP500
+419,SWKS,Skyworks Solutions,,Information Technology,Semiconductors,united state,SP500
+420,SJM,The J.M. Smucker Company,,Consumer Staples,Packaged Foods & Meats,united state,SP500
+421,SNA,Snap-on,,Industrials,Industrial Machinery,united state,SP500
+422,SEDG,SolarEdge,,Information Technology,Semiconductor Equipment,united state,SP500
+423,SO,Southern Company,,Utilities,Electric Utilities,united state,SP500
+424,LUV,Southwest Airlines,,Industrials,Airlines,united state,SP500
+425,SWK,Stanley Black & Decker,,Industrials,Industrial Machinery,united state,SP500
+426,SBUX,Starbucks,,Consumer Discretionary,Restaurants,united state,SP500
+427,STT,State Street Corporation,,Financials,Asset Management & Custody Banks,united state,SP500
+428,STE,Steris,,Health Care,Health Care Equipment,united state,SP500
+429,SYK,Stryker Corporation,,Health Care,Health Care Equipment,united state,SP500
+430,SIVB,SVB Financial,,Financials,Regional Banks,united state,SP500
+431,SYF,Synchrony Financial,,Financials,Consumer Finance,united state,SP500
+432,SNPS,Synopsys,,Information Technology,Application Software,united state,SP500
+433,SYY,Sysco,,Consumer Staples,Food Distributors,united state,SP500
+434,TMUS,T-Mobile US,,Communication Services,Wireless Telecommunication Services,united state,SP500
+435,TROW,T. Rowe Price,,Financials,Asset Management & Custody Banks,united state,SP500
+436,TTWO,Take-Two Interactive,,Communication Services,Interactive Home Entertainment,united state,SP500
+437,TPR,"Tapestry, Inc.",,Consumer Discretionary,"Apparel, Accessories & Luxury Goods",united state,SP500
+438,TGT,Target Corporation,,Consumer Discretionary,General Merchandise Stores,united state,SP500
+439,TEL,TE Connectivity,,Information Technology,Electronic Manufacturing Services,united state,SP500
+440,TDY,Teledyne Technologies,,Industrials,Aerospace & Defense,united state,SP500
+441,TFX,Teleflex,,Health Care,Health Care Equipment,united state,SP500
+442,TER,Teradyne,,Information Technology,Semiconductor Equipment,united state,SP500
+443,TSLA,"Tesla, Inc.",,Consumer Discretionary,Automobile Manufacturers,united state,SP500
+444,TXN,Texas Instruments,,Information Technology,Semiconductors,united state,SP500
+445,TXT,Textron,,Industrials,Aerospace & Defense,united state,SP500
+446,TMO,Thermo Fisher Scientific,,Health Care,Life Sciences Tools & Services,united state,SP500
+447,TJX,TJX Companies,,Consumer Discretionary,Apparel Retail,united state,SP500
+448,TSCO,Tractor Supply,,Consumer Discretionary,Specialty Stores,united state,SP500
+449,TT,Trane Technologies,,Industrials,Building Products,united state,SP500
+450,TDG,TransDigm Group,,Industrials,Aerospace & Defense,united state,SP500
+451,TRV,The Travelers Companies,,Financials,Property & Casualty Insurance,united state,SP500
+452,TRMB,Trimble Inc.,,Information Technology,Electronic Equipment & Instruments,united state,SP500
+453,TFC,Truist,,Financials,Regional Banks,united state,SP500
+454,TWTR,Twitter Inc.,,Communication Services,Interactive Media & Services,united state,SP500
+455,TYL,Tyler Technologies,,Information Technology,Application Software,united state,SP500
+456,TSN,Tyson Foods,,Consumer Staples,Packaged Foods & Meats,united state,SP500
+457,USB,U.S. Bank,,Financials,Diversified Banks,united state,SP500
+458,UDR,"UDR, Inc.",,Real Estate,Residential REITs,united state,SP500
+459,ULTA,Ulta Beauty,,Consumer Discretionary,Specialty Stores,united state,SP500
+460,UNP,Union Pacific Corporation,,Industrials,Railroads,united state,SP500
+461,UAL,United Airlines Holdings,,Industrials,Airlines,united state,SP500
+462,UPS,United Parcel Service,,Industrials,Air Freight & Logistics,united state,SP500
+463,URI,United Rentals,,Industrials,Trading Companies & Distributors,united state,SP500
+464,UNH,UnitedHealth Group,,Health Care,Managed Health Care,united state,SP500
+465,UHS,Universal Health Services,,Health Care,Health Care Facilities,united state,SP500
+466,VLO,Valero Energy,,Energy,Oil & Gas Refining & Marketing,united state,SP500
+467,VTR,Ventas,,Real Estate,Health Care REITs,united state,SP500
+468,VRSN,Verisign,,Information Technology,Internet Services & Infrastructure,united state,SP500
+469,VRSK,Verisk,,Industrials,Research & Consulting Services,united state,SP500
+470,VZ,Verizon,,Communication Services,Integrated Telecommunication Services,united state,SP500
+471,VRTX,Vertex Pharmaceuticals,,Health Care,Biotechnology,united state,SP500
+472,VFC,VF Corporation,,Consumer Discretionary,"Apparel, Accessories & Luxury Goods",united state,SP500
+473,VTRS,Viatris,,Health Care,Pharmaceuticals,united state,SP500
+474,VICI,Vici Properties,,Real Estate,Hotel & Resort REITs,united state,SP500
+475,V,Visa Inc.,,Information Technology,Data Processing & Outsourced Services,united state,SP500
+476,VNO,Vornado Realty Trust,,Real Estate,Office REITs,united state,SP500
+477,VMC,Vulcan Materials Company,,Materials,Construction Materials,united state,SP500
+478,WAB,Wabtec,,Industrials,Construction Machinery & Heavy Trucks,united state,SP500
+479,WBA,Walgreens Boots Alliance,,Consumer Staples,Drug Retail,united state,SP500
+480,WMT,Walmart,,Consumer Staples,Hypermarkets & Super Centers,united state,SP500
+481,WBD,Warner Bros. Discovery,,Communication Services,Broadcasting,united state,SP500
+482,WM,Waste Management,,Industrials,Environmental & Facilities Services,united state,SP500
+483,WAT,Waters Corporation,,Health Care,Health Care Distributors,united state,SP500
+484,WEC,WEC Energy Group,,Utilities,Electric Utilities,united state,SP500
+485,WFC,Wells Fargo,,Financials,Diversified Banks,united state,SP500
+486,WELL,Welltower,,Real Estate,Health Care REITs,united state,SP500
+487,WST,West Pharmaceutical Services,,Health Care,Health Care Supplies,united state,SP500
+488,WDC,Western Digital,,Information Technology,"Technology Hardware, Storage & Peripherals",united state,SP500
+489,WRK,WestRock,,Materials,Paper Packaging,united state,SP500
+490,WY,Weyerhaeuser,,Real Estate,Specialized REITs,united state,SP500
+491,WHR,Whirlpool Corporation,,Consumer Discretionary,Household Appliances,united state,SP500
+492,WMB,Williams Companies,,Energy,Oil & Gas Storage & Transportation,united state,SP500
+493,WTW,Willis Towers Watson,,Financials,Insurance Brokers,united state,SP500
+494,GWW,W. W. Grainger,,Industrials,Industrial Machinery,united state,SP500
+495,WYNN,Wynn Resorts,,Consumer Discretionary,Casinos & Gaming,united state,SP500
+496,XEL,Xcel Energy,,Utilities,Multi-Utilities,united state,SP500
+497,XYL,Xylem Inc.,,Industrials,Industrial Machinery,united state,SP500
+498,YUM,Yum! Brands,,Consumer Discretionary,Restaurants,united state,SP500
+499,ZBRA,Zebra Technologies,,Information Technology,Electronic Equipment & Instruments,united state,SP500
+500,ZBH,Zimmer Biomet,,Health Care,Health Care Equipment,united state,SP500
+501,ZION,Zions Bancorporation,,Financials,Regional Banks,united state,SP500
+502,ZTS,Zoetis,,Health Care,Pharmaceuticals,united state,SP500
