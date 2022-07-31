@@ -178,7 +178,7 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d"
     ohlcv = ohlcv.reindex(expected_range, fill_value=np.nan)
 
     if len(indicators) != 0:
-        ohlcv = inc_indicators.compute_indicators(ohlcv, indicators)
+        ohlcv = inc_indicators.compute_indicators(ohlcv, indicators, True)
 
     return ohlcv
 

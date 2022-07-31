@@ -1,9 +1,8 @@
-from . import crypto
 import pandas as pd
 from parse import parse
 from stockstats import StockDataFrame as Sdf
 from finta import TA
-
+import numpy as np
 
 
 class SuperTrend():
@@ -86,7 +85,7 @@ class SuperTrend():
 
 
 
-def compute_indicators(df, indicators):
+def compute_indicators(df, indicators, keep_only_requested_indicators = False):
     if not isinstance(df, pd.DataFrame):
         return df
 
@@ -96,7 +95,6 @@ def compute_indicators(df, indicators):
     # compute the indicators
     columns = list(df.columns)
     for indicator in indicators:
-        print(indicator)
         if indicator in columns:
             continue
 
@@ -123,7 +121,6 @@ def compute_indicators(df, indicators):
             df["wma_"+str(period)] = TA.WMA(stock, period = period).copy()
 
         elif indicator == 'macd':
-            print("###################################################")
             df['macd'] = stock.get('macd').copy() # from stockstats
             #df['macd'] = TA.MACD(stock)['MACD'].copy() # from finta
 
@@ -193,9 +190,77 @@ def compute_indicators(df, indicators):
 
 
     # keep only the requested indicators
-    for column in list(df.columns):
-        if not column in indicators:
-            df.drop(columns=[column], inplace=True)
+    if keep_only_requested_indicators:
+        for column in list(df.columns):
+            if not column in indicators:
+                df.drop(columns=[column], inplace=True)
 
     return df
     
+def remove_features(df, features):
+    for feature in features:
+        try:
+            df.drop(feature, axis=1, inplace=True)
+        except KeyError as feature:
+            print("{}. Columns are {}".format(feature, df.columns))
+    return df
+
+def normalize_column_headings(df):
+    # Change all column headings to be lower case, and remove spacing
+    df.columns = [str(x).lower().replace(' ', '_') for x in df.columns]
+    return df
+
+def get_trend_info(df):
+    tmp = pd.concat([df['close']], axis=1, keys=['close'])
+    tmp = compute_indicators(tmp, ["trend_1d"])
+    tmp['shift_trend_1d'] = tmp['trend_1d'].shift(-1)
+    tmp.dropna(inplace=True)
+
+    tmp['true_positive'] = np.where((tmp['trend_1d'] == 1) & (tmp['shift_trend_1d'] == 1), 1, 0)
+    tmp['true_negative'] = np.where((tmp['trend_1d'] == 0) & (tmp['shift_trend_1d'] == 0), 1, 0)
+    tmp['false_positive'] = np.where((tmp['trend_1d'] == 1) & (tmp['shift_trend_1d'] == 0), 1, 0)
+    tmp['false_negative'] = np.where((tmp['trend_1d'] == 0) & (tmp['shift_trend_1d'] == 1), 1, 0)
+
+    # how many times the trend is up
+    trend_counted = tmp['trend_1d'].value_counts(normalize=True)
+    trend_ratio = 100 * trend_counted[1]
+
+    # how many times trend today = trend tomorrow
+    true_positive = 100*tmp['true_positive'].value_counts(normalize=True)[1]
+    true_negative = 100*tmp['true_negative'].value_counts(normalize=True)[1]
+    false_positive = 100*tmp['false_positive'].value_counts(normalize=True)[1]
+    false_negative = 100*tmp['false_negative'].value_counts(normalize=True)[1]
+
+    return trend_ratio, true_positive, true_negative, false_positive, false_negative
+
+def get_stats_for_trend_up(df, n_forward_days):
+    tmp = df.copy()
+
+    indicator = "trend_"+str(n_forward_days)+"d"
+    if indicator not in tmp.columns:
+        tmp = compute_indicators(tmp, [indicator])
+
+    # how many times the trend is up for d+n_forward_days
+    trend_counted = tmp[indicator].value_counts(normalize=True)
+    trend_ratio = 100 * trend_counted[1]
+
+    return trend_ratio
+
+def get_stats_on_trend_today_equals_trend_tomorrow(df):
+    tmp = pd.concat([df['close']], axis=1, keys=['close'])
+    tmp = compute_indicators(tmp, ["trend_1d"])
+    tmp['shift_trend'] = tmp["trend_1d"].shift(-1)
+    tmp.dropna(inplace=True)
+
+    tmp['true_positive'] = np.where((tmp["trend_1d"] == 1) & (tmp['shift_trend'] == 1), 1, 0)
+    tmp['true_negative'] = np.where((tmp["trend_1d"] == 0) & (tmp['shift_trend'] == 0), 1, 0)
+    tmp['false_positive'] = np.where((tmp["trend_1d"] == 1) & (tmp['shift_trend'] == 0), 1, 0)
+    tmp['false_negative'] = np.where((tmp["trend_1d"] == 0) & (tmp['shift_trend'] == 1), 1, 0)
+
+    # how many times trend today = trend tomorrow
+    true_positive = 100*tmp['true_positive'].value_counts(normalize=True)[1]
+    true_negative = 100*tmp['true_negative'].value_counts(normalize=True)[1]
+    false_positive = 100*tmp['false_positive'].value_counts(normalize=True)[1]
+    false_negative = 100*tmp['false_negative'].value_counts(normalize=True)[1]
+
+    return true_positive, true_negative, false_positive, false_negative
