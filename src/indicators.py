@@ -38,8 +38,8 @@ class SuperTrend():
         hl2 = (self.high + self.low) / 2
         # upperband and lowerband calculation
         # notice that final bands are set to be equal to the respective bands
-        final_upperband = upperband = hl2 + (self.atr_multi * atr)
-        final_lowerband = lowerband = hl2 - (self.atr_multi * atr)
+        final_upperband = hl2 + (self.atr_multi * atr)
+        final_lowerband = hl2 - (self.atr_multi * atr)
         
         # initialize Supertrend column to True
         supertrend = [True] * len(self.close)
@@ -201,7 +201,7 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
     # keep only the requested indicators
     if keep_only_requested_indicators:
         for column in list(df.columns):
-            if not column in indicators:
+            if column not in indicators:
                 df.drop(columns=[column], inplace=True)
 
     return df
