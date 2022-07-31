@@ -81,6 +81,20 @@ class TestIndicators:
         assert(false_positive == pytest.approx(11.111, 0.001))
         assert(false_negative == pytest.approx(22.222, 0.001))
 
+    def test_super_trend_direction(self):
+        df = self.get_dataframe_from_csv("./test/data/google_stocks_data.csv")
+        df = df.head(200)
+        df = indicators.compute_indicators(df, ['super_trend_direction'])
+        df = indicators.remove_missing_values(df)
+        df = indicators.normalize_column_headings(df)
+
+        df.to_csv("./test/generated/findicators_super_trend_direction_generated.csv")
+        expected_df = self.get_dataframe_from_csv("./test/references/findicators_super_trend_direction_reference.csv")
+ 
+        array = df["super_trend_direction"].to_numpy()
+        array_expected = expected_df["super_trend_direction"].to_numpy()
+        assert((array==array_expected).all())
+
     def test_vsa(self):
         df = self.get_dataframe_from_csv("./test/data/google_stocks_data.csv")
         df = df.head(200)
