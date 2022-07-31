@@ -159,3 +159,12 @@ class TestIndicators:
 
         array = df.loc[:,'close'].values
         assert(np.array_equal(array, [np.NaN, np.NaN, 20., 21., 23., 19., 18., 24., 25.], equal_nan=True))
+
+    def test_temporal_indicators(self):
+        idx = pd.Index(pd.date_range("19991231", periods=10), name='Date')
+        df = pd.DataFrame([1]*10, columns=["Foobar"], index=idx)
+        df = indicators.add_temporal_indicators(df, "Date")
+        df = indicators.normalize_column_headings(df)
+
+        expected_df = self.get_dataframe_from_csv("./test/references/findicators_temporal_indicators_reference.csv")
+        assert(df.equals(expected_df))
