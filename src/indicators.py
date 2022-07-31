@@ -3,7 +3,8 @@ from parse import parse
 from stockstats import StockDataFrame as Sdf
 from finta import TA
 import numpy as np
-
+from . import indicators_vsa as vsa
+from . import indicators_flabeling as flabeling
 
 class SuperTrend():
     def __init__(
@@ -85,7 +86,7 @@ class SuperTrend():
 
 
 
-def compute_indicators(df, indicators, keep_only_requested_indicators = False):
+def compute_indicators(df, indicators, keep_only_requested_indicators = False, params = None):
     if not isinstance(df, pd.DataFrame):
         return df
 
@@ -176,6 +177,14 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False):
         elif indicator == 'simple_rtn':
             df['simple_rtn'] = df['close'].pct_change()
 
+        elif indicator == 'labeling':
+            df = flabeling.data_labeling(df, params)
+
+        elif indicator == 'vsa':
+            days = [1, 2, 3, 5, 20, 40, 60]
+            df = vsa.create_bunch_of_vsa_features(df, days)
+            df['outcomes_vsa'] = df.close.pct_change(-1)
+
         elif indicator == "super_trend_direction":
             super_trend = SuperTrend(
                     df['high'], 
@@ -264,3 +273,29 @@ def get_stats_on_trend_today_equals_trend_tomorrow(df):
     false_negative = 100*tmp['false_negative'].value_counts(normalize=True)[1]
 
     return true_positive, true_negative, false_positive, false_negative
+
+def shift(df, indicator, shift):
+    if isinstance(shift, str):
+        shift = int(shift)
+    
+    df[indicator] = df[indicator].shift(shift)
+    return df
+
+def remove_missing_values(df):
+    df['inf'] = 0
+    for col in df.columns:
+        df['inf'] = np.where((df[col] == np.inf) | (df[col] == -np.inf), 1, df['inf'])
+
+    df = df.drop(df[df.inf == 1].index)
+    df = df.drop(['inf'], axis=1)
+
+    df.replace([np.inf, -np.inf], np.nan)
+    # Drop the NaNs
+    df.dropna(axis=0, how='any', inplace=True)
+
+    return df
+
+
+def remove_duplicates(df):
+    df.drop_duplicates(inplace=True)
+    return df
