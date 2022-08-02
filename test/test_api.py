@@ -1,9 +1,17 @@
 import pytest
 import pandas as pd
 import json
+#from dataclasses import dataclass
 
 from src import api
 from . import test_utils
+
+
+class MockRequest:
+    def __init__(self):
+        self.method = ""
+        self.args = {}
+        self.form = {}
 
 class TestApi:
 
@@ -32,9 +40,54 @@ class TestApi:
         assert("info" in response["result"][symbol])
         assert(response["result"][symbol]["info"]["symbol"] == symbol)
 
+    def test_api_history_parse_parameters_get_ok(self):
+        req = MockRequest
+        req.method = "GET"
+        req.args = {}
+        req.args["exchange"] = "hitbtc"
+        req.args["symbol"] = "ETH/EURS"
+        req.args["start"] = "2022-02-01"
+        history_params = api.api_history_parse_parameters(req)
+
+        assert(history_params.get("status") == "ok")
+
+    def test_api_history_parse_parameters_get_ko_exchange_not_specified(self):
+        req = MockRequest
+        req.method = "GET"
+        req.args = {}
+        req.args["symbol"] = "ETH/EURS"
+        req.args["start"] = "2022-02-01"
+        history_params = api.api_history_parse_parameters(req)
+
+        assert(history_params.get("status") == "ko")
+        assert(history_params.get("reason") == "exchange not specified")
+
+    def test_api_history_parse_parameters_post_ok(self):
+        req = MockRequest
+        req.method = "POST"
+        req.form = {}
+        req.form["exchange"] = "hitbtc"
+        req.form["symbol"] = "ETH/EURS"
+        req.form["start"] = "2022-02-01"
+        history_params = api.api_history_parse_parameters(req)
+
+        assert(history_params.get("status") == "ok")
+
+    def test_api_history_parse_parameters_post_ko_exchange_not_specified(self):
+        req = MockRequest
+        req.method = "POST"
+        req.form = {}
+        req.form["symbol"] = "ETH/EURS"
+        req.form["start"] = "2022-02-01"
+        history_params = api.api_history_parse_parameters(req)
+
+        assert(history_params.get("status") == "ko")
+        assert(history_params.get("reason") == "exchange not specified")
+
     def test_api_history(self):
         symbol = "BTC_EURS"
-        response = api.api_history("hitbtc", symbol, "2021-12-05",  "2022-01-05", str_interval="1d")
+        params_history = {"str_exchange":"hitbtc", "str_symbol":symbol, "str_start":"2021-12-05", "str_end": "2022-01-05", "str_interval":"1d"}
+        response = api.api_history(params_history)
         assert("status" in response)
         assert(response["status"] == "ok")
         assert("result" in response)
@@ -51,7 +104,8 @@ class TestApi:
     def test_api_indicators(self):
         symbol = "BTC_EURS"
         indicators = ["close", "high", "ema_30"]
-        response = api.api_history("hitbtc", symbol, "2021-12-05",  "2022-01-05", str_interval="1d", indicators = indicators)
+        params_history = {"str_exchange":"hitbtc", "str_symbol":symbol, "str_start":"2021-12-05", "str_end": "2022-01-05", "str_interval":"1d", "indicators":indicators}
+        response = api.api_history(params_history)
         assert("status" in response)
         assert(response["status"] == "ok")
         assert("result" in response)

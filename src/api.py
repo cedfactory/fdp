@@ -2,6 +2,7 @@ import pandas as pd
 from datetime import datetime
 from . import wiki,yahoo,yf_wrapper,crypto,tradingview,portfolio,indicators
 import concurrent.futures
+import json
 
 map_market_function = {
     "w_cac":                wiki.get_list_cac,
@@ -97,14 +98,70 @@ def api_symbol(str_screener, str_exchange, str_symbols):
 
     return final_response
 
-def api_history(str_exchange, str_symbol, str_start, str_end = None, str_interval = "1d", length = None, indicators = []):
-    if str_exchange == None:
-        return {"result":{}, "status":"ko", "reason":"exchange not specified", "elapsed_time":"0"}
-    if str_symbol == None:
-        return {"result":{}, "status":"ko", "reason":"symbol not specified", "elapsed_time":"0"}
+def api_history_parse_parameters(request):
+    status = "ok"
+    reason = ""
+    if request.method == 'GET':
+        str_exchange = request.args.get("exchange")
+        str_symbol = request.args.get("symbol")
+        str_start = request.args.get("start")
+        str_end = request.args.get("end")
+        str_interval = request.args.get("interval", "1d")
+        length = request.args.get("length", 100)
+        if length != None:
+            length = int(length)
+        indicators= request.args.get("indicators", {})
+        if isinstance(indicators, str):
+            indicators = indicators.split(',')
+    elif request.method == 'POST':
+        str_exchange = ""
+        if "exchange" in request.form:
+            str_exchange = request.form['exchange']
+        str_symbol = request.form['symbol']
+        str_start = request.form['start']
+        str_end = None
+        if "end" in request.form:
+            str_end = request.form['end']
+        str_interval = "1d"
+        if "interval" in request.form:
+            str_interval = request.form["interval"]
+        length = 100
+        if "length" in request.form:
+            length = request.form['length']
+            length = int(length)
+        indicators = {}
+        if "indicators" in request.form:
+            indicators = request.form["indicators"]
+            indicators = json.loads(indicators)
+
+    if str_exchange == None or str_exchange == "":
+        status = False
+        reason = "exchange not specified"
+    elif str_symbol == None or str_symbol == "":
+        reason = "symbol not specified"
+    elif str_start == None or str_start == "":
+        reason = "start not specified"
+
+    if reason != "":
+        status = "ko"
 
     if str_end == None:
         str_end = datetime.today().strftime('%Y-%m-%d')
+
+    return {
+        "status":status, "reason":reason,
+        "str_exchange":str_exchange, "str_symbol":str_symbol,
+        "str_start":str_start, "str_end":str_end, "str_interval":str_interval,
+        "length":length, "indicators":indicators}
+
+def api_history(history_params):
+    str_exchange = history_params.get("str_exchange")
+    str_symbol = history_params.get("str_symbol")
+    str_start = history_params.get("str_start")
+    str_end = history_params.get("str_end")
+    str_interval = history_params.get("str_interval", "1d")
+    length = history_params.get("length", None)
+    indicators = history_params.get("indicators", [])
 
     start = datetime.now()
 

@@ -1,7 +1,6 @@
 import sys
 sys.path.insert(0, '../')
 from flask import Flask, request, jsonify
-import json
 from src import api
 
 app = Flask(__name__)
@@ -41,22 +40,16 @@ def get_symbol():
     
     return response
 
-@app.route('/history', methods=['OPTIONS', 'GET'])
+@app.route('/history', methods=['OPTIONS', 'GET', 'POST'])
 def get_history():
-   
-    str_exchange = request.args.get("exchange")
-    str_symbol = request.args.get("symbol")
-    str_start = request.args.get("start")
-    str_end = request.args.get("end")
-    str_interval = request.args.get("interval", "1d")
-    length = request.args.get("length", 100)
-    if length != None:
-        length = int(length)
-    indicators= request.args.get("indicators", [])
-    if isinstance(indicators, str):
-        indicators = indicators.split(',')
-
-    response = api.api_history(str_exchange, str_symbol, str_start, str_end, str_interval, length, indicators)
+    history_params = api.api_history_parse_parameters(request)
+    if history_params.get("status") == "ko":
+        response = {
+            "result":history_params.get("reason"),
+            "status":"ok"
+            }
+    else:
+        response = api.api_history(history_params)
     response = jsonify(response)
     response = add_headers(response)
     
