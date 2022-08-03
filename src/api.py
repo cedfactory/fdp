@@ -101,6 +101,13 @@ def api_symbol(str_screener, str_exchange, str_symbols):
 def api_history_parse_parameters(request):
     status = "ok"
     reason = ""
+    str_exchange = ""
+    str_symbol = ""
+    str_start = ""
+    str_end = None
+    str_interval = "1d"
+    length = 100
+    indicators = {}
     if request.method == 'GET':
         str_exchange = request.args.get("exchange")
         str_symbol = request.args.get("symbol")
@@ -114,22 +121,19 @@ def api_history_parse_parameters(request):
         if isinstance(indicators, str):
             indicators = indicators.split(',')
     elif request.method == 'POST':
-        str_exchange = ""
         if "exchange" in request.form:
             str_exchange = request.form['exchange']
-        str_symbol = request.form['symbol']
-        str_start = request.form['start']
-        str_end = None
+        if "symbol" in request.form:
+            str_symbol = request.form['symbol']
+        if "start" in request.form:
+            str_start = request.form['start']
         if "end" in request.form:
             str_end = request.form['end']
-        str_interval = "1d"
         if "interval" in request.form:
             str_interval = request.form["interval"]
-        length = 100
         if "length" in request.form:
             length = request.form['length']
             length = int(length)
-        indicators = {}
         if "indicators" in request.form:
             indicators = request.form["indicators"]
             indicators = json.loads(indicators)
