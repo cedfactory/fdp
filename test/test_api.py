@@ -47,9 +47,17 @@ class TestApi:
         req.args["exchange"] = "hitbtc"
         req.args["symbol"] = "ETH/EURS"
         req.args["start"] = "2022-02-01"
+        req.args["end"] = "2022-03-01"
+        req.args["indicators"] = "ema_5"
         history_params = api.api_history_parse_parameters(req)
 
         assert(history_params.get("status") == "ok")
+        assert(history_params.get("str_exchange") == "hitbtc")
+        assert(history_params.get("str_symbol") == "ETH/EURS")
+        assert(history_params.get("str_start") == "2022-02-01")
+        assert(history_params.get("str_end") == "2022-03-01")
+        assert(history_params.get("str_interval") == "1d")
+        assert(history_params.get("indicators") == ["ema_5"])
 
     def test_api_history_parse_parameters_get_ko_exchange_not_specified(self):
         req = MockRequest
@@ -62,6 +70,28 @@ class TestApi:
         assert(history_params.get("status") == "ko")
         assert(history_params.get("reason") == "exchange not specified")
 
+    def test_api_history_parse_parameters_get_ko_symbol_not_specified(self):
+        req = MockRequest
+        req.method = "GET"
+        req.args = {}
+        req.args["exchange"] = "hitbtc"
+        req.args["start"] = "2022-02-01"
+        history_params = api.api_history_parse_parameters(req)
+
+        assert(history_params.get("status") == "ko")
+        assert(history_params.get("reason") == "symbol not specified")
+
+    def test_api_history_parse_parameters_get_ko_start_not_specified(self):
+        req = MockRequest
+        req.method = "GET"
+        req.args = {}
+        req.args["exchange"] = "hitbtc"
+        req.args["symbol"] = "ETH/EURS"
+        history_params = api.api_history_parse_parameters(req)
+
+        assert(history_params.get("status") == "ko")
+        assert(history_params.get("reason") == "start not specified")
+
     def test_api_history_parse_parameters_post_ok(self):
         req = MockRequest
         req.method = "POST"
@@ -69,9 +99,18 @@ class TestApi:
         req.form["exchange"] = "hitbtc"
         req.form["symbol"] = "ETH/EURS"
         req.form["start"] = "2022-02-01"
+        req.form["end"] = "2022-03-01"
+        req.form["interval"] = "1h"
+        req.form["indicators"] = "{\"close\":{}}"
         history_params = api.api_history_parse_parameters(req)
 
         assert(history_params.get("status") == "ok")
+        assert(history_params.get("str_exchange") == "hitbtc")
+        assert(history_params.get("str_symbol") == "ETH/EURS")
+        assert(history_params.get("str_start") == "2022-02-01")
+        assert(history_params.get("str_end") == "2022-03-01")
+        assert(history_params.get("str_interval") == "1h")
+        assert("close" in history_params.get("indicators"))
 
     def test_api_history_parse_parameters_post_ko_exchange_not_specified(self):
         req = MockRequest
