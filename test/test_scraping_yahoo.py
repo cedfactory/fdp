@@ -9,7 +9,8 @@ class TestScrapingYahoo:
 
     def test_get_list_nasdaq(self):
         df = yahoo.get_list_nasdaq()
-        test_utils.check_expectations(df, "yahoo_list_nasdaq.csv")
+        assert(df["symbol"].isin(["AACG","AACI","ZXZZT"]).value_counts().loc[True] == 3)
+        #test_utils.check_expectations(df, "yahoo_list_nasdaq.csv")
 
     def test_get_list_yahoo_sp500(self):
         df = yahoo.get_list_yahoo_sp500()
