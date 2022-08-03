@@ -45,15 +45,15 @@
 # permissions:
 #   contents: read
 #
-# jobs:
-#   deploy:
-#     name: Deploy
-#     runs-on: ubuntu-latest
-#     environment: production
-#
-#     steps:
-#     - name: Checkout
-#       uses: actions/checkout@v3
+ jobs:
+   deploy:
+     name: Deploy
+     runs-on: ubuntu-latest
+     environment: production
+
+     steps:
+     - name: Checkout
+       uses: actions/checkout@v3
 #
 #     - name: Configure AWS credentials
 #       uses: aws-actions/configure-aws-credentials@v1
