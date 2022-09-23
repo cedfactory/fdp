@@ -31,10 +31,13 @@ def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1d", limit=None):
     #print("limit : ", limit)
     
     intervals = []
-    if (timeframe == "1d" or timeframe == "1h"): # split into requests with limit = 5000
-        offset = 5000 * 24 * 60 * 60 * 1000
+    if timeframe == "1d" or timeframe == "1h" or timeframe == "1m" : # split into requests with limit = 5000
+        if timeframe == "1d":
+            offset = 5000 * 24 * 60 * 60 * 1000
         if timeframe == "1h":
             offset = 5000 * 60 * 60 * 1000
+        if timeframe == "1m":
+            offset = 5000 * 60 * 1000
         while limit > 5000:
             since_next = since + offset
             intervals.append({'since': since, 'limit': 5000})
@@ -167,7 +170,7 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d"
     ohlcv = ohlcv[~ohlcv.index.duplicated()]
 
     # add potential missing dates
-    map_timeframe_freq = {"1h": "H", "1d": "D", "1m": "M"}
+    map_timeframe_freq = {"1h": "H", "1d": "D", "1m": "min"}
     freq = map_timeframe_freq[timeframe]
     if end == None and length == None:
         end = date.today()
