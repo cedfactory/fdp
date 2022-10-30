@@ -57,7 +57,7 @@ class TestApi:
         assert(history_params.get("str_start") == "2022-02-01")
         assert(history_params.get("str_end") == "2022-03-01")
         assert(history_params.get("str_interval") == "1d")
-        assert(history_params.get("indicators") == ["ema_5"])
+        assert(history_params.get("indicators") == {"ema_5":None})
 
     def test_api_history_parse_parameters_get_ko_exchange_not_specified(self):
         req = MockRequest
@@ -142,7 +142,7 @@ class TestApi:
 
     def test_api_indicators(self):
         symbol = "BTC_EURS"
-        indicators = ["close", "high", "ema_30"]
+        indicators = {"close":None, "high":None, "ema_30":None}
         params_history = {"str_exchange":"hitbtc", "str_symbol":symbol, "str_start":"2021-12-05", "str_end": "2022-01-05", "str_interval":"1d", "indicators":indicators}
         response = api.api_history(params_history)
         assert("status" in response)

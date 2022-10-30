@@ -50,7 +50,7 @@ localhost:5000/symbol?screener=crypto&exchange=ftx&symbols=ETH_EUR
 example :
 
 ```
-localhost:5000/history?exchange=ftx&symbol=ETH_EUR&start=01_01_2022
+localhost:5000/history?exchange=ftx&symbol=ETH_EUR&start=2022-01-01
 ```
 
 ## recommendations

@@ -12,12 +12,16 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
     if not isinstance(df, pd.DataFrame):
         return df
 
+    # manage indicators as an array but it is converted into a dictionary
+    if isinstance(indicators, list):
+        indicators = dict.fromkeys(indicators)
+
     # call stockstats
     stock = Sdf.retype(df.copy())
 
     # compute the indicators
     columns = list(df.columns)
-    for indicator in indicators:
+    for indicator, parameters in indicators.items():
         if indicator in columns:
             continue
 

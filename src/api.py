@@ -119,7 +119,8 @@ def api_history_parse_parameters(request):
             length = int(length)
         indicators= request.args.get("indicators", {})
         if isinstance(indicators, str):
-            indicators = indicators.split(',')
+            indicatorsArray = indicators.split(',')
+            indicators = dict.fromkeys(indicatorsArray)
     elif request.method == 'POST':
         if "exchange" in request.form:
             str_exchange = request.form['exchange']
@@ -165,7 +166,7 @@ def api_history(history_params):
     str_end = history_params.get("str_end")
     str_interval = history_params.get("str_interval", "1d")
     length = history_params.get("length", None)
-    indicators = history_params.get("indicators", [])
+    indicators = history_params.get("indicators", {})
 
     start = datetime.now()
 
