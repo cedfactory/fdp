@@ -4,7 +4,7 @@ from . import utils
 
 def get_list_cac():
     df_html = pd.read_html('https://en.wikipedia.org/wiki/CAC_40')
-    df_cac = df_html[3]
+    df_cac = df_html[4]
     list_cac = df_cac["Ticker"].tolist()
     list_sectors = df_cac["Sector"].tolist()
     list_industry = df_cac["GICS Sub-Industry"].tolist()
@@ -21,8 +21,8 @@ def get_list_cac():
 
 def get_list_dax():
     df_html = pd.read_html('https://en.wikipedia.org/wiki/DAX')
-    df_dax = df_html[3]
-    list_dax = df_dax["Ticker symbol"].tolist()
+    df_dax = df_html[4]
+    list_dax = df_dax["Ticker"].tolist()
     list_company_name = df_dax["Company"].tolist()
     list_sectors = df_dax["Prime Standard Sector"].tolist()
 
