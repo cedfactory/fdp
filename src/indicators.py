@@ -6,6 +6,7 @@ import numpy as np
 from . import indicators_vsa as vsa
 from . import indicators_flabeling as flabeling
 from . import indicators_supertrend as supertrend
+from . import indicators_tradingview as tv
 
 def compute_indicators(df, indicators, keep_only_requested_indicators = False, params = None):
     if not isinstance(df, pd.DataFrame):
@@ -100,6 +101,9 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
 
         elif indicator == 'labeling':
             df = flabeling.data_labeling(df, params)
+
+        elif indicator.startswith('tv_'):
+            df[indicator] = tv.get_recommendation(df, indicator, params)
 
         elif indicator == 'vsa':
             days = [1, 2, 3, 5, 20, 40, 60]
