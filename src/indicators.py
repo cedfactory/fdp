@@ -124,7 +124,7 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
                 )
                 
             df['super_trend_direction'] = st.super_trend_direction()
-            df['super_trend_direction'] = df['super_trend_direction'].shift(1)
+            #df['super_trend_direction'] = df['super_trend_direction'].shift(1)
 
 
     # keep only the requested indicators
