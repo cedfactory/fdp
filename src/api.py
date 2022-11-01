@@ -122,22 +122,33 @@ def api_history_parse_parameters(request):
             indicatorsArray = indicators.split(',')
             indicators = dict.fromkeys(indicatorsArray)
     elif request.method == 'POST':
-        if "exchange" in request.form:
-            str_exchange = request.form['exchange']
-        if "symbol" in request.form:
-            str_symbol = request.form['symbol']
-        if "start" in request.form:
-            str_start = request.form['start']
-        if "end" in request.form:
-            str_end = request.form['end']
-        if "interval" in request.form:
-            str_interval = request.form["interval"]
-        if "length" in request.form:
-            length = request.form['length']
-            length = int(length)
-        if "indicators" in request.form:
-            indicators = request.form["indicators"]
-            indicators = json.loads(indicators)
+        if request.is_json:
+            params = request.get_json()
+            str_exchange = params.get("exchange", str_exchange)
+            str_symbol = params.get("symbol", str_symbol)
+            str_start = params.get("start", str_start)
+            str_end = params.get("end", str_end)
+            str_interval = params.get("interval", str_interval)
+            length = params.get("length", length)
+            indicators = params.get("indicators", indicators)
+        else:
+            if "exchange" in request.form:
+                str_exchange = request.form['exchange']
+            if "symbol" in request.form:
+                str_symbol = request.form['symbol']
+            if "start" in request.form:
+                str_start = request.form['start']
+            if "end" in request.form:
+                str_end = request.form['end']
+            if "interval" in request.form:
+                str_interval = request.form["interval"]
+            if "length" in request.form:
+                length = request.form['length']
+                length = int(length)
+            if "indicators" in request.form:
+                indicators = request.form["indicators"]
+                print(type(indicators))
+                indicators = json.loads(indicators)
 
     if str_exchange == None or str_exchange == "":
         status = False

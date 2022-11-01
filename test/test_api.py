@@ -95,6 +95,7 @@ class TestApi:
     def test_api_history_parse_parameters_post_ok(self):
         req = MockRequest
         req.method = "POST"
+        req.is_json = False
         req.form = {}
         req.form["exchange"] = "hitbtc"
         req.form["symbol"] = "ETH/EURS"
@@ -115,6 +116,7 @@ class TestApi:
     def test_api_history_parse_parameters_post_ko_exchange_not_specified(self):
         req = MockRequest
         req.method = "POST"
+        req.is_json = False
         req.form = {}
         req.form["symbol"] = "ETH/EURS"
         req.form["start"] = "2022-02-01"
