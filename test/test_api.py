@@ -177,12 +177,11 @@ class TestApi:
         assert(response["result"][symbol]["RECOMMENDATION"] in ["STRONG_BUY", "BUY", "NEUTRAL", "SELL", "STRONG_SELL"])
 
     def test_api_recommendations_for_exchange(self):
-        return # TODO
         screener = "crypto"
         exchange = "binance"
         symbol = None
         response = api.api_recommendations(screener, exchange, symbol, "1h")
-        arbitrary_symbol = "BNBUSD"
+        arbitrary_symbol = "BNBEUR"
         assert("status" in response)
         assert(response["status"] == "ok")
         assert("result" in response)
@@ -194,7 +193,6 @@ class TestApi:
         assert(response["result"][arbitrary_symbol]["RECOMMENDATION"] in ["STRONG_BUY", "BUY", "NEUTRAL", "SELL", "STRONG_SELL"])
 
     def test_api_portfolio(self):
-        return # TODO
         response = api.api_portfolio()
         assert("status" in response)
         assert(response["status"] == "ok")

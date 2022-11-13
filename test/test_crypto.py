@@ -33,9 +33,8 @@ class TestCrypto:
         assert(len(ohlcv.index) == 48)
 
     def test_get_top_gainers(self):
-        return # TODO
         df = crypto.get_top_gainers("binance", 50)
         assert(isinstance(df, pd.DataFrame))
-        assert(df.columns.to_list() == ['symbol', 'change1h', 'rank_change1h', 'change24h', 'rank_change24h'])
+        assert(df.columns.to_list() == ['symbol', 'volume', 'change', 'rank'])
         symbols = df['symbol'].to_list()
         assert(len(symbols) > 1)
