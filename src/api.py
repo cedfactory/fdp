@@ -245,7 +245,7 @@ def api_recommendations(screener, exchange, str_symbols = None, interval = "1h")
 
     return final_response
 
-def api_portfolio(exchange_name="ftx", recommendations=["BUY", "STRONG_BUY"], intervals=["15m", "30m", "1h"]):
+def api_portfolio(exchange_name="binance", recommendations=["BUY", "STRONG_BUY"], intervals=["15m", "30m", "1h"]):
     start = datetime.now()
 
  

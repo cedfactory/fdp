@@ -72,7 +72,7 @@ def get_recommendations():
 @app.route('/portfolio', methods=['OPTIONS', 'GET'])
 def get_portfolio():
    
-    exchange_name = request.args.get("exchange", "ftx")
+    exchange_name = request.args.get("exchange", "binance")
     recommendations = request.args.get("recommendations")
     if recommendations is None:
         recommendations = ["BUY", "STRONG_BUY"]

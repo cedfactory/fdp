@@ -17,29 +17,29 @@ API
 
 ## list
 
-- *exchanges* : for crypto may be hitbtc, bitmex, binance, ftx, speratated with ','
+- *exchanges* : for crypto may be hitbtc, bitmex, binance, speratated with ','
 
 example :
 
 ```
-localhost:5000/list?exchanges=ftx
+localhost:5000/list?exchanges=binance
 ```
 
 ## symbol
 
 - *screener* : should be crypto.
-- *exchange* : may be hitbtc, bitmex, binance, ftx.
+- *exchange* : may be hitbtc, bitmex, binance.
 - *symbols* : symbols separated with ',' and '/' replaced with '_'
 
 example :
 
 ```
-localhost:5000/symbol?screener=crypto&exchange=ftx&symbols=ETH_EUR
+localhost:5000/symbol?screener=crypto&exchange=binance&symbols=ETH_EUR
 ```
 
 ## history
 
-- *exchange* : may be hitbtc, bitmex, binance, ftx.
+- *exchange* : may be hitbtc, bitmex, binance.
 - *symbol* : symbols separated with ',' and '/' replaced with '_'
 - *start* : date with format yyyy-mm-dd
 - *end* (optional) : date with format yyyy-mm-dd
@@ -50,25 +50,25 @@ localhost:5000/symbol?screener=crypto&exchange=ftx&symbols=ETH_EUR
 example :
 
 ```
-localhost:5000/history?exchange=ftx&symbol=ETH_EUR&start=2022-01-01
+localhost:5000/history?exchange=binance&symbol=ETH_EUR&start=2022-01-01
 ```
 
 ## recommendations
 
 - *symbols* (optional) : symbols separated with ',' and '/' replaced with '_'
 - *screener* : should be crypto
-- *exchange* : may be hitbtc, bitmex, binance, ftx.
+- *exchange* : may be hitbtc, bitmex, binance.
 - *interval* : may be 1m, 5m, 15m, 30m, 1h, 2h, 4h, 1d, 1W, 1M
 
 example :
 
 ```
-http://localhost:5000/recommendations?symbols=ETHEUR&screener=crypto&exchange=ftx&interval=1h
+http://localhost:5000/recommendations?symbols=ETHEUR&screener=crypto&exchange=binance&interval=1h
 ```
 
 ## portfolio
 
-- *exchange* : may be hitbtc, bitmex, binance, ftx (default).
+- *exchange* : may be hitbtc, bitmex, binance (default).
 - *recommendations* : may be STRONG_SELL, SELL, NEUTRAL, BUY, STRONG_BUY
 - *intervals* : may be 1m, 5m, 15m, 30m, 1h, 2h, 4h, 1d, 1W, 1M
 

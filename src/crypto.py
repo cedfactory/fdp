@@ -95,6 +95,8 @@ def _get_exchange(exchange_market):
         exchange = ccxt.bitmex()
     elif exchange_market == "binance":
         exchange = ccxt.binance()
+    elif exchange_market == "kraken":
+        exchange = ccxt.kraken()
     elif exchange_market == "ftx":
         exchange = ccxt.ftx()
     return exchange

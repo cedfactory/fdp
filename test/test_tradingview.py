@@ -7,7 +7,7 @@ class TestTradingView:
 
     def test_get_recommendations_from_list(self):
         symbol = "1INCHUSD"
-        result = tradingview.get_recommendations_from_list("crypto", "ftx", [symbol], "1h")
+        result = tradingview.get_recommendations_from_list("crypto", "binance", [symbol], "1h")
         assert(symbol in result)
         assert(result[symbol]["status"] == "ok")
         assert("status" in result[symbol])
@@ -20,7 +20,7 @@ class TestTradingView:
         df = pd.DataFrame(symbols, columns =['symbol'])
         df['symbolTV'] = df['symbol'].str.replace("/", "")
         df['screener'] = "crypto"
-        df['exchange'] = "ftx"
+        df['exchange'] = "binance"
         
         df = tradingview.get_recommendations_from_dataframe(df, "2h")
         df = tradingview.get_recommendations_from_dataframe(df, "1d")

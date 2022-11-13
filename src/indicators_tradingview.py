@@ -30,7 +30,7 @@ tv_indicators = {
 
 def get_recommendation(df, indicator, params):
     symbol = ""
-    exchange = "FTX" # default
+    exchange = "binance" # default
     if params:
         symbol = params.get("symbol", symbol)
         symbol = symbol.replace('/', '')
