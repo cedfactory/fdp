@@ -40,8 +40,9 @@ class TestTradingView:
         assert(len(df_symbol.index) == 2)
 
     def test_filter_with_tradingview_recommendations(self):
+        exchange = "binance"
         symbols = ['AXS/USD', 'BICO/USD', 'CTX/USD', 'SLP/USD', 'STSOL/USD', 'SOL/USD']
-        df_filtered_symbols = tradingview.filter_with_tradingview_recommendations(symbols, ['STRONG_BUY', 'BUY', 'NEUTRAL'], ["15m", "30m", "1h"])
+        df_filtered_symbols = tradingview.filter_with_tradingview_recommendations(exchange, symbols, ['STRONG_BUY', 'BUY', 'NEUTRAL'], ["15m", "30m", "1h"])
 
         # result is a dataframe
         assert(isinstance(df_filtered_symbols,pd.DataFrame))

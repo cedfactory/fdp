@@ -71,10 +71,10 @@ def remove_rows_where_recommendation_not_in_filter(df, filter):
         df.drop(index_names , inplace=True)
     return df
 
-def filter_with_tradingview_recommendations(symbols, recommendations, intervals):
+def filter_with_tradingview_recommendations(exchange, symbols, recommendations, intervals):
     df_symbol = pd.DataFrame(symbols, columns =['symbol'])
     df_symbol['symbolTV'] = df_symbol['symbol'].str.replace("/", "")
-    df_symbol['exchange'] = 'ftx'
+    df_symbol['exchange'] = exchange
     df_symbol['screener'] = 'crypto'
 
     # get recommendations
