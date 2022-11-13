@@ -3,11 +3,11 @@ from parse import parse
 from stockstats import StockDataFrame as Sdf
 from finta import TA
 import numpy as np
+from . import synthetic_data as synthetic_data
 from . import indicators_vsa as vsa
 from . import indicators_flabeling as flabeling
 from . import indicators_supertrend as supertrend
 from . import indicators_tradingview as tv
-from . import indicators_synthetic_data as synthetic
 
 def compute_indicators(df, indicators, keep_only_requested_indicators = False, params = None):
     if not isinstance(df, pd.DataFrame):
@@ -111,7 +111,7 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
             df[indicator] = tv.get_recommendation(df, indicator, params)
 
         elif indicator.startswith('close_synthetic_'):
-            df[indicator] = synthetic.get_synthetic_data(df, indicator, params)
+            df[indicator] = synthetic_data.get_synthetic_data(df, indicator, params)
 
         elif indicator == 'vsa':
             days = [1, 2, 3, 5, 20, 40, 60]

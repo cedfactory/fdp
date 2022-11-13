@@ -38,7 +38,7 @@ def fill_df_linear(df, column, a, b):
     df[column] = y
     return df
 
-def fill_ohlv(df):
+def fill_ohl(df):
     df['open'] = df['close'].shift()
     df['high'] = df['close'] + 0.1
     df['low'] = df['open'] - 0.1
@@ -122,7 +122,7 @@ def get_synthetic_data(df, indicator, params):
         df_ohlv = pd.DataFrame(columns=['time', 'close'])
         df_ohlv['time'] = df_synthetic['time']
         df_ohlv['close'] = df[indicator]
-        df_ohlv = fill_ohlv(df_ohlv)
+        df_ohlv = fill_ohl(df_ohlv)
         df_ohlv = add_df_ohlv_noise(df_ohlv, config.noise_amplitude)
 
     return df
