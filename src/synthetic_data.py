@@ -91,38 +91,39 @@ def build_synthetic_data(df):
 
 def get_synthetic_data(df, indicator, params):
     prefix_size = len('close_synthetic_')
-    type = indicator[prefix_size:]
+    data_type = indicator[prefix_size:]
 
     df_synthetic = build_synthetic_data(df)
 
-    if type == 'SINGLE_SINUS_1_FLAT':
+    if data_type == 'SINGLE_SINUS_1_FLAT':
         df[indicator] = df_synthetic['sinus_1'] + 10
-    elif type == 'SINGLE_SINUS_2_FLAT':
+    elif data_type == 'SINGLE_SINUS_2_FLAT':
         df[indicator] = df_synthetic['sinus_2'] + 10
-    elif type == 'MIXED_SINUS_FLAT':
+    elif data_type == 'MIXED_SINUS_FLAT':
         df[indicator] = df_synthetic['sinus_2'] + df_synthetic['sinus_3'] + 10
-    elif type == 'SINGLE_SINUS_1_UP':
+    elif data_type == 'SINGLE_SINUS_1_UP':
         df[indicator] = df_synthetic['sinus_1'] + df_synthetic['linear_up'] + 10
-    elif type == 'SINGLE_SINUS_2_UP':
+    elif data_type == 'SINGLE_SINUS_2_UP':
         df[indicator] = df_synthetic['sinus_2'] + df_synthetic['linear_up'] + 10
-    elif type == 'MIXED_SINUS_UP':
+    elif data_type == 'MIXED_SINUS_UP':
         df[indicator] = df_synthetic['sinus_2'] + df_synthetic['sinus_3'] + df_synthetic['linear_up'] + 10
-    elif type == 'SINGLE_SINUS_1_DOWN':
+    elif data_type == 'SINGLE_SINUS_1_DOWN':
         df[indicator] = df_synthetic['sinus_1'] + df_synthetic['linear_down'] + 10
-    elif type == 'SINGLE_SINUS_2_DOWN':
+    elif data_type == 'SINGLE_SINUS_2_DOWN':
         df[indicator] = df_synthetic['sinus_2'] + df_synthetic['linear_down'] + 10
-    elif type == 'MIXED_SINUS_DOWN':
+    elif data_type == 'MIXED_SINUS_DOWN':
         df[indicator] = df_synthetic['sinus_2'] + df_synthetic['sinus_3'] + df_synthetic['linear_down'] + 10
-    elif type == 'MIXED_SINUS_UP_DOWN':
+    elif data_type == 'MIXED_SINUS_UP_DOWN':
         df[indicator] = df_synthetic['sinus_3'] + df_synthetic['sinus_4'] + 10
-    elif type == 'MIXED_SINUS_DOWN_UP':
+    elif data_type == 'MIXED_SINUS_DOWN_UP':
         df[indicator] = df_synthetic['sinus_3'] + df_synthetic['sinus_5'] + 10
 
-    if config.OHLV:
+    if params and params.get("ohlc", False):
         df_ohlv = pd.DataFrame(columns=['time', 'close'])
         df_ohlv['time'] = df_synthetic['time']
         df_ohlv['close'] = df[indicator]
-        df_ohlv = fill_ohl(df_ohlv)
-        df_ohlv = add_df_ohlv_noise(df_ohlv, config.noise_amplitude)
+        df = fill_ohl(df_ohlv)
+        if params.get("noise", False):
+            df = add_df_ohlv_noise(df, config.noise_amplitude)
 
     return df
