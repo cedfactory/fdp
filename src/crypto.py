@@ -8,6 +8,16 @@ from . import utils
 from . import indicators as inc_indicators
 import concurrent.futures
 
+def convert_string_to_datetime(str):
+    if str == None:
+        return str
+    try:
+        result = datetime.strptime(str, "%Y-%m-%d")
+    except ValueError:
+        timestamp = int(int(str)/1000)
+        result = datetime.fromtimestamp(timestamp)
+    return result
+
 '''
 format for since : yyyy-mm-dd
 '''
@@ -17,10 +27,8 @@ def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1d", limit=None):
     #print("start : ", start)
     #print("end : ", end)
 
-    since = int(datetime.strptime(start, "%Y-%m-%d").timestamp())*1000
+    since = int(start.timestamp())*1000
     if end != None:
-        start = datetime.strptime(start, '%Y-%m-%d')
-        end = datetime.strptime(end, '%Y-%m-%d')
         delta = end - start
         limit  = delta.days # days
         if timeframe == "1m":
@@ -79,7 +87,7 @@ def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1d", limit=None):
         return "no data"
     df_result = df_result.set_index(df_result['timestamp'])
     df_result.index = pd.to_datetime(df_result.index, unit='ms')
-    del df_result['timestamp']
+    #del df_result['timestamp']
 
     return df_result
 
@@ -163,6 +171,9 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d"
     if symbol not in exchange.symbols or exchange.has['fetchOHLCV'] == False:
         print("symbol not found")
         return "symbol not found"
+    
+    start = convert_string_to_datetime(start)
+    end = convert_string_to_datetime(end)
 
     ohlcv = _get_ohlcv(exchange, symbol, start, end, timeframe, length)
     if not isinstance(ohlcv, pd.DataFrame):
