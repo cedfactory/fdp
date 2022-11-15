@@ -2,21 +2,10 @@ import pandas as pd
 import numpy as np
 import ccxt
 import time
-from datetime import datetime
 from datetime import date
 from . import utils
 from . import indicators as inc_indicators
 import concurrent.futures
-
-def convert_string_to_datetime(str):
-    if str == None:
-        return str
-    try:
-        result = datetime.strptime(str, "%Y-%m-%d")
-    except ValueError:
-        timestamp = int(int(str)/1000)
-        result = datetime.fromtimestamp(timestamp)
-    return result
 
 '''
 format for since : yyyy-mm-dd
@@ -172,8 +161,8 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d"
         print("symbol not found")
         return "symbol not found"
     
-    start = convert_string_to_datetime(start)
-    end = convert_string_to_datetime(end)
+    start = utils.convert_string_to_datetime(start)
+    end = utils.convert_string_to_datetime(end)
 
     ohlcv = _get_ohlcv(exchange, symbol, start, end, timeframe, length)
     if not isinstance(ohlcv, pd.DataFrame):
