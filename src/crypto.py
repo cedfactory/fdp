@@ -17,16 +17,20 @@ def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1d", limit=None):
     #print("end : ", end)
 
     since = int(start.timestamp())*1000
+    limit = None
     if end != None:
         delta = end - start
-        limit  = delta.days # days
-        if timeframe == "1m":
-            limit = limit * 24 * 60
+        if timeframe == "1d":
+            limit = delta.days # days
         elif timeframe == "1h":
-            limit = limit * 24
+            limit = int(delta.total_seconds() / 3600)
+        elif timeframe == "1m":
+            limit = int(delta.total_seconds() / 60)
 
     #print("limit : ", limit)
-    
+    if limit == None:
+        return None
+
     intervals = []
     if timeframe == "1d" or timeframe == "1h" or timeframe == "1m" : # split into requests with limit = 5000
         if timeframe == "1d":

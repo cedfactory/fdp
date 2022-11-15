@@ -65,6 +65,16 @@ class TestCrypto:
         assert(isinstance(ohlcv, pd.DataFrame))
         assert(len(ohlcv.index) == 48)
 
+    def test_get_symbol_ohlcv_limit_h(self):
+        ohlcv = crypto.get_symbol_ohlcv("hitbtc", "ETH/EURS", "2020-01-01 08:00:00", "2020-01-01 16:00:00", "1h")
+        assert(isinstance(ohlcv, pd.DataFrame))
+        assert(len(ohlcv.index) == 8)
+
+    def test_get_symbol_ohlcv_limit_m(self):
+        ohlcv = crypto.get_symbol_ohlcv("hitbtc", "ETH/EURS", "2020-01-01 08:00:00", "2020-01-01 09:12:00", "1m")
+        assert(isinstance(ohlcv, pd.DataFrame))
+        assert(len(ohlcv.index) == 72)
+
     def test_get_top_gainers(self):
         df = crypto.get_top_gainers("binance", 50)
         assert(isinstance(df, pd.DataFrame))
