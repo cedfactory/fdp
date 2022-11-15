@@ -18,11 +18,28 @@ def make_df_stock_info(list_stock, list_company_name, list_isin,list_sectors, li
 
 def convert_string_to_datetime(str):
     if str == None:
-        return str
+        return None
+
+    if isinstance(str, int):
+        return datetime.fromtimestamp(str/1000)
+
     try:
         result = datetime.strptime(str, "%Y-%m-%d")
+        return result
     except ValueError:
+        pass
+    
+    try:
+        result = datetime.strptime(str, "%Y-%m-%d %H:%M:%S")
+        return result
+    except ValueError:
+        pass
+
+    try:
         timestamp = int(int(str)/1000)
         result = datetime.fromtimestamp(timestamp)
-    return result
+        return result
+    except ValueError:
+        pass
 
+    return None
