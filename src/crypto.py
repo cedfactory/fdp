@@ -17,7 +17,6 @@ def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1d", limit=None):
     #print("end : ", end)
 
     since = int(start.timestamp())*1000
-    limit = None
     if end != None:
         delta = end - start
         if timeframe == "1d":
