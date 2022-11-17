@@ -1,6 +1,7 @@
 import pandas as pd
 from datetime import datetime
 from . import wiki,yahoo,yf_wrapper,crypto,tradingview,portfolio,indicators
+from src import config
 import concurrent.futures
 import json
 
@@ -186,7 +187,9 @@ def api_history(history_params):
     symbols = str_symbol.split(',')
     real_symbols = [symbol.replace("_", "/") for symbol in symbols]
     with concurrent.futures.ThreadPoolExecutor() as executor:
-        futures = {executor.submit(crypto.get_symbol_ohlcv, exchange_name=str_exchange, symbol=real_symbol, start=str_start, end=str_end, timeframe=str_interval, length=length, indicators=indicators): real_symbol for real_symbol in real_symbols}
+        # Modif CEDE: in progress.....
+        # futures = {executor.submit(crypto.get_symbol_ohlcv, exchange_name=str_exchange, symbol=real_symbol, start=str_start, end=str_end, timeframe=str_interval, length=length, indicators=indicators): real_symbol for real_symbol in real_symbols}
+        futures = {executor.submit(config.ohlv_recorded.get_symbol_ohlcv, exchange_name=str_exchange, symbol=real_symbol, start=str_start, end=str_end, timeframe=str_interval, length=length, indicators=indicators): real_symbol for real_symbol in real_symbols}
 
         for future in concurrent.futures.as_completed(futures):
             real_symbol = futures[future]

@@ -2,6 +2,8 @@ import sys
 sys.path.insert(0, '../')
 from flask import Flask, request, jsonify
 from src import api
+from src import data_recorder
+from src import config
 
 app = Flask(__name__)
 
@@ -93,4 +95,11 @@ def get_portfolio():
     return response
 
 if __name__ == "__main__":
+
+    if len(sys.argv) > 2 and (sys.argv[1] == "--sim"):
+        config.ohlv_recorded = data_recorder.DataRecorder(sys.argv[2], sys.argv[3])
+    # Modif CEDE: for testing purpose
+    # config.ohlv_recorded.get_symbol_ohlcv("binance", "BTC/USDT", "2022-01-10 00:00:00", "2022-01-20 00:00:00", "1h", None, config.ohlv_recorded.indicators)
+
+
     app.run(debug=False, host= '0.0.0.0', port=5000)
