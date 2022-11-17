@@ -2,6 +2,7 @@ import pandas as pd
 import json
 from datetime import datetime
 
+from . import utils
 from . import crypto
 
 class Data():
@@ -28,6 +29,10 @@ class DataRecorder():
 
     def get_symbol_ohlcv(self, exchange_name, symbol, start, end, timeframe, length, indicators):
         data = self.data[symbol]
+
+        start = utils.convert_string_to_datetime(start)
+        end = utils.convert_string_to_datetime(end)
+
         if data.symbol == symbol and data.exchange_name == exchange_name and data.interval == timeframe:
             df_ohlvc = data.ohlcv.copy()
             df_ohlvc = df_ohlvc.drop(df_ohlvc[df_ohlvc.index < start].index)
