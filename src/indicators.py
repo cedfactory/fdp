@@ -9,6 +9,81 @@ from . import indicators_flabeling as flabeling
 from . import indicators_supertrend as supertrend
 from . import indicators_tradingview as tv
 
+def get_window_size(indicator):
+    trend_parsed = parse('trend_{}d', indicator)
+    sma_parsed = parse('sma_{}', indicator)
+    ema_parsed = parse('ema_{}', indicator)
+    wma_parsed = parse('wma_{}', indicator)
+
+    if trend_parsed != None and trend_parsed[0].isdigit():
+        return int(trend_parsed[0])
+
+    elif sma_parsed != None and sma_parsed[0].isdigit():
+        return int(sma_parsed[0])
+
+    elif ema_parsed != None and ema_parsed[0].isdigit():
+        return int(ema_parsed[0])
+
+    elif wma_parsed != None and wma_parsed[0].isdigit():
+        return int(wma_parsed[0])
+
+    elif indicator in ['macd', 'macds', 'macdh']:
+        return 26
+
+    elif indicator == "bbands":
+        return 20
+
+    elif indicator in ["rsi_30", "cci_30", "dx_30"]:
+        return 30
+    
+    elif indicator == 'williams_%r':
+        return 14
+
+    elif indicator in ['stoch_%k', 'stoch_%d']:
+        return 14
+        
+    elif indicator == 'er':
+        return 10
+        
+    elif indicator == 'stc':
+        return 50
+        
+    elif indicator == 'atr':
+        return 14
+        
+    elif indicator == 'adx':
+        return 14
+        
+    elif indicator == 'roc':
+        return 12
+
+    elif indicator == 'mom':
+        return 10
+
+    elif indicator == 'simple_rtn':
+        return 1
+
+    elif indicator == 'labeling':
+        return 20
+
+    elif indicator.startswith('tv_'):
+        return 0
+
+    elif indicator.startswith('close_synthetic_'):
+        return 0
+
+    elif indicator == 'vsa':
+        return 60
+
+    elif indicator == "super_trend_direction":
+        return 15
+
+    print("unknown window size for ", indicator)
+    return 0
+
+def get_max_window_size(indicators):
+    return max([get_window_size(indicator) for indicator in indicators])
+
 def compute_indicators(df, indicators, keep_only_requested_indicators = False, params = None):
     if not isinstance(df, pd.DataFrame):
         return df
