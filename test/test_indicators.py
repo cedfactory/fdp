@@ -201,11 +201,10 @@ class TestIndicators:
             window_size = indicators.get_window_size(indicator)
             assert(window_size == expected_window_size)
 
-    def test_get_max_window_size(self):
+    def test_get_max_window_size_from_list(self):
         window_size = indicators.get_max_window_size(["trend_4d", "ema_3", "macd", "bbands"])
         assert(window_size == 26)
 
-        df = self.get_dataframe_from_csv("./test/data/google_stocks_data.csv")
-        print(df.head(10))
-        df = indicators.compute_indicators(df, ['simple_rtn'])
-        print(df.head(10))
+    def test_get_max_window_size_from_dict(self):
+        window_size = indicators.get_max_window_size({"trend_4d":None, "ema_3":None, "macd":None, "bbands":None})
+        assert(window_size == 26)

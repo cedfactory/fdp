@@ -82,6 +82,10 @@ def get_window_size(indicator):
     return 0
 
 def get_max_window_size(indicators):
+    list_indicators = indicators
+    if isinstance(list_indicators, dict):
+        list_indicators = list_indicators.keys()
+
     return max([get_window_size(indicator) for indicator in indicators])
 
 def compute_indicators(df, indicators, keep_only_requested_indicators = False, params = None):
