@@ -82,6 +82,8 @@ def get_window_size(indicator):
     return 0
 
 def get_max_window_size(indicators):
+    if len(indicators) == 0:
+        return 0
     list_indicators = indicators
     if isinstance(list_indicators, dict):
         list_indicators = list_indicators.keys()

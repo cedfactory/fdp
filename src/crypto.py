@@ -3,6 +3,7 @@ import numpy as np
 import ccxt
 import time
 from datetime import date
+import datetime
 from . import utils
 from . import indicators as inc_indicators
 import concurrent.futures
@@ -167,7 +168,18 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d"
     start = utils.convert_string_to_datetime(start)
     end = utils.convert_string_to_datetime(end)
 
-    ohlcv = _get_ohlcv(exchange, symbol, start, end, timeframe, length)
+    # request a start earlier according to what the indicators need
+    start_with_period = start
+    max_period = inc_indicators.get_max_window_size(indicators)
+    if max_period != 0:
+        if timeframe == "1d":
+            start_with_period = start_with_period + datetime.timedelta(days=-max_period)
+        elif timeframe == "1h":
+            start_with_period = start_with_period + datetime.timedelta(hours=-max_period)
+        elif timeframe == "1m":
+            start_with_period = start_with_period + datetime.timedelta(minutes=-max_period)
+
+    ohlcv = _get_ohlcv(exchange, symbol, start_with_period, end, timeframe, length)
     if not isinstance(ohlcv, pd.DataFrame):
         return ohlcv
 
@@ -181,13 +193,16 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d"
         end = date.today()
         end = end.strftime("%Y-%m-%d")
 
-    expected_range = pd.date_range(start=start, end=end, freq=freq, closed="left")
+    expected_range = pd.date_range(start=start_with_period, end=end, freq=freq, closed="left")
     ohlcv.index = pd.DatetimeIndex(ohlcv.index)
     ohlcv = ohlcv.reindex(expected_range, fill_value=np.nan)
 
     if len(indicators) != 0:
         indicator_params = {"symbol": symbol, "exchange": exchange_name}
         ohlcv = inc_indicators.compute_indicators(ohlcv, indicators, True, indicator_params)
+
+    if max_period != 0:
+        ohlcv = ohlcv.iloc[max_period:]
 
     return ohlcv
 

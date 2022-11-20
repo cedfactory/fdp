@@ -81,3 +81,14 @@ class TestCrypto:
         assert(df.columns.to_list() == ['symbol', 'volume', 'change', 'rank'])
         symbols = df['symbol'].to_list()
         assert(len(symbols) > 1)
+
+    def test_get_symbol_ohlcv_with_indicators(self):
+        ohlcv = crypto.get_symbol_ohlcv("binance", "ETH/USDT", "2020-01-11", "2020-01-15", "1d", None, ["er"])
+        print(ohlcv)
+        assert(isinstance(ohlcv, pd.DataFrame))
+        assert(len(ohlcv.index) == 4)
+        assert(ohlcv["er"][0] == pytest.approx(0.315403, 0.0001))
+        assert(ohlcv["er"][1] == pytest.approx(0.517518, 0.0001))
+        assert(ohlcv["er"][2] == pytest.approx(0.278096, 0.0001))
+        assert(ohlcv["er"][3] == pytest.approx(0.570599, 0.0001))
+        
