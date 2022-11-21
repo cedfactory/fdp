@@ -9,16 +9,6 @@ from . import utils
 from . import indicators as inc_indicators
 import concurrent.futures
 
-def convert_string_to_datetime(str):
-    if str == None or type(str) == datetime:
-        return str
-    try:
-        result = datetime.strptime(str, "%Y-%m-%d")
-    except ValueError:
-        timestamp = int(int(str)/1000)
-        result = datetime.fromtimestamp(timestamp)
-    return result
-
 '''
 format for since : yyyy-mm-dd
 '''
@@ -30,13 +20,6 @@ def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1d", limit=None):
 
     since = int(start.timestamp())*1000
     if end != None:
-        if timeframe == "1d":
-            end += timedelta(days=1)
-        elif timeframe == "1h":
-            end += timedelta(hours=1)
-        elif timeframe == "1m":
-            end += timedelta(minutes=1)
-
         delta = end - start
         if timeframe == "1d":
             limit = delta.days # days
@@ -183,8 +166,8 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d"
         print("symbol not found: ", symbol)
         return "symbol not found"
     
-    start = convert_string_to_datetime(start)
-    end = convert_string_to_datetime(end)
+    start = utils.convert_string_to_datetime(start)
+    end = utils.convert_string_to_datetime(end)
 
     # as we want the end date included, one adds a delta
     if timeframe == "1d":
