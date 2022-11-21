@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import ccxt
 import time
+from datetime import datetime, timedelta
 from datetime import date
 import datetime
 from . import utils
@@ -162,7 +163,7 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d"
 
     exchange.load_markets()
     if symbol not in exchange.symbols or exchange.has['fetchOHLCV'] == False:
-        print("symbol not found")
+        print("symbol not found: ", symbol)
         return "symbol not found"
     
     start = utils.convert_string_to_datetime(start)
