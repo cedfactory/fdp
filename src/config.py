@@ -1,4 +1,5 @@
-ohlv_recorded = None
+use_mock = False
+get_symbol_ohlcv_fn = None
 
 
 '''

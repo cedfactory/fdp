@@ -96,10 +96,13 @@ def get_portfolio():
 
 if __name__ == "__main__":
 
-    if len(sys.argv) > 2 and (sys.argv[1] == "--sim"):
-        config.ohlv_recorded = data_recorder.DataRecorder(sys.argv[2], sys.argv[3])
-    # Modif CEDE: for testing purpose
-    # config.ohlv_recorded.get_symbol_ohlcv("binance", "BTC/USDT", "2022-01-10 00:00:00", "2022-01-20 00:00:00", "1h", None, config.ohlv_recorded.indicators)
-
+    if len(sys.argv) >= 2 and (sys.argv[1] == "--sim"):
+        if len(sys.argv) != 4:
+            print("usage : python main.py --sim csvfilename indicatorfilename")
+            exit(0)
+        else:
+            config.get_symbol_ohlcv_fn = data_recorder.DataRecorder(sys.argv[2], sys.argv[3])
+    # for testing purpose
+    #config.get_symbol_ohlcv_fn.get_symbol_ohlcv("binance", "BTC/USDT", "2022-01-10 00:00:00", "2022-01-20 00:00:00", "1h", None, config.ohlv_recorded.indicators)
 
     app.run(debug=False, host= '0.0.0.0', port=5000)
