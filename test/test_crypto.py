@@ -25,7 +25,7 @@ class TestCrypto:
     def test_get_symbol_ohlcv(self):
         ohlcv = crypto.get_symbol_ohlcv("hitbtc", "BTC/EURS", "2022-03-01", "2022-05-01")
         assert(isinstance(ohlcv, pd.DataFrame))
-        assert(len(ohlcv.index) == 61)
+        assert(len(ohlcv.index) == 62)
         columns = ohlcv.columns.tolist()
         assert(columns == ["timestamp", "open", "high", "low", "close", "volume"])
         assert(ohlcv.iloc[0]["timestamp"] == 1646092800000)
@@ -34,17 +34,17 @@ class TestCrypto:
         assert(ohlcv.iloc[0]["low"] == 38344.53)
         assert(ohlcv.iloc[0]["close"] == 39301.7)
         assert(ohlcv.iloc[0]["volume"] == 0.02559)
-        assert(ohlcv.iloc[60]["timestamp"] == 1651276800000)
-        assert(ohlcv.iloc[60]["open"] == 36750.07)
-        assert(ohlcv.iloc[60]["high"] == 36901.75)
-        assert(ohlcv.iloc[60]["low"] == 35760.06)
-        assert(ohlcv.iloc[60]["close"] == 35836.63)
-        assert(ohlcv.iloc[60]["volume"] == 23.71129)
+        assert(ohlcv.iloc[61]["timestamp"] == 1651363200000)
+        assert(ohlcv.iloc[61]["open"] == 35819.56)
+        assert(ohlcv.iloc[61]["high"] == 36777.42)
+        assert(ohlcv.iloc[61]["low"] == 35601.47)
+        assert(ohlcv.iloc[61]["close"] == 36583.49)
+        assert(ohlcv.iloc[61]["volume"] == 15.42320)
 
     def test_get_symbol_ohlcv_with_timestamp(self):
         ohlcv = crypto.get_symbol_ohlcv("hitbtc", "BTC/EURS", "1646092800000", "1651363200000")
         assert(isinstance(ohlcv, pd.DataFrame))
-        assert(len(ohlcv.index) == 61)
+        assert(len(ohlcv.index) == 62)
         columns = ohlcv.columns.tolist()
         assert(columns == ["timestamp", "open", "high", "low", "close", "volume"])
         assert(ohlcv.iloc[0]["timestamp"] == 1646092800000)
@@ -53,27 +53,27 @@ class TestCrypto:
         assert(ohlcv.iloc[0]["low"] == 38344.53000)
         assert(ohlcv.iloc[0]["close"] == 39301.70000)
         assert(ohlcv.iloc[0]["volume"] == 0.02559)
-        assert(ohlcv.iloc[60]["timestamp"] == 1651276800000)
-        assert(ohlcv.iloc[60]["open"] == 36750.07)
-        assert(ohlcv.iloc[60]["high"] == 36901.75)
-        assert(ohlcv.iloc[60]["low"] == 35760.06)
-        assert(ohlcv.iloc[60]["close"] == 35836.63)
-        assert(ohlcv.iloc[60]["volume"] == 23.71129)
+        assert(ohlcv.iloc[61]["timestamp"] == 1651363200000)
+        assert(ohlcv.iloc[61]["open"] == 35819.56)
+        assert(ohlcv.iloc[61]["high"] == 36777.42)
+        assert(ohlcv.iloc[61]["low"] == 35601.47)
+        assert(ohlcv.iloc[61]["close"] == 36583.49)
+        assert(ohlcv.iloc[61]["volume"] == 15.42320)
 
     def test_get_symbol_ohlcv_with_data_before_existing(self):
         ohlcv = crypto.get_symbol_ohlcv("hitbtc", "ETH/EURS", "2018-07-23", "2018-07-25", "1h")
         assert(isinstance(ohlcv, pd.DataFrame))
-        assert(len(ohlcv.index) == 48)
+        assert(len(ohlcv.index) == 49)
 
     def test_get_symbol_ohlcv_limit_h(self):
         ohlcv = crypto.get_symbol_ohlcv("hitbtc", "ETH/EURS", "2020-01-01 08:00:00", "2020-01-01 16:00:00", "1h")
         assert(isinstance(ohlcv, pd.DataFrame))
-        assert(len(ohlcv.index) == 8)
+        assert(len(ohlcv.index) == 9)
 
     def test_get_symbol_ohlcv_limit_m(self):
         ohlcv = crypto.get_symbol_ohlcv("hitbtc", "ETH/EURS", "2020-01-01 08:00:00", "2020-01-01 09:12:00", "1m")
         assert(isinstance(ohlcv, pd.DataFrame))
-        assert(len(ohlcv.index) == 72)
+        assert(len(ohlcv.index) == 73)
 
     def test_get_top_gainers(self):
         df = crypto.get_top_gainers("binance", 50)
@@ -84,11 +84,10 @@ class TestCrypto:
 
     def test_get_symbol_ohlcv_with_indicators(self):
         ohlcv = crypto.get_symbol_ohlcv("binance", "ETH/USDT", "2020-01-11", "2020-01-15", "1d", None, ["er"])
-        print(ohlcv)
         assert(isinstance(ohlcv, pd.DataFrame))
-        assert(len(ohlcv.index) == 4)
+        assert(len(ohlcv.index) == 5)
         assert(ohlcv["er"][0] == pytest.approx(0.315403, 0.0001))
         assert(ohlcv["er"][1] == pytest.approx(0.517518, 0.0001))
         assert(ohlcv["er"][2] == pytest.approx(0.278096, 0.0001))
         assert(ohlcv["er"][3] == pytest.approx(0.570599, 0.0001))
-        
+        assert(ohlcv["er"][4] == pytest.approx(0.567380, 0.0001))

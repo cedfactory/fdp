@@ -136,7 +136,7 @@ class TestApi:
         df_data = response["result"][symbol]["info"]
         ohlcv = pd.read_json(df_data)
         assert(isinstance(ohlcv, pd.DataFrame))
-        assert(len(ohlcv.index) == 31)
+        assert(len(ohlcv.index) == 32)
 
     def test_api_indicators(self):
         symbol = "BTC_EURS"
@@ -154,7 +154,7 @@ class TestApi:
         df_data = response["result"][symbol]["info"]
         ohlcv = pd.read_json(df_data)
         assert(isinstance(ohlcv, pd.DataFrame))
-        assert(len(ohlcv.index) == 31)
+        assert(len(ohlcv.index) == 32)
         assert(list(ohlcv.columns) == ["index", "high", "close", "ema_30"])
 
     def test_api_recommendations_for_symbol(self):
