@@ -5,7 +5,7 @@ from datetime import datetime
 from . import utils
 from . import crypto
 
-class Data():
+class CryptoCache():
     def __init__(self, df, symbol, indicators):
         self.symbol = symbol
         self.exchange_name = df.loc[df['symbol'] == symbol, 'exchange_name'].iloc[0]
@@ -25,7 +25,7 @@ class DataRecorder():
         self.lst_symbols = self.df_symbols_param["symbol"].tolist()
         self.data = {}
         for symbol in self.lst_symbols:
-            self.data[symbol] = Data(self.df_symbols_param, symbol, self.indicators)
+            self.data[symbol] = CryptoCache(self.df_symbols_param, symbol, self.indicators)
 
     def get_symbol_ohlcv(self, exchange_name, symbol, start, end, timeframe, length, indicators):
         data = self.data[symbol]
