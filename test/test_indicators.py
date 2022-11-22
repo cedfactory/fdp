@@ -195,7 +195,22 @@ class TestIndicators:
             "bbands": 20,
             "rsi_30": 30,
             "cci_30": 30,
-            "dx_30": 30
+            "dx_30": 30,
+            "williams_%r": 14,
+            "stoch_%k": 14,
+            "stoch_%d": 14,
+            "er": 10,
+            "stc": 50,
+            "atr": 14,
+            "adx": 14,
+            "roc": 12,
+            "mom": 10,
+            "simple_rtn": 1,
+            "labeling": 20,
+            "tv_1h": 0,
+            "vsa": 60,
+            "super_trend_direction": 15,
+            "foobar": 0
         }
         for indicator, expected_window_size in dict_tests.items():
             window_size = indicators.get_window_size(indicator)
