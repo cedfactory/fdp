@@ -99,8 +99,6 @@ def _get_exchange(exchange_market):
         exchange = ccxt.binance()
     elif exchange_market == "kraken":
         exchange = ccxt.kraken()
-    elif exchange_market == "kraken":
-        exchange = ccxt.kraken()
     return exchange
 
 def get_exchange_and_markets(exchange_name):
