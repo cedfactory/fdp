@@ -5,6 +5,22 @@ from src import crypto
 
 class TestCrypto:
 
+    def test_get_list_symbols_hitbtc(self):
+        symbols = crypto.get_list_symbols_hitbtc()
+        assert(symbols == ["BTC/EURS", "ETH/EURS"])
+
+    def test_get_list_symbols_bitmex(self):
+        symbols = crypto.get_list_symbols_bitmex()
+        assert(symbols == [])
+
+    def test_get_list_symbols_binance(self):
+        symbols = crypto.get_list_symbols_binance()
+        assert(symbols == ["BNB/EUR", "BTC/EUR", "ETH/EUR"])
+
+    def test_get_list_symbols_kraken(self):
+        symbols = crypto.get_list_symbols_kraken()
+        assert(symbols == ["BTC/EUR", "BTC/USD", "ETH/EUR", "ETH/USD", "ETHW/EUR", "ETHW/USD", "TBTC/EUR", "TBTC/USD", "WBTC/EUR", "WBTC/USD"])
+
     def test_get_dataframe_symbols(slef):
         df_symbols = crypto.get_dataframe_symbols("binance")
         assert(len(df_symbols.index) == 3)
@@ -21,6 +37,14 @@ class TestCrypto:
         info = crypto.get_symbol_ticker("hitbtc", "BTC/EURS")
         assert("symbol" in info)
         assert(info["symbol"] == "BTC/EURS")
+
+    def test_get_symbol_ticker_ko_no_exchange(self):
+        info = crypto.get_symbol_ticker("fake_exchange", "BTC/EURS")
+        assert(info == {})
+
+    def test_get_symbol_ticker_ko_no_symbol(self):
+        info = crypto.get_symbol_ticker("bitmex", "fake_crypto")
+        assert(info == {})
 
     def test_get_symbol_ohlcv(self):
         ohlcv = crypto.get_symbol_ohlcv("hitbtc", "BTC/EURS", "2022-03-01", "2022-05-01")

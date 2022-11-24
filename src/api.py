@@ -30,7 +30,7 @@ map_market_function = {
     "hitbtc":             crypto.get_list_symbols_hitbtc,
     "bitmex":             crypto.get_list_symbols_bitmex,
     "binance":            crypto.get_list_symbols_binance,
-    "ftx":                crypto.get_list_symbols_ftx
+    "kraken":             crypto.get_list_symbols_kraken
 }
 
 def api_list(str_exchanges):

@@ -99,8 +99,8 @@ def _get_exchange(exchange_market):
         exchange = ccxt.binance()
     elif exchange_market == "kraken":
         exchange = ccxt.kraken()
-    elif exchange_market == "ftx":
-        exchange = ccxt.ftx()
+    elif exchange_market == "kraken":
+        exchange = ccxt.kraken()
     return exchange
 
 def get_exchange_and_markets(exchange_name):
@@ -137,13 +137,13 @@ def get_list_symbols_bitmex():
 def get_list_symbols_binance():
     return get_list_symbols("binance")
 
-def get_list_symbols_ftx():
-    return get_list_symbols("ftx")
+def get_list_symbols_kraken():
+    return get_list_symbols("kraken")
 
 def get_symbol_ticker(exchange_market, symbol):
     exchange = _get_exchange(exchange_market)
     if exchange == None:
-        return []
+        return {}
 
     exchange.load_markets()
     if symbol not in exchange.symbols:
