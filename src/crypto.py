@@ -202,7 +202,7 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d"
         end = date.today()
         end = end.strftime("%Y-%m-%d")
 
-    expected_range = pd.date_range(start=start_with_period, end=end, freq=freq, closed="left")
+    expected_range = pd.date_range(start=start_with_period, end=end, freq=freq, inclusive="left")
     ohlcv.index = pd.DatetimeIndex(ohlcv.index)
     ohlcv = ohlcv.reindex(expected_range, fill_value=np.nan)
 
