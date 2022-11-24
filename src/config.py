@@ -1,4 +1,7 @@
+from . import data_recorder
+
 use_mock = False
+g_data = None
 get_symbol_ohlcv_fn = None
 
 

@@ -189,7 +189,7 @@ def api_history(history_params):
     with concurrent.futures.ThreadPoolExecutor() as executor:
         get_symbol_ohlcv_fn = None
         if config.use_mock:
-            get_symbol_ohlcv_fn = config.get_symbol_ohlcv_fn
+            get_symbol_ohlcv_fn = config.g_data.get_symbol_ohlcv
         else:
             get_symbol_ohlcv_fn = crypto.get_symbol_ohlcv
         futures = {executor.submit(get_symbol_ohlcv_fn, exchange_name=str_exchange, symbol=real_symbol, start=str_start, end=str_end, timeframe=str_interval, length=length, indicators=indicators): real_symbol for real_symbol in real_symbols}
