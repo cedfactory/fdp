@@ -169,10 +169,13 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d"
 
     # as we want the end date included, one adds a delta
     if timeframe == "1d":
+        end = end.replace(hour=0, minute=0, second=0, microsecond=0)
         end += datetime.timedelta(days=1)
     elif timeframe == "1h":
+        end = end.replace(minute=0, second=0, microsecond=0)
         end += datetime.timedelta(hours=1)
     elif timeframe == "1m":
+        end = end.replace(second=0, microsecond=0)
         end += datetime.timedelta(minutes=1)
 
     # request a start earlier according to what the indicators need
