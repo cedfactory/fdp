@@ -9,15 +9,9 @@ from . import utils
 from . import indicators as inc_indicators
 import concurrent.futures
 
-'''
-format for since : yyyy-mm-dd
-'''
 def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1d", limit=None):
     if exchange == None or symbol == None or start == None:
         return None
-    #print("start : ", start)
-    #print("end : ", end)
-
     since = int(start.timestamp())*1000
     if end != None:
         delta = end - start
@@ -27,37 +21,25 @@ def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1d", limit=None):
             limit = int(delta.total_seconds() / 3600)
         elif timeframe == "1m":
             limit = int(delta.total_seconds() / 60)
-
-    #print("limit : ", limit)
     if limit == None:
         return None
 
     intervals = []
+    # offset is a param depending on the exchanger properties
+    # binance offset = 1000
     if timeframe == "1d" or timeframe == "1h" or timeframe == "1m" : # split into requests with limit = 5000
         if timeframe == "1d":
-            offset = 5000 * 24 * 60 * 60 * 1000
+            offset = 1000 * 24 * 60 * 60 * 1000
         if timeframe == "1h":
-            offset = 5000 * 60 * 60 * 1000
+            offset = 1000 * 60 * 60 * 1000
         if timeframe == "1m":
-            offset = 5000 * 60 * 1000
-        while limit > 5000:
+            offset = 1000 * 60 * 1000
+        while limit > 1000:
             since_next = since + offset
-            intervals.append({'since': since, 'limit': 5000})
+            intervals.append({'since': since, 'limit': 1000})
             since = since_next
-            limit = limit - 5000
+            limit = limit - 1000
         intervals.append({'since': since, 'limit': limit})
-    #print(intervals)
-
-    '''
-    df_result = pd.DataFrame()
-    for interval in intervals:
-        df = pd.DataFrame(exchange.fetch_ohlcv(symbol=symbol, timeframe=timeframe, since=interval["since"], limit=interval["limit"]))
-        df = df.rename(columns={0: 'timestamp', 1: 'open', 2: 'high', 3: 'low', 4: 'close', 5: 'volume'})
-        df = df.set_index(df['timestamp'])
-        df.index = pd.to_datetime(df.index, unit='ms')
-        del df['timestamp']
-        df_result = pd.concat([df_result, df])
-    '''
 
     everything_ok = True
     df_results = {}
@@ -67,8 +49,6 @@ def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1d", limit=None):
             current_since = futures[future]
             res = future.result()
             df = pd.DataFrame(res)
-            #if df.empty:
-            #    everything_ok = False
             df_results[current_since] = df
 
     if not everything_ok:
@@ -81,7 +61,6 @@ def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1d", limit=None):
         return "no data"
     df_result = df_result.set_index(df_result['timestamp'])
     df_result.index = pd.to_datetime(df_result.index, unit='ms')
-    #del df_result['timestamp']
 
     return df_result
 
