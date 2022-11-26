@@ -1,9 +1,11 @@
 import pandas as pd
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from . import utils
 from . import crypto
+from . import config
+from . import synthetic_data
 
 class CryptoCache():
     def __init__(self, df, symbol, indicators):
@@ -12,7 +14,10 @@ class CryptoCache():
         self.start_date = datetime.strptime(df.loc[df['symbol'] == symbol, 'start_date'].iloc[0], "%Y-%m-%d %H:%M:%S")
         self.end_date = datetime.strptime(df.loc[df['symbol'] == symbol, 'end_date'].iloc[0], "%Y-%m-%d %H:%M:%S")
         self.interval = df.loc[df['symbol'] == symbol, 'interval'].iloc[0]
-        self.ohlcv = crypto.get_symbol_ohlcv(self.exchange_name, self.symbol, self.start_date, self.end_date, self.interval, None,indicators)
+        if config.SYMBOL_SYNTHETIC in self.symbol:
+            self.ohlcv = synthetic_data.get_synthetic_data(df, self.symbol, self.start_date, self.end_date, self.interval)
+        else:
+            self.ohlcv = crypto.get_symbol_ohlcv(self.exchange_name, self.symbol, self.start_date, self.end_date, self.interval, None,indicators)
 
 class DataRecorder():
     def __init__(self, csvfilename, indicatorfilename, params=None):

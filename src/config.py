@@ -4,6 +4,7 @@ use_mock = False
 g_data = None
 get_symbol_ohlcv_fn = None
 
+SYMBOL_SYNTHETIC = 'SINUS'
 
 '''
     features = {"low": None,
