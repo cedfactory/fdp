@@ -2,13 +2,13 @@
 import pandas as pd
 import pytest
 
-from src import synthetic_data
+from src import synthetic_data,utils
 
 class TestSyntheticData:
 
     def test_build_synthetic_data(self):
         # action
-        df = synthetic_data.build_synthetic_data(None, "2019-10-16", "2019-10-21", "1d")
+        df = synthetic_data.build_synthetic_data("2019-10-16", "2019-10-21", "1d")
 
         # expectations
         assert(isinstance(df,pd.DataFrame))
@@ -19,15 +19,16 @@ class TestSyntheticData:
 
     def test_get_synthetic_data(self):
         # context
-        df = pd.DataFrame({"date":pd.date_range("2019-10-16", periods=6)})
+        start = utils.convert_string_to_datetime("2019-10-16")
+        end = utils.convert_string_to_datetime("2019-10-21")
         
         # action
-        df = synthetic_data.get_synthetic_data(df, "close_synthetic_SINGLE_SINUS_2_FLAT", "2019-10-16", "2019-10-21", "1d")
+        df = synthetic_data.get_synthetic_data("binance", "close_synthetic_SINGLE_SINUS_2_FLAT", start, end, "1d", ["open", "close", "high", "low"])
 
         # expectations
         assert(isinstance(df, pd.DataFrame))
         columns = df.columns.tolist()
-        assert(len(df.index) == 6)
+        assert(len(df.index) == 5)
         # check the columns names
         columns = df.columns.tolist()
         #assert(any(column in ["date", "close_synthetic_SINGLE_SINUS_2_FLAT"] for column in columns))
@@ -36,10 +37,11 @@ class TestSyntheticData:
 
     def test_get_synthetic_data_ohlc(self):
         # context
-        df = pd.DataFrame({"date":pd.date_range("2019-10-16", periods=50)})
+        start = utils.convert_string_to_datetime("2019-10-16")
+        end = utils.convert_string_to_datetime("2019-10-21")
 
         # action
-        df = synthetic_data.get_synthetic_data(df, "close_synthetic_SINGLE_SINUS_2_FLAT", "2019-10-16", "2019-10-21", "1d")
+        df = synthetic_data.get_synthetic_data("binance", "close_synthetic_SINGLE_SINUS_2_FLAT", start, end, "1d", ["open", "close", "high", "low"])
         assert(isinstance(df, pd.DataFrame))
         columns = df.columns.tolist()
 
