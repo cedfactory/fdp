@@ -23,7 +23,7 @@ class TestSyntheticData:
         end = utils.convert_string_to_datetime("2019-10-21")
         
         # action
-        df = synthetic_data.get_synthetic_data("binance", "close_synthetic_SINGLE_SINUS_2_FLAT", start, end, "1d", ["open", "close", "high", "low"])
+        df = synthetic_data.get_synthetic_data("binance", "SINGLESINUS1FLAT", "2019-10-16", "2019-10-21", "1d", ["open", "close", "high", "low"])
 
         # expectations
         assert(isinstance(df, pd.DataFrame))
@@ -31,24 +31,7 @@ class TestSyntheticData:
         assert(len(df.index) == 5)
         # check the columns names
         columns = df.columns.tolist()
-        #assert(any(column in ["date", "close_synthetic_SINGLE_SINUS_2_FLAT"] for column in columns))
-        #assert(df["close_synthetic_SINGLE_SINUS_2_FLAT"][0] == 10)
-        #assert(df["close_synthetic_SINGLE_SINUS_2_FLAT"][1] == pytest.approx(10.125333))
+        assert(any(column in ["close", "open", "high", "low"] for column in columns))
+        assert(df["close"][0] == pytest.approx(10.866025))
+        assert(df["close"][1] == pytest.approx(9.133975))
 
-    def test_get_synthetic_data_ohlc(self):
-        # context
-        start = utils.convert_string_to_datetime("2019-10-16")
-        end = utils.convert_string_to_datetime("2019-10-21")
-
-        # action
-        df = synthetic_data.get_synthetic_data("binance", "close_synthetic_SINGLE_SINUS_2_FLAT", start, end, "1d", ["open", "close", "high", "low"])
-        assert(isinstance(df, pd.DataFrame))
-        columns = df.columns.tolist()
-
-        # check the columns names
-        columns = df.columns.tolist()
-        assert(any(column in ["time", "close", "open", "high", "low"] for column in columns))
-        #assert(df["close"][0] == pytest.approx(10.))
-        #assert(df["close"][1] == pytest.approx(10.125333))
-        #assert(df["high"][0] == pytest.approx(10.1))
-        #assert(df["high"][1] == pytest.approx(10.225333))
