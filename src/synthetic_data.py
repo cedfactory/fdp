@@ -1,5 +1,8 @@
 import pandas as pd
 import numpy as np
+from . import indicators as inc_indicators
+from datetime import datetime, timedelta
+import datetime
 
 import math
 
@@ -66,7 +69,7 @@ def get_df_range_time(start_date, end_date, interval):
     df_datetime = pd.DataFrame({'timestamp': pd.date_range(start=start_date, end=end_date, freq=interval)})
     return df_datetime
 
-def build_synthetic_data(df, start_date, end_date, interval):
+def build_synthetic_data(start_date, end_date, interval):
     df_range_time = get_df_range_time(start_date, end_date, interval)
 
     df_synthetic = pd.DataFrame(columns=['timestamp', 'sinus_1', 'sinus_2', 'linear_up', 'linear_down'])
@@ -94,38 +97,65 @@ def build_synthetic_data(df, start_date, end_date, interval):
     
     return df_synthetic
 
-def get_synthetic_data(df, data_type, start, end, interval):
-    df_synthetic = build_synthetic_data(df, start, end, interval)
+def get_synthetic_data(exchange_name, data_type, start, end, interval, indicators):
+    # request a start earlier according to what the indicators need
+    start_with_period = start
+    max_period = inc_indicators.get_max_window_size(indicators)
+    if max_period != 0:
+        if interval == "1d":
+            start_with_period = start_with_period + datetime.timedelta(days=-max_period-1)
+        elif interval == "1h":
+            start_with_period = start_with_period + datetime.timedelta(hours=-max_period-1)
+        elif interval == "1m":
+            start_with_period = start_with_period + datetime.timedelta(minutes=-max_period-1)
 
-    if 'SINGLE_SINUS_1_FLAT' in data_type:
-        df['close'] = df_synthetic['sinus_1'] + 10
-    elif 'SINGLE_SINUS_2_FLAT' in data_type:
-        df['close'] = df_synthetic['sinus_2'] + 10
-    elif 'MIXED_SINUS_FLAT' in data_type:
-        df['close'] = df_synthetic['sinus_2'] + df_synthetic['sinus_3'] + 10
-    elif 'SINGLE_SINUS_1_UP' in data_type:
-        df['close'] = df_synthetic['sinus_1'] + df_synthetic['linear_up'] + 10
-    elif 'SINGLE_SINUS_2_UP' in data_type:
-        df['close'] = df_synthetic['sinus_2'] + df_synthetic['linear_up'] + 10
-    elif 'MIXED_SINUS_UP' in data_type:
-        df['close'] = df_synthetic['sinus_2'] + df_synthetic['sinus_3'] + df_synthetic['linear_up'] + 10
-    elif 'SINGLE_SINUS_1_DOWN' in data_type:
-        df['close'] = df_synthetic['sinus_1'] + df_synthetic['linear_down'] + 10
-    elif 'SINGLE_SINUS_2_DOWN' in data_type:
-        df['close'] = df_synthetic['sinus_2'] + df_synthetic['linear_down'] + 10
-    elif 'MIXED_SINUS_DOWN' in data_type:
-        df['close'] = df_synthetic['sinus_2'] + df_synthetic['sinus_3'] + df_synthetic['linear_down'] + 10
-    elif 'MIXED_SINUS_UP_DOWN' in data_type:
-        df['close'] = df_synthetic['sinus_3'] + df_synthetic['sinus_4'] + 10
-    elif 'MIXED_SINUS_DOWN_UP' in data_type:
-        df['close'] = df_synthetic['sinus_3'] + df_synthetic['sinus_5'] + 10
+    df_synthetic = build_synthetic_data(start_with_period, end, interval)
 
     df_ohlv = pd.DataFrame(columns=['timestamp', 'close'])
     df_ohlv['timestamp'] = df_synthetic['timestamp']
-    df_ohlv['close'] = df['close']
-    df = fill_ohl(df_ohlv)
+
+    if 'SINGLESINUS1FLAT' in data_type:
+        df_ohlv['close'] = df_synthetic['sinus_1'] + 10
+    elif 'SINGLESINUS2FLAT' in data_type:
+        df_ohlv['close'] = df_synthetic['sinus_2'] + 10
+    elif 'MIXEDSINUSFLAT' in data_type:
+        df_ohlv['close'] = df_synthetic['sinus_2'] + df_synthetic['sinus_3'] + 10
+    elif 'SINGLESINUS1UP' in data_type:
+        df_ohlv['close'] = df_synthetic['sinus_1'] + df_synthetic['linear_up'] + 10
+    elif 'SINGLESINUS2UP' in data_type:
+        df_ohlv['close'] = df_synthetic['sinus_2'] + df_synthetic['linear_up'] + 10
+    elif 'MIXEDSINUSUP' in data_type:
+        df_ohlv['close'] = df_synthetic['sinus_2'] + df_synthetic['sinus_3'] + df_synthetic['linear_up'] + 10
+    elif 'SINGLESINUS1DOWN' in data_type:
+        df_ohlv['close'] = df_synthetic['sinus_1'] + df_synthetic['linear_down'] + 10
+    elif 'SINGLESINUS2DOWN' in data_type:
+        df_ohlv['close'] = df_synthetic['sinus_2'] + df_synthetic['linear_down'] + 10
+    elif 'MIXEDSINUSDOWN' in data_type:
+        df_ohlv['close'] = df_synthetic['sinus_2'] + df_synthetic['sinus_3'] + df_synthetic['linear_down'] + 10
+    elif 'MIXEDSINUSUPDOWN' in data_type:
+        df_ohlv['close'] = df_synthetic['sinus_3'] + df_synthetic['sinus_4'] + 10
+    elif 'MIXEDSINUSDOWNUP' in data_type:
+        df_ohlv['close'] = df_synthetic['sinus_3'] + df_synthetic['sinus_5'] + 10
+
+
+    df_ohlv = fill_ohl(df_ohlv)
+
+    df_ohlv.drop(0, inplace=True)
+    df_ohlv.reset_index(inplace=True, drop=True)
 
     if 'NOISE' in data_type:
-        df = add_df_ohlv_noise(df, config_param.noise_amplitude)
+        df_ohlv = add_df_ohlv_noise(df_ohlv, config_param.noise_amplitude)
 
-    return df
+    # remove dupicates
+    df_ohlv = df_ohlv[~df_ohlv.index.duplicated()]
+
+    df_ohlv.set_index('timestamp', inplace=True)
+
+    if len(indicators) != 0:
+        indicator_params = {"symbol": data_type, "exchange": exchange_name}
+        df_ohlv = inc_indicators.compute_indicators(df_ohlv, indicators, True, indicator_params)
+
+    if max_period != 0:
+        df_ohlv = df_ohlv.iloc[max_period:]
+
+    return df_ohlv

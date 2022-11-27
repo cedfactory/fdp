@@ -15,7 +15,7 @@ class CryptoCache():
         self.end_date = datetime.strptime(df.loc[df['symbol'] == symbol, 'end_date'].iloc[0], "%Y-%m-%d %H:%M:%S")
         self.interval = df.loc[df['symbol'] == symbol, 'interval'].iloc[0]
         if config.SYMBOL_SYNTHETIC in self.symbol:
-            self.ohlcv = synthetic_data.get_synthetic_data(df, self.symbol, self.start_date, self.end_date, self.interval)
+            self.ohlcv = synthetic_data.get_synthetic_data(self.exchange_name, self.symbol, self.start_date, self.end_date, self.interval, indicators)
         else:
             self.ohlcv = crypto.get_symbol_ohlcv(self.exchange_name, self.symbol, self.start_date, self.end_date, self.interval, None,indicators)
 
