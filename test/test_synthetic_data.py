@@ -2,52 +2,36 @@
 import pandas as pd
 import pytest
 
-from src import synthetic_data
+from src import synthetic_data,utils
 
 class TestSyntheticData:
 
     def test_build_synthetic_data(self):
-        # context
-        df = pd.DataFrame({"date":pd.date_range("2019-10-16", periods=5)})
-
         # action
-        df = synthetic_data.build_synthetic_data(df)
+        df = synthetic_data.build_synthetic_data("2019-10-16", "2019-10-21", "1d")
 
         # expectations
         assert(isinstance(df,pd.DataFrame))
-
+        assert(len(df.index) == 6)
         # check the columns names
         columns = df.columns.tolist()
         assert(any(column in ['time', 'sinus_1', 'sinus_2', 'linear_up', 'linear_down', 'sinus_3', 'sinus_4', 'sinus_5'] for column in columns))
 
     def test_get_synthetic_data(self):
         # context
-        df = pd.DataFrame({"date":pd.date_range("2019-10-16", periods=50)})
-
+        start = utils.convert_string_to_datetime("2019-10-16")
+        end = utils.convert_string_to_datetime("2019-10-21")
+        
         # action
-        df = synthetic_data.get_synthetic_data(df, "close_synthetic_SINGLE_SINUS_2_FLAT", None)
+        df = synthetic_data.get_synthetic_data("binance", "SINGLESINUS1FLAT", "2019-10-16", "2019-10-21", "1d", ["open", "close", "high", "low"])
+
+        # expectations
         assert(isinstance(df, pd.DataFrame))
         columns = df.columns.tolist()
-
+        assert(len(df.index) == 5)
         # check the columns names
         columns = df.columns.tolist()
-        assert(any(column in ["date", "close_synthetic_SINGLE_SINUS_2_FLAT"] for column in columns))
-        assert(df["close_synthetic_SINGLE_SINUS_2_FLAT"][0] == 10)
-        assert(df["close_synthetic_SINGLE_SINUS_2_FLAT"][1] == pytest.approx(10.125333))
+        assert(any(column in ["close", "open", "high", "low"] for column in columns))
+        assert(df["close"][0] == pytest.approx(10.866025))
+        assert(df["close"][1] == pytest.approx(9.133975))
 
-    def test_get_synthetic_data_ohlc(self):
-        # context
-        df = pd.DataFrame({"date":pd.date_range("2019-10-16", periods=50)})
-
-        # action
-        df = synthetic_data.get_synthetic_data(df, "close_synthetic_SINGLE_SINUS_2_FLAT", {"ohlc":True})
-        assert(isinstance(df, pd.DataFrame))
-        columns = df.columns.tolist()
-
-        # check the columns names
-        columns = df.columns.tolist()
-        assert(any(column in ["time", "close", "open", "high", "low"] for column in columns))
-        assert(df["close"][0] == pytest.approx(10.))
-        assert(df["close"][1] == pytest.approx(10.125333))
-        assert(df["high"][0] == pytest.approx(10.1))
-        assert(df["high"][1] == pytest.approx(10.225333))
