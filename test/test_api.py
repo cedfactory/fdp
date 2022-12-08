@@ -24,8 +24,8 @@ class TestApi:
         assert(symbols == symbols_reference)
 
     def test_api_symbol(self):
-        symbol = "ETH/EUR"
-        response = api.api_symbol("crypto", "binance", symbol)
+        symbol = "ETH/EURS"
+        response = api.api_symbol("crypto", "hitbtc", symbol)
         assert("status" in response)
         assert(response["status"] == "ok")
         assert("result" in response)
@@ -197,7 +197,7 @@ class TestApi:
 
     def test_api_recommendations_for_symbol(self):
         screener = "crypto"
-        exchange = "binance"
+        exchange = "hitbtc"
         symbol = "1INCHUSD"
         response = api.api_recommendations(screener, exchange, symbol, "1h")
         assert("status" in response)
@@ -212,10 +212,10 @@ class TestApi:
 
     def test_api_recommendations_for_exchange(self):
         screener = "crypto"
-        exchange = "binance"
+        exchange = "hitbtc"
         symbol = None
         response = api.api_recommendations(screener, exchange, symbol, "1h")
-        arbitrary_symbol = "BNBEUR"
+        arbitrary_symbol = "ETHEURS"
         assert("status" in response)
         assert(response["status"] == "ok")
         assert("result" in response)
