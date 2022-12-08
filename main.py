@@ -118,7 +118,7 @@ if __name__ == "__main__":
             exit(0)
         else:
             config.g_data = data_recorder.DataRecorder(sys.argv[2], sys.argv[3])
-    # for testing purpose
-    #config.get_symbol_ohlcv_fn.get_symbol_ohlcv("binance", "BTC/USDT", "2022-01-10 00:00:00", "2022-01-20 00:00:00", "1h", None, config.ohlv_recorded.indicators)
+    else:
+        config.use_mock = False
 
     app.run(debug=False, host= '0.0.0.0', port=5000)
