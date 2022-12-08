@@ -39,7 +39,7 @@ def get_list_dax():
 def get_list_nasdaq100():
     df_html = pd.read_html('https://en.wikipedia.org/wiki/Nasdaq-100')
     df_nasdaq = df_html[4]
-    list_nasdaq = df_nasdaq["Ticker"].tolist()
+    list_nasdaq = df_nasdaq["Company"].tolist()
     list_sectors = df_nasdaq["GICS Sector"].tolist()
     list_industry = df_nasdaq["GICS Sub-Industry"].tolist()
     list_company_name = df_nasdaq["Company"].tolist()
