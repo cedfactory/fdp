@@ -121,6 +121,44 @@ class TestApi:
         assert(history_params.get("status") == "ko")
         assert(history_params.get("reason") == "exchange not specified")
 
+    def _api_history_last_parse_parameters_common(self, interval):
+        req = MockRequest
+        req.method = "POST"
+        req.is_json = False
+        req.form = {}
+        req.form["exchange"] = "hitbtc"
+        req.form["symbol"] = "ETH/EURS"
+        req.form["interval"] = interval
+        return api.api_history_parse_parameters(req, True)
+
+    def test_api_history_last_parse_parameters_1m(self):
+        # action
+        history_params = self._api_history_last_parse_parameters_common("1m")
+
+        # expectations
+        assert(history_params.get("status") == "ok")
+        assert(history_params.get("str_start") == history_params.get("str_end"))
+        assert(history_params.get("str_start").endswith(":00"))
+
+    def test_api_history_last_parse_parameters_1h(self):
+        # action
+        history_params = self._api_history_last_parse_parameters_common("1h")
+
+        # expectations
+        assert(history_params.get("status") == "ok")
+        assert(history_params.get("str_start") == history_params.get("str_end"))
+        assert(history_params.get("str_start").endswith(":00:00"))
+
+    def test_api_history_last_parse_parameters_1d(self):
+        # action
+        history_params = self._api_history_last_parse_parameters_common("1d")
+
+        # expectations
+        assert(history_params.get("status") == "ok")
+        assert(history_params.get("str_start") == history_params.get("str_end"))
+        assert(len(history_params.get("str_start")) == 10)
+
+
     def test_api_history(self):
         symbol = "BTC_EURS"
         params_history = {"str_exchange":"hitbtc", "str_symbol":symbol, "str_start":"2021-12-05", "str_end": "2022-01-05", "str_interval":"1d"}

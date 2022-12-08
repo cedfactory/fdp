@@ -99,7 +99,7 @@ def api_symbol(str_screener, str_exchange, str_symbols):
 
     return final_response
 
-def api_history_parse_parameters(request):
+def api_history_parse_parameters(request, last=False):
     status = "ok"
     reason = ""
     str_exchange = ""
@@ -148,7 +148,6 @@ def api_history_parse_parameters(request):
                 length = int(length)
             if "indicators" in request.form:
                 indicators = request.form["indicators"]
-                print(type(indicators))
                 indicators = json.loads(indicators)
 
     if str_exchange == None or str_exchange == "":
@@ -156,7 +155,7 @@ def api_history_parse_parameters(request):
         reason = "exchange not specified"
     elif str_symbol == None or str_symbol == "":
         reason = "symbol not specified"
-    elif str_start == None or str_start == "":
+    elif last == False and (str_start == None or str_start == ""):
         reason = "start not specified"
 
     if reason != "":
@@ -164,6 +163,16 @@ def api_history_parse_parameters(request):
 
     if str_end == None:
         str_end = datetime.today().strftime('%Y-%m-%d')
+
+    if last == True:
+        if str_interval == "1m":
+            str_start = datetime.today().strftime('%Y-%m-%d %H:%M:00')
+        elif str_interval == "1h":
+            str_start = datetime.today().strftime('%Y-%m-%d %H:00:00')
+        elif str_interval == "1d":
+            str_start = datetime.today().strftime('%Y-%m-%d')
+        str_end = str_start
+        length = 1
 
     return {
         "status":status, "reason":reason,

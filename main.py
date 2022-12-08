@@ -57,6 +57,22 @@ def get_history():
     
     return response
 
+@app.route('/history_last', methods=['OPTIONS', 'GET', 'POST'])
+def get_history_last():
+    history_params = api.api_history_parse_parameters(request, True)
+    if history_params.get("status") == "ko":
+        response = {
+            "result":history_params.get("reason"),
+            "status":"ok"
+            }
+    else:
+        response = api.api_history(history_params)
+    print(response)
+    response = jsonify(response)
+    response = add_headers(response)
+    
+    return response
+
 @app.route('/recommendations', methods=['OPTIONS', 'GET'])
 def get_recommendations():
    
