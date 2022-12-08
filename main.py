@@ -16,7 +16,7 @@ def add_headers(response):
 
 @app.route("/")
 def hello():
-	return '''Hello world ! (v1.0)'''
+	return '''Hello world ! (v1.1)'''
 
 @app.route('/list', methods=['OPTIONS', 'GET'])
 def get_list():
