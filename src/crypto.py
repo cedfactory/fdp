@@ -78,6 +78,10 @@ def _get_exchange(exchange_market):
         exchange = ccxt.binance()
     elif exchange_market == "kraken":
         exchange = ccxt.kraken()
+    elif exchange_market == "bitget":
+        exchange = ccxt.bitget()
+    elif exchange_market == "coinbase":
+        exchange = ccxt.coinbase()
     return exchange
 
 def get_exchange_and_markets(exchange_name):
@@ -116,6 +120,12 @@ def get_list_symbols_binance():
 
 def get_list_symbols_kraken():
     return get_list_symbols("kraken")
+
+def get_list_symbols_bitget():
+    return get_list_symbols("bitget")
+
+def get_list_symbols_coinbase():
+    return get_list_symbols("coinbase")
 
 def get_symbol_ticker(exchange_market, symbol):
     exchange = _get_exchange(exchange_market)

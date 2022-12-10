@@ -98,14 +98,14 @@ class TestCrypto:
         ohlcv = crypto.get_symbol_ohlcv("hitbtc", "ETH/EURS", "2020-01-01 08:00:00", "2020-01-01 09:12:00", "1m")
         assert(isinstance(ohlcv, pd.DataFrame))
         assert(len(ohlcv.index) == 73)
-    '''
+
     def test_get_top_gainers(self):
-        df = crypto.get_top_gainers("binance", 50)
+        df = crypto.get_top_gainers("bitget", 50)
         assert(isinstance(df, pd.DataFrame))
         assert(df.columns.to_list() == ['symbol', 'volume', 'change', 'rank'])
         symbols = df['symbol'].to_list()
         assert(len(symbols) > 1)
-    '''
+
     def test_get_symbol_ohlcv_with_indicators(self):
         ohlcv = crypto.get_symbol_ohlcv("hitbtc", "BTC/EURS", "2020-01-12", "2020-01-16", "1d", None, ["er"])
         assert(isinstance(ohlcv, pd.DataFrame))
