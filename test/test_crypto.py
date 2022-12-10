@@ -12,19 +12,19 @@ class TestCrypto:
     def test_get_list_symbols_bitmex(self):
         symbols = crypto.get_list_symbols_bitmex()
         assert(symbols == [])
-
+    '''
     def test_get_list_symbols_binance(self):
         symbols = crypto.get_list_symbols_binance()
         assert(symbols == ["BNB/EUR", "BTC/EUR", "ETH/EUR"])
-
+    '''
     def test_get_list_symbols_kraken(self):
         symbols = crypto.get_list_symbols_kraken()
         assert(symbols == ["BTC/EUR", "BTC/USD", "ETH/EUR", "ETH/USD", "ETHW/EUR", "ETHW/USD", "TBTC/EUR", "TBTC/USD", "WBTC/EUR", "WBTC/USD"])
-
+    '''
     def test_get_dataframe_symbols(slef):
         df_symbols = crypto.get_dataframe_symbols("binance")
         assert(len(df_symbols.index) == 3)
-
+    '''
     def test_get_list_symbols(self):
         symbols = crypto.get_list_symbols("hitbtc")
         assert(len(symbols) == 2)
@@ -100,7 +100,7 @@ class TestCrypto:
         assert(len(ohlcv.index) == 73)
 
     def test_get_top_gainers(self):
-        df = crypto.get_top_gainers("bitget", 50)
+        df = crypto.get_top_gainers("hitbtc", 50)
         assert(isinstance(df, pd.DataFrame))
         assert(df.columns.to_list() == ['symbol', 'volume', 'change', 'rank'])
         symbols = df['symbol'].to_list()
