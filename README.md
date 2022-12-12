@@ -17,7 +17,7 @@ API
 
 ## list
 
-- *exchanges* : for crypto may be hitbtc, bitmex, binance, speratated with ','
+- *exchanges* : for crypto may be hitbtc, bitmex, binance, kraken, bitget, coinbase speratated with ','
 
 example :
 
