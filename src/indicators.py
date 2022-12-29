@@ -193,6 +193,11 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
         elif indicator.startswith('tv_'):
             df[indicator] = tv.get_recommendation(df, indicator, params)
 
+        # shift feature: column_shift_nb ex: close_shift_5
+        elif '_shift_' in indicator:
+            lst_split = indicator.split("_")
+            df[indicator] = df[lst_split[0]].shift(int(lst_split[2]), axis=0)
+
         elif indicator == 'vsa':
             days = [1, 2, 3, 5, 20, 40, 60]
             df = vsa.create_bunch_of_vsa_features(df, days)

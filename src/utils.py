@@ -1,4 +1,5 @@
 import pandas as pd
+import os, shutil
 from inspect import getframeinfo, stack
 from datetime import datetime
 
@@ -45,3 +46,16 @@ def convert_string_to_datetime(str):
         pass
 
     return None
+
+def max_from_dict_values(indicators):
+    v = list(indicators.values())
+    v = [0 if x is None else x for x in v]
+    v = [int(x) for x in v]
+    return max(v) + 1
+
+def clear_directory(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+    else:
+        shutil.rmtree(path)
+        os.makedirs(path)

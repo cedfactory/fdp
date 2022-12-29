@@ -1,6 +1,6 @@
 import pandas as pd
 from datetime import datetime
-from . import wiki,yahoo,yf_wrapper,crypto,tradingview,portfolio,indicators
+from . import wiki,yahoo,yf_wrapper,crypto,tradingview,portfolio,indicators,utils
 from src import config
 import concurrent.futures
 import json
@@ -167,12 +167,15 @@ def api_history_parse_parameters(request, last=False):
         str_end = datetime.today().strftime('%Y-%m-%d')
 
     if last == True:
-        if str_interval == "1m":
-            str_start = datetime.today().strftime('%Y-%m-%d %H:%M:00')
-        elif str_interval == "1h":
-            str_start = datetime.today().strftime('%Y-%m-%d %H:00:00')
-        elif str_interval == "1d":
-            str_start = datetime.today().strftime('%Y-%m-%d')
+        if len(str_start) != 0 and isinstance(str_start, str):
+            pass
+        else:
+            if str_interval == "1m":
+                str_start = datetime.today().strftime('%Y-%m-%d %H:%M:00')
+            elif str_interval == "1h":
+                str_start = datetime.today().strftime('%Y-%m-%d %H:00:00')
+            elif str_interval == "1d":
+                str_start = datetime.today().strftime('%Y-%m-%d')
         str_end = str_start
         length = 1
 
@@ -191,7 +194,10 @@ def api_history(history_params):
     length = history_params.get("length", None)
     indicators = history_params.get("indicators", {})
 
-    start = datetime.now()
+    if len(str_start) != 0 and isinstance(str_start, str):
+        start = utils.convert_string_to_datetime(str_start)
+    else:
+        start = datetime.now()
 
     result_for_response = {}
 

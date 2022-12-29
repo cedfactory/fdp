@@ -1,10 +1,11 @@
 from . import data_recorder
 
-use_mock = False
+use_mock = True
 g_data = None
 get_symbol_ohlcv_fn = None
 
-SYMBOL_SYNTHETIC = 'SINUS'
+SYMBOL_SYNTHETIC = 'SYNTHETIC'
+trace_ohlcv = True
 
 '''
     features = {"low": None,

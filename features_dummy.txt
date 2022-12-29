@@ -1,0 +1,1 @@
+{"close": null, "close_shift_5": 5, "close_shift_10": 10, "close_shift_15": 15}

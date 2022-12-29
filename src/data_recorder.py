@@ -1,6 +1,6 @@
 import pandas as pd
 import json
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from . import utils
 from . import crypto
@@ -8,16 +8,25 @@ from . import config
 from . import synthetic_data
 
 class CryptoCache():
-    def __init__(self, df, symbol, indicators):
+    def __init__(self, df, symbol, indicators, directory):
         self.symbol = symbol
         self.exchange_name = df.loc[df['symbol'] == symbol, 'exchange_name'].iloc[0]
+        self.interval = df.loc[df['symbol'] == symbol, 'interval'].iloc[0]
         self.start_date = datetime.strptime(df.loc[df['symbol'] == symbol, 'start_date'].iloc[0], "%Y-%m-%d %H:%M:%S")
         self.end_date = datetime.strptime(df.loc[df['symbol'] == symbol, 'end_date'].iloc[0], "%Y-%m-%d %H:%M:%S")
-        self.interval = df.loc[df['symbol'] == symbol, 'interval'].iloc[0]
+
         if config.SYMBOL_SYNTHETIC in self.symbol:
             self.ohlcv = synthetic_data.get_synthetic_data(self.exchange_name, self.symbol, self.start_date, self.end_date, self.interval, indicators)
         else:
             self.ohlcv = crypto.get_symbol_ohlcv(self.exchange_name, self.symbol, self.start_date, self.end_date, self.interval, None,indicators)
+
+        # Trace for debug and adjust synthetics parameters
+        if config.trace_ohlcv and 'close' in self.ohlcv.columns.tolist():
+            df_plot = pd.DataFrame()
+            df_plot["close"] = self.ohlcv['close']
+            df_plot.reset_index(drop=True, inplace=True)
+            ax = df_plot.plot.line()
+            ax.figure.savefig(directory + self.symbol + '.png')
 
 class DataRecorder():
     def __init__(self, csvfilename, indicatorfilename, params=None):
@@ -29,8 +38,13 @@ class DataRecorder():
 
         self.lst_symbols = self.df_symbols_param["symbol"].tolist()
         self.data = {}
+
+        if config.trace_ohlcv:
+            self.directory = './plot/'
+            utils.clear_directory(self.directory)
+
         for symbol in self.lst_symbols:
-            self.data[symbol] = CryptoCache(self.df_symbols_param, symbol, self.indicators)
+            self.data[symbol] = CryptoCache(self.df_symbols_param, symbol, self.indicators, self.directory)
 
     def get_symbol_ohlcv(self, exchange_name, symbol, start, end, timeframe, length, indicators):
         data = self.data[symbol]
