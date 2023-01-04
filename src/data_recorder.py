@@ -28,6 +28,28 @@ class CryptoCache():
             ax = df_plot.plot.line()
             ax.figure.savefig(directory + self.symbol + '.png')
 
+        # Trace for debug and adjust bollinger synthetics parameters
+        if config.trace_ohlcv \
+                and 'close' in self.ohlcv.columns.tolist() \
+                and ('bollinger' in self.ohlcv.columns.tolist() or 'syntheticbollinger' in self.ohlcv.columns.tolist()):
+            df_plot = pd.DataFrame()
+            df_plot["close"] = self.ohlcv['close']
+            df_plot["lower_band"] = self.ohlcv['lower_band']
+            df_plot["higher_band"] = self.ohlcv['higher_band']
+            df_plot["ma_band"] = self.ohlcv['ma_band']
+            df_plot["long_ma"] = self.ohlcv['long_ma']
+
+            df_plot.reset_index(drop=True, inplace=True)
+
+            ax = df_plot.plot.line()
+
+            # Add a legend
+            pos = ax.get_position()
+            ax.set_position([pos.x0, pos.y0, pos.width * 0.9, pos.height])
+            ax.legend(loc='center right', bbox_to_anchor=(1.25, 0.5))
+
+            ax.figure.savefig(directory + 'bollinger_' + self.symbol + '.png')
+
 class DataRecorder():
     def __init__(self, csvfilename, indicatorfilename, params=None):
         self.df_symbols_param = pd.read_csv('./' + csvfilename)

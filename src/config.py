@@ -6,6 +6,7 @@ get_symbol_ohlcv_fn = None
 
 SYMBOL_SYNTHETIC = 'SYNTHETIC'
 trace_ohlcv = True
+noise = False
 
 '''
     features = {"low": None,

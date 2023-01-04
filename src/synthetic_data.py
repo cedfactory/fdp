@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from . import indicators as inc_indicators
 from . import utils
+from . import config
 from datetime import datetime, timedelta
 import datetime
 
@@ -63,6 +64,8 @@ def fill_df_combined_linear(df, column, a, b):
     z = z[:x_half + 1]
     y = [*y, *z]
     y = y - min(y) + 1
+    if len(y) != len(df):
+        y = y[:len(df)]
     df[column] = y
     return df
 
@@ -183,7 +186,7 @@ def get_synthetic_data(exchange_name, data_type, start, end, interval, indicator
     df_ohlv.drop(0, inplace=True)
     df_ohlv.reset_index(inplace=True, drop=True)
 
-    if 'NOISE' in data_type:
+    if config.noise:
         df_ohlv = add_df_ohlv_noise(df_ohlv, config_param.noise_amplitude)
 
     # remove dupicates

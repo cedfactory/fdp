@@ -2,11 +2,13 @@ import pandas as pd
 from parse import parse
 from stockstats import StockDataFrame as Sdf
 from finta import TA
+import ta
 import numpy as np
 from . import indicators_vsa as vsa
 from . import indicators_flabeling as flabeling
 from . import indicators_supertrend as supertrend
 from . import indicators_tradingview as tv
+from . import utils
 
 def get_window_size(indicator):
     trend_parsed = parse('trend_{}d', indicator)
@@ -147,6 +149,110 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
             df.rename(columns={'BB_UPPER': 'bb_upper'}, inplace=True)
             df.rename(columns={'BB_MIDDLE': 'bb_middle'}, inplace=True)
             df.rename(columns={'BB_LOWER': 'bb_lower'}, inplace=True)
+
+        elif indicator == 'bollinger':
+            bol_window = 100
+            bol_std = 2.25
+            long_ma_window = 500
+
+            bol_band = ta.volatility.BollingerBands(close=df["close"], window=bol_window, window_dev=bol_std)
+            df["lower_band"] = bol_band.bollinger_lband()
+            df["higher_band"] = bol_band.bollinger_hband()
+            df["ma_band"] = bol_band.bollinger_mavg()
+            df['long_ma'] = ta.trend.sma_indicator(close=df['close'], window=long_ma_window)
+
+            df = utils.get_n_columns(df, ["ma_band", "lower_band", "higher_band", "close"], 1)
+
+            df['bollinger'] = True # bollinger indicator trigger
+
+        elif indicator == 'syntheticbollinger':
+            df.reset_index(inplace=True)
+            # TEST SCENARIO
+            # values set for SYNTHETICMIXEDSINUSFLAT
+            df['close'] = 10
+            df["lower_band"] = 9
+            df["higher_band"] = 11
+            df["ma_band"] = 9.5
+            df["long_ma"] = 7
+
+            t = 1000 + 50
+            t_plus = 25
+            df.at[t, "close"] = df["higher_band"].iloc[t] + 0.01
+            # OPEN LONG
+            df['close'] = np.where(df.index >= t, df["higher_band"] + 0.5, df['close'])
+            t = t + t_plus
+            df['close'] = np.where(df.index >= t, df["higher_band"] + 1, df['close'])
+            t = t + t_plus
+            df['close'] = np.where(df.index >= t, df["higher_band"] + 1.5, df['close'])
+            # CLOSE LONG
+            t = t + t_plus
+            df['ma_band'] = np.where(df.index >= t, df["close"] + 1, df['ma_band'])
+
+            # OPEN SHORT
+            t = t + t_plus
+            df['lower_band'] = np.where(df.index >= t, df["close"] + 0.6, df['lower_band'])
+            df['long_ma'] = np.where(df.index >= t, df["close"] + 0.3, df['long_ma'])
+
+            t = t + t_plus
+            df['close'] = np.where(df.index >= t, df["close"] - 0.5, df['close'])
+            t = t + t_plus
+            df['close'] = np.where(df.index >= t, df["close"] - 1, df['close'])
+            t = t + t_plus
+            df['close'] = np.where(df.index >= t, df["close"] - 1.5, df['close'])
+            t = t + t_plus
+            # CLOSE SHORT
+            df['ma_band'] = np.where(df.index >= t, df["close"] - 2.5, df['ma_band'])
+
+            # OPEN LONG
+            t = t + t_plus
+            df['long_ma'] = np.where(df.index >= t, df["close"] - 0.3, df['long_ma'])
+            t = t + t_plus
+            df['close'] = np.where(df.index >= t, df["higher_band"] + 0.5, df['close'])
+            t = t + t_plus
+            df['close'] = np.where(df.index >= t, df["close"] - 0.5, df['close'])
+            t = t + t_plus
+            df['close'] = np.where(df.index >= t, df["close"] - 1, df['close'])
+            t = t + t_plus
+            df['close'] = np.where(df.index >= t, df["close"] - 1.5, df['close'])
+            # CLOSE LONG
+            t = t + t_plus
+            df['ma_band'] = np.where(df.index >= t, df["close"] + 2, df['ma_band'])
+
+            t = t + t_plus
+            df['higher_band'] = np.where(df.index >= t, df["higher_band"] + 4, df['higher_band'])
+
+            # OPEN SHORT
+            t = t + t_plus
+            df['lower_band'] = np.where(df.index >= t, df["close"] - 1, df['lower_band'])
+            t = t + t_plus
+            df['lower_band'] = np.where(df.index >= t, df["close"] + 1, df['lower_band'])
+            t = t + t_plus
+            df['close'] = np.where(df.index >= t, df["close"] + 0.5, df['close'])
+            t = t + t_plus
+            df['close'] = np.where(df.index >= t, df["close"] + 1, df['close'])
+            t = t + t_plus
+            df['close'] = np.where(df.index >= t, df["close"] + 1.5, df['close'])
+            # CLOSE SHORT BY MA_BAND ALREADY BELOW CLOSE
+
+            # OPEN LONG
+            t = t + t_plus
+            df['higher_band'] = np.where(df.index >= t, df["higher_band"] - 4, df['higher_band'])
+            t = t + t_plus
+            df['close'] = np.where(df.index >= t, df["close"] + 0.5, df['close'])
+            t = t + t_plus
+            df['close'] = np.where(df.index >= t, df["close"] + 1, df['close'])
+            t = t + t_plus
+            df['close'] = np.where(df.index >= t, df["close"] + 1.5, df['close'])
+
+            # CLOSE LONG
+            t = t + t_plus
+            df['ma_band'] = np.where(df.index >= t, df["close"] + 0.5, df['ma_band'])
+
+            # END OF SCENARIO
+            df.set_index(['timestamp'], inplace=True, drop=True)
+            df = utils.get_n_columns(df, ["ma_band", "lower_band", "higher_band", "close"], 1)
+
+            df['syntheticbollinger'] = True  # bollinger indicator trigger
 
         elif indicator == 'rsi_30':
             df['rsi_30'] = stock.get('rsi_30').copy()
