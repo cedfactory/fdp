@@ -12,6 +12,8 @@ class config_param:
     noise_amplitude = 0.1
     a = 0.1
     b = 10
+    slow = 30
+    fast = 1.1
     sinus_1_amplitude = 5
     sinus_1_height = 0
     sinus_2_amplitude = 1
@@ -125,6 +127,12 @@ def build_synthetic_data(start_date, end_date, interval):
     df_synthetic = fill_df_linear(df_synthetic, 'linear_up', config_param.a, config_param.b)
     df_synthetic = fill_df_linear(df_synthetic, 'linear_down', -config_param.a, config_param.b)
 
+    df_synthetic = fill_df_linear(df_synthetic, 'linear_up_slow', config_param.a / config_param.slow, config_param.b)
+    df_synthetic = fill_df_linear(df_synthetic, 'linear_down_slow', -config_param.a / config_param.slow, config_param.b)
+
+    df_synthetic = fill_df_linear(df_synthetic, 'linear_up_fast', config_param.a * config_param.fast, config_param.b)
+    df_synthetic = fill_df_linear(df_synthetic, 'linear_down_fast', -config_param.a * config_param.fast, config_param.b)
+
     df_synthetic = fill_df_combined_linear(df_synthetic, 'linear_down_up', -config_param.a, config_param.b)
     df_synthetic = fill_df_combined_linear(df_synthetic, 'linear_up_down', config_param.a, config_param.b)
 
@@ -180,7 +188,84 @@ def get_synthetic_data(exchange_name, data_type, start, end, interval, indicator
         df_ohlv['close'] = df_synthetic['linear_up_down'] + 10
     elif 'SYNTHETICMIXEDLINEARDOWNUP' in data_type:
         df_ohlv['close'] = df_synthetic['linear_down_up'] + 10
+    # GRID TRADING STRATEGY SCENARIOS
+    elif 'SYNTHETICGRIDTRADING1' in data_type:
+        df_ohlv['close'] = df_synthetic['sinus_1'] + 10
+    elif 'SYNTHETICGRIDTRADING2' in data_type:
+        df_ohlv['close'] = df_synthetic['sinus_1'] + df_synthetic['linear_up_slow'] + 10
+    elif 'SYNTHETICGRIDTRADING3' in data_type:
+        df_ohlv['close'] = df_synthetic['sinus_1'] + df_synthetic['linear_down_slow'] + 10
+    elif 'SYNTHETICGRIDTRADING4' in data_type:
+        df_ohlv['close'] = df_synthetic['sinus_1'] + df_synthetic['sinus_6'] + 10
+    elif 'SYNTHETICGRIDTRADING5' in data_type:
+        df_ohlv['close'] = df_synthetic['sinus_1'] + 10
+        z = 601
+        x = df_ohlv['close'].values[z]
+        y = df_synthetic['linear_down'].values[z]
+        df_ohlv['close'] = np.where(df_ohlv.index >= z, df_synthetic['linear_down'] +x -y, df_ohlv['close'])
+        df_ohlv['close'] = np.where(df_ohlv['close'] <= 0.5, 0.5, df_ohlv['close'])
+    elif 'SYNTHETICGRIDTRADING6' in data_type:
+        df_ohlv['close'] = df_synthetic['sinus_1'] + 10
+        z = 640
+        x = df_ohlv['close'].values[z]
+        y = df_synthetic['linear_up'].values[z]
+        df_ohlv['close'] = np.where(df_ohlv.index >= z, df_synthetic['linear_up'] +x -y, df_ohlv['close'])
+    elif 'SYNTHETICGRIDTRADING7' in data_type:
+        df_ohlv['close'] = df_synthetic['sinus_1'] + 10
+        z = 213
+        x = df_ohlv['close'].values[z]
+        y = df_synthetic['linear_down'].values[z]
+        df_ohlv['close'] = np.where(df_ohlv.index >= z, df_synthetic['linear_down'] +x -y, df_ohlv['close'])
+        df_ohlv['close'] = np.where(df_ohlv['close'] <= 0.5, 0.5, df_ohlv['close'])
+        z = 259 + 65 # + (369 - 259)
+        y = df_synthetic['linear_up'].values[z]
+        df_ohlv['close'] = np.where(df_ohlv.index >= z, df_synthetic['linear_up'] + 0.5 -y, df_ohlv['close'])
+        z = 369
+        df_ohlv['close'] = np.where(df_ohlv.index >= z, df_synthetic['sinus_1'] + 10, df_ohlv['close'])
+    elif 'SYNTHETICGRIDTRADING8' in data_type:
+        df_ohlv['close'] = df_synthetic['sinus_1'] + 10
+        z = 250
+        x = df_ohlv['close'].values[z]
+        y = df_synthetic['linear_up'].values[z]
+        df_ohlv['close'] = np.where(df_ohlv.index >= z, df_synthetic['linear_up'] + x - y, df_ohlv['close'])
+        df_ohlv['close'] = np.where(df_ohlv['close'] >= 25, 25, df_ohlv['close'])
+        z = 400 + (541 - 500) + 20
+        w = df_synthetic['linear_down'].values[z] - 25
+        df_ohlv['close'] = np.where(df_ohlv.index >= z, df_synthetic['linear_down'] - w, df_ohlv['close'])
+        z = 541 + 20
+        df_ohlv['close'] = np.where(df_ohlv.index >= z, df_synthetic['sinus_1'] + 10, df_ohlv['close'])
+    elif 'SYNTHETICGRIDTRADING9' in data_type:
+        df_ohlv['close'] = df_synthetic['sinus_1'] + 10
+        z = 291
+        x = df_ohlv['close'].values[z]
+        y = df_synthetic['linear_down_fast'].values[z]
+        df_ohlv['close'] = np.where(df_ohlv.index >= z, df_synthetic['linear_down_fast'] + x - y, df_ohlv['close'])
+        df_ohlv['close'] = np.where(df_ohlv['close'] <= 0.5, 0.5, df_ohlv['close'])
+        z1 = 332
+        w = df_synthetic['linear_up_fast'].values[z1]
+        df_ohlv['close'] = np.where(df_ohlv.index >= z1, df_synthetic['linear_up_fast'] - w + 0.5, df_ohlv['close'])
+        z2 = 373
+        df_ohlv['close'] = np.where(df_ohlv.index >= z2, df_synthetic['sinus_1'] + 10, df_ohlv['close'])
+        z3 = 485
+        x3 = df_ohlv['close'].values[z3]
+        w3 = df_synthetic['linear_up_fast'].values[z3]
+        df_ohlv['close'] = np.where(df_ohlv.index >= z3, df_synthetic['linear_up_fast'] + x3 - w3, df_ohlv['close'])
+        z4 = z3 + z1 - z
+        x4 = df_ohlv['close'].values[z4]
+        w4 = df_synthetic['linear_down_fast'].values[z4]
+        df_ohlv['close'] = np.where(df_ohlv.index >= z4, df_synthetic['linear_down_fast'] + x4 - w4, df_ohlv['close'])
+        z5 = 567
+        df_ohlv['close'] = np.where(df_ohlv.index >= z5, df_synthetic['sinus_1'] + 10, df_ohlv['close'])
+        df_ohlv['close'] = np.where(df_ohlv['close'] <= 2.5, 2.5, df_ohlv['close'])
+        df_ohlv['close'] = np.where(df_ohlv['close'] >= 17, 17, df_ohlv['close'])
+    elif 'SYNTHETICGRIDTRADING10' in data_type:
+        df_ohlv['close'] = df_synthetic['sinus_1'] + 10
+        z = 617
+        x = df_ohlv['close'].values[z]
+        y = df_synthetic['linear_up'].values[z]
+        df_ohlv['close'] = np.where(df_ohlv.index >= z, df_synthetic['linear_up'] + x - y, df_ohlv['close'])
 
+    # END OF SCENARIOS
     df_ohlv = fill_ohl(df_ohlv)
 
     df_ohlv.drop(0, inplace=True)

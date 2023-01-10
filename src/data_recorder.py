@@ -26,6 +26,7 @@ class CryptoCache():
             df_plot["close"] = self.ohlcv['close']
             df_plot.reset_index(drop=True, inplace=True)
             ax = df_plot.plot.line()
+            ax.grid()
             ax.figure.savefig(directory + self.symbol + '.png')
 
         # Trace for debug and adjust bollinger synthetics parameters
@@ -47,7 +48,7 @@ class CryptoCache():
             pos = ax.get_position()
             ax.set_position([pos.x0, pos.y0, pos.width * 0.9, pos.height])
             ax.legend(loc='center right', bbox_to_anchor=(1.25, 0.5))
-
+            ax.grid()
             ax.figure.savefig(directory + 'bollinger_' + self.symbol + '.png')
 
 class DataRecorder():

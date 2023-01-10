@@ -115,6 +115,7 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
         sma_parsed = parse('sma_{}', indicator)
         ema_parsed = parse('ema_{}', indicator)
         wma_parsed = parse('wma_{}', indicator)
+        slope_parsed = parse('slope_{}', indicator)
 
         if trend_parsed != None and trend_parsed[0].isdigit():
             seq = int(trend_parsed[0])
@@ -132,6 +133,10 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
         elif wma_parsed != None and wma_parsed[0].isdigit():
             period = int(wma_parsed[0])
             df["wma_"+str(period)] = TA.WMA(stock, period = period).copy()
+
+        elif slope_parsed != None and slope_parsed[0].isdigit():
+            period = int(slope_parsed[0])
+            df["slope_"+str(period)] = df["close"].rolling(window=period).apply(lambda x: np.polyfit(range(len(x)), x, 1)[0])
 
         elif indicator == 'macd':
             df['macd'] = stock.get('macd').copy() # from stockstats
