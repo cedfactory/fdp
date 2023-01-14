@@ -264,7 +264,26 @@ def get_synthetic_data(exchange_name, data_type, start, end, interval, indicator
         x = df_ohlv['close'].values[z]
         y = df_synthetic['linear_up'].values[z]
         df_ohlv['close'] = np.where(df_ohlv.index >= z, df_synthetic['linear_up'] + x - y, df_ohlv['close'])
-
+    # DUMMY STRATEGY SCENARIOS
+    elif 'SYNTHETICDUMMY1' in data_type:
+        df_ohlv['close'] = df_synthetic['sinus_1'] + 10
+    elif 'SYNTHETICDUMMY2' in data_type:
+        df_ohlv['close'] = df_synthetic['sinus_1'] + df_synthetic['linear_up_slow'] + 10
+    elif 'SYNTHETICDUMMY3' in data_type:
+        df_ohlv['close'] = df_synthetic['sinus_1'] + df_synthetic['linear_down_slow'] + 10
+    elif 'SYNTHETICDUMMY4' in data_type:
+        df_ohlv['close'] = df_synthetic['sinus_1'] + df_synthetic['sinus_6'] + 10
+    # SUPER REVERSAL STRATEGY SCENARIOS
+    elif 'SYNTHETICSUPERREVERSAL1' in data_type:
+        df_ohlv['close'] = df_synthetic['sinus_1'] + 10
+    elif 'SYNTHETICSUPERREVERSAL2' in data_type:
+        df_ohlv['close'] = df_synthetic['sinus_1'] + df_synthetic['linear_up_slow'] + 10
+    elif 'SYNTHETICSUPERREVERSAL3' in data_type:
+        df_ohlv['close'] = df_synthetic['sinus_1'] + df_synthetic['linear_down_slow'] + 10
+    elif 'SYNTHETICSUPERREVERSAL4' in data_type:
+        df_ohlv['close'] = df_synthetic['sinus_1'] + df_synthetic['sinus_6'] + 10
+    elif 'SYNTHETICSUPERREVERSAL5' in data_type:
+        df_ohlv['close'] = df_synthetic['sinus_1'] + df_synthetic['sinus_6'] + 10
     # END OF SCENARIOS
     df_ohlv = fill_ohl(df_ohlv)
 

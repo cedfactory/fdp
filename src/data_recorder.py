@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import json
 from datetime import datetime
 
@@ -27,7 +28,8 @@ class CryptoCache():
             df_plot.reset_index(drop=True, inplace=True)
             ax = df_plot.plot.line()
             ax.grid()
-            ax.figure.savefig(directory + self.symbol + '.png')
+            str_symbol = self.symbol.replace("/", "_")
+            ax.figure.savefig(directory + str_symbol + '.png')
 
         # Trace for debug and adjust bollinger synthetics parameters
         if config.trace_ohlcv \
@@ -49,7 +51,33 @@ class CryptoCache():
             ax.set_position([pos.x0, pos.y0, pos.width * 0.9, pos.height])
             ax.legend(loc='center right', bbox_to_anchor=(1.25, 0.5))
             ax.grid()
-            ax.figure.savefig(directory + 'bollinger_' + self.symbol + '.png')
+            str_symbol = self.symbol.replace("/", "_")
+            ax.figure.savefig(directory + 'bollinger_' + str_symbol + '.png')
+
+        # Trace for debug and adjust super_reversal synthetics parameters
+        if config.trace_ohlcv \
+                and 'close' in self.ohlcv.columns.tolist() \
+                and ('superreversal' in self.ohlcv.columns.tolist() or 'syntheticsuperreversal' in self.ohlcv.columns.tolist()):
+            df_plot = pd.DataFrame()
+            df_plot["close"] = self.ohlcv['close']
+            df_plot["high"] = self.ohlcv['high']
+            df_plot["low"] = self.ohlcv['low']
+            df_plot["n1_ema_short"] = self.ohlcv['n1_ema_short']
+            df_plot["n1_ema_long"] = self.ohlcv['n1_ema_long']
+            df_plot["n1_super_trend_direction"] = self.ohlcv['n1_super_trend_direction']
+            df_plot["n1_super_trend_direction"] = np.where(df_plot["n1_super_trend_direction"], 1, -1)
+
+            df_plot.reset_index(drop=True, inplace=True)
+
+            ax = df_plot.plot.line()
+
+            # Add a legend
+            pos = ax.get_position()
+            ax.set_position([pos.x0, pos.y0, pos.width * 0.9, pos.height])
+            ax.legend(loc='center right', bbox_to_anchor=(1.25, 0.5))
+            ax.grid()
+            str_symbol = self.symbol.replace("/", "_")
+            ax.figure.savefig(directory + 'superreversal_' + str_symbol + '.png')
 
 class DataRecorder():
     def __init__(self, csvfilename, indicatorfilename, params=None):

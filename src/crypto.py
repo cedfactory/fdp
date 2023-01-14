@@ -204,6 +204,7 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d"
     if max_period != 0:
         ohlcv = ohlcv.iloc[max_period - 1:] # Modif CEDE -1 to be tested
 
+    ohlcv.interpolate(inplace=True) # CEDE WORKAROUND TO BE DISCUSSED WITH CL
     return ohlcv
 
 ###

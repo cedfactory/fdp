@@ -170,10 +170,9 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
 
             df['bollinger'] = True # bollinger indicator trigger
 
-        elif indicator == 'syntheticbollinger':
+        elif indicator == 'synthetic_bollinger':
             df.reset_index(inplace=True)
             # TEST SCENARIO
-            # values set for SYNTHETICMIXEDSINUSFLAT
             df['close'] = 10
             df["lower_band"] = 9
             df["higher_band"] = 11
@@ -326,6 +325,79 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
             df['super_trend_direction'] = st.super_trend_direction()
             #df['super_trend_direction'] = df['super_trend_direction'].shift(1)
 
+        elif indicator == "super_reversal":
+            short_ema_window = 5
+            long_ema_window = 15
+            # -- Populate indicators --
+            super_trend = supertrend.SuperTrend(
+                df['high'],
+                df['low'],
+                df['close'],
+                long_ema_window,
+                short_ema_window
+            )
+            df['super_trend_direction'] = super_trend.super_trend_direction()
+            df['ema_short'] = ta.trend.ema_indicator(close=df['close'], window=short_ema_window)
+            df['ema_long'] = ta.trend.ema_indicator(close=df['close'], window=long_ema_window)
+
+            df = utils.get_n_columns(df, ["super_trend_direction", "ema_short", "ema_long"], 1)
+            df['superreversal'] = True  # super_reversal indicator trigger
+            df['super_reversal'] = True  # super_reversal indicator trigger
+
+        elif indicator == 'syntheticsuperreversal':
+            df.reset_index(inplace=True)
+            # TEST SCENARIO
+            df['close'] = 5
+            df["high"] = 10
+            df["low"] = 17
+            df["n1_ema_short"] = 14
+            df["n1_ema_long"] = 15
+            df["n1_super_trend_direction"] = False
+
+            # OPEN LONG AT t
+            t = 100 + 400
+            df['n1_ema_short'] = np.where(df.index >= t, df["n1_ema_long"] + 1, df['n1_ema_short'])
+            df['n1_super_trend_direction'] = np.where(df.index >= t, True, df['n1_super_trend_direction'])
+            df['low'] = np.where(df.index >= t, df["n1_ema_short"] - 1, df['low'])
+
+            df['close'] = np.where(df.index >= t + 10, df["close"] + 1, df['close'])
+
+            # CLOSING SHORT
+            t = t + 100
+            df['n1_ema_short'] = np.where(df.index >= t, df["n1_ema_long"] - 1, df['n1_ema_short'])
+            df['n1_super_trend_direction'] = np.where(df.index >= t, False, df['n1_super_trend_direction'])
+            df['high'] = np.where(df.index >= t, df["n1_ema_short"] + 5, df['high'])
+
+            # CLOSING SHORT
+            t = t + 100
+            df['n1_ema_short'] = np.where(df.index >= t, 20, df['n1_ema_short'])
+            df['n1_ema_long'] = np.where(df.index >= t, df['n1_ema_short'] -1, df['n1_ema_long'])
+            df['n1_super_trend_direction'] = np.where(df.index >= t, True, df['n1_super_trend_direction'])
+            df['low'] = np.where(df.index >= t,  df['n1_ema_short'] -1, df['low'])
+
+            # OPENING SHORT
+            t = t + 100
+            df['n1_ema_short'] = np.where(df.index >= t, 25, df['n1_ema_short'])
+            df['n1_ema_long'] = np.where(df.index >= t, df['n1_ema_short'] +1, df['n1_ema_long'])
+            df['n1_super_trend_direction'] = np.where(df.index >= t, False, df['n1_super_trend_direction'])
+            df['high'] = np.where(df.index >= t,  df['n1_ema_short'] +2, df['high'])
+
+            df['close'] = np.where(df.index >= t + 10, df["close"] - 1, df['close'])
+
+            # CLOSING SHORT
+            t = t + 100
+            df['n1_ema_short'] = np.where(df.index >= t, 30, df['n1_ema_short'])
+            df['n1_ema_long'] = np.where(df.index >= t, df['n1_ema_short'] -1, df['n1_ema_long'])
+            df['n1_super_trend_direction'] = np.where(df.index >= t, True, df['n1_super_trend_direction'])
+            df['low'] = np.where(df.index >= t,  df['n1_ema_short'] -1, df['low'])
+
+            df["ema_short"] = df["n1_ema_short"]
+            df["ema_long"] =  df["n1_ema_long"]
+            df["super_trend_direction"] =  df["n1_super_trend_direction"]
+
+            df['syntheticsuperreversal'] = True
+
+            df.set_index(['timestamp'], inplace=True, drop=True)
 
     # keep only the requested indicators
     if keep_only_requested_indicators:
