@@ -112,6 +112,12 @@ def get_portfolio():
 
 if __name__ == "__main__":
 
-    config.use_mock = False
+    if len(sys.argv) >= 2 and (sys.argv[1] == "--sim"):
+        if len(sys.argv) != 4:
+            print("usage : python main.py --sim csvfilename indicatorfilename")
+            exit(0)
+        else:
+            config.use_mock = True
+            config.g_data = data_recorder.DataRecorder(sys.argv[2], sys.argv[3])
 
     app.run(debug=False, host= '0.0.0.0', port=5000)
