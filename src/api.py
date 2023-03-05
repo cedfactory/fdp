@@ -202,7 +202,7 @@ def api_history(history_params):
     result_for_response = {}
 
     symbols = str_symbol.split(',')
-    real_symbols = [symbol.replace("_", "/") for symbol in symbols]
+    real_symbols = symbols # [symbol.replace("_", "/") for symbol in symbols]
     with concurrent.futures.ThreadPoolExecutor() as executor:
         get_symbol_ohlcv_fn = None
         if config.use_mock:

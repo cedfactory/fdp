@@ -140,6 +140,11 @@ def get_symbol_ticker(exchange_market, symbol):
     return ticker
 
 def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d", length=None, indicators={}):
+
+    # hack : find a better way
+    if exchange_name == "bitget":
+        symbol = "S" + symbol + "SUSDT_SUMCBL"
+
     # manage some errors
     if exchange_name == "hitbtc" and length and length > 1000:
         return "for hitbtc, length must be in [1, 1000]"
