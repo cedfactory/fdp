@@ -1,0 +1,2 @@
+# exemple:
+--sim record_df_sim_synthetic.csv features_slopeisdope_trend.txt

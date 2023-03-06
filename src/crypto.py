@@ -143,7 +143,7 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d"
 
     # hack : find a better way
     if exchange_name == "bitget":
-        symbol = "S" + symbol + "SUSDT_SUMCBL"
+        symbol = symbol + "/USDT"
 
     # manage some errors
     if exchange_name == "hitbtc" and length and length > 1000:
@@ -154,23 +154,43 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d"
         return "exchange not found"
 
     exchange.load_markets()
+
+    # CEDE DEBUG:
+    # lst_symbol = []
+    # for exchange_symbol in exchange.symbols:
+    #     if symbol in exchange_symbol:
+    #         lst_symbol.append(exchange_symbol)
+    # print(lst_symbol)
+
     if symbol not in exchange.symbols or exchange.has['fetchOHLCV'] == False:
         print("symbol not found: ", symbol)
         return "symbol not found"
-    
-    start = utils.convert_string_to_datetime(start)
-    end = utils.convert_string_to_datetime(end)
 
-    # as we want the end date included, one adds a delta
-    if timeframe == "1d":
-        end = end.replace(hour=0, minute=0, second=0, microsecond=0)
-        end += datetime.timedelta(days=1)
-    elif timeframe == "1h":
-        end = end.replace(minute=0, second=0, microsecond=0)
-        end += datetime.timedelta(hours=1)
-    elif timeframe == "1m":
+    if start == 'None' and end == 'None':
+        end = datetime.datetime.now()
         end = end.replace(second=0, microsecond=0)
-        end += datetime.timedelta(minutes=1)
+        if timeframe == "1d":
+            end = end.replace(hour=0, minute=0, second=0, microsecond=0)
+            start = end + datetime.timedelta(days=-1)
+        elif timeframe == "1h":
+            end = end.replace(minute=0, second=0, microsecond=0)
+            start = end + datetime.timedelta(hours=-1)
+        elif timeframe == "1m":
+            end = end.replace(second=0, microsecond=0)
+            start = end + datetime.timedelta(minutes=-1)
+    else:
+        start = utils.convert_string_to_datetime(start)
+        end = utils.convert_string_to_datetime(end)
+        # as we want the end date included, one adds a delta
+        if timeframe == "1d":
+            end = end.replace(hour=0, minute=0, second=0, microsecond=0)
+            end += datetime.timedelta(days=1)
+        elif timeframe == "1h":
+            end = end.replace(minute=0, second=0, microsecond=0)
+            end += datetime.timedelta(hours=1)
+        elif timeframe == "1m":
+            end = end.replace(second=0, microsecond=0)
+            end += datetime.timedelta(minutes=1)
 
     # request a start earlier according to what the indicators need
     start_with_period = start
@@ -198,9 +218,11 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d"
         end = date.today()
         end = end.strftime("%Y-%m-%d")
 
-    expected_range = pd.date_range(start=start_with_period, end=end, freq=freq, inclusive="left")
-    ohlcv.index = pd.DatetimeIndex(ohlcv.index)
-    ohlcv = ohlcv.reindex(expected_range, fill_value=np.nan)
+    # TEST CEDE FOR LIVE
+    # USED FOR SIM:
+    # expected_range = pd.date_range(start=start_with_period, end=end, freq=freq, inclusive="left")
+    # ohlcv.index = pd.DatetimeIndex(ohlcv.index)
+    # ohlcv = ohlcv.reindex(expected_range, fill_value=np.nan)
 
     if len(indicators) != 0:
         indicator_params = {"symbol": symbol, "exchange": exchange_name}

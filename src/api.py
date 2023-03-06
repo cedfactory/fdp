@@ -199,6 +199,7 @@ def api_history(history_params):
     else:
         start = datetime.now()
 
+    start_process = datetime.now()
     result_for_response = {}
 
     symbols = str_symbol.split(',')
@@ -222,7 +223,7 @@ def api_history(history_params):
                 result_for_response[symbol] = {"status": "ko", "reason": "", "info": df}
               
     end = datetime.now()
-    elapsed_time = str(end - start)
+    elapsed_time = str(end - start_process)
 
     final_response = {
         "result":result_for_response,

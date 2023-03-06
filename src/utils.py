@@ -33,6 +33,8 @@ def convert_string_to_datetime(str):
         pass
     
     try:
+        if "." in str:
+            str = str.split(".")[0]
         result = datetime.strptime(str, "%Y-%m-%d %H:%M:%S")
         return result
     except ValueError:
