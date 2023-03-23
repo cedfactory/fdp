@@ -51,9 +51,17 @@ def convert_string_to_datetime(str):
 
 def max_from_dict_values(indicators):
     v = list(indicators.values())
+    print(v)
+    for item in v:
+        print(type(item), ' - ', item)
+
     v = [0 if x is None else x for x in v]
     v = [0 if isinstance(x, str) else x for x in v]
+    print(v)
+
     v = [int(x) for x in v]
+    print(max(v))
+
     return max(v) + 1
 
 def clear_directory(path):
