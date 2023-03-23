@@ -52,6 +52,7 @@ def convert_string_to_datetime(str):
 def max_from_dict_values(indicators):
     v = list(indicators.values())
     v = [0 if x is None else x for x in v]
+    v = [0 if isinstance(x, str) else x for x in v]
     v = [int(x) for x in v]
     return max(v) + 1
 
