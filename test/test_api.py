@@ -160,7 +160,7 @@ class TestApi:
 
 
     def test_api_history(self):
-        symbol = "BTC_EURS"
+        symbol = "BTC/EURS"
         params_history = {"str_exchange":"hitbtc", "str_symbol":symbol, "str_start":"2021-12-05", "str_end": "2022-01-05", "str_interval":"1d"}
         response = api.api_history(params_history)
         assert("status" in response)
@@ -177,23 +177,24 @@ class TestApi:
         assert(len(ohlcv.index) == 32)
 
     def test_api_indicators(self):
-        symbol = "BTC_EURS"
+        symbol = "BTC/EURS"
+        expected_symbol = "BTC_EURS"
         indicators = {"close":None, "high":None, "ema_30":None}
         params_history = {"str_exchange":"hitbtc", "str_symbol":symbol, "str_start":"2021-12-05", "str_end": "2022-01-05", "str_interval":"1d", "indicators":indicators}
         response = api.api_history(params_history)
         assert("status" in response)
         assert(response["status"] == "ok")
         assert("result" in response)
-        assert(symbol in response["result"])
-        assert(response["result"][symbol]["status"] == "ok")
-        assert("status" in response["result"][symbol])
-        assert(response["result"][symbol]["status"] == "ok")
-        assert("info" in response["result"][symbol])
-        df_data = response["result"][symbol]["info"]
+        assert(expected_symbol in response["result"])
+        assert(response["result"][expected_symbol]["status"] == "ok")
+        assert("status" in response["result"][expected_symbol])
+        assert(response["result"][expected_symbol]["status"] == "ok")
+        assert("info" in response["result"][expected_symbol])
+        df_data = response["result"][expected_symbol]["info"]
         ohlcv = pd.read_json(df_data)
         assert(isinstance(ohlcv, pd.DataFrame))
-        assert(len(ohlcv.index) == 32)
-        assert(list(ohlcv.columns) == ["index", "high", "close", "ema_30"])
+        assert(len(ohlcv.index) == 33)
+        assert(list(ohlcv.columns) == ["timestamp", "high", "close", "ema_30"])
 
     def test_api_recommendations_for_symbol(self):
         screener = "crypto"
