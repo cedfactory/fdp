@@ -17,7 +17,7 @@ def get_window_size(indicator):
     wma_parsed = parse('wma_{}', indicator)
 
     if indicator in ["open", "close", "high", "low"]:
-        return 0
+        return 1
 
     elif trend_parsed != None and trend_parsed[0].isdigit():
         return int(trend_parsed[0])
@@ -75,6 +75,13 @@ def get_window_size(indicator):
 
     elif indicator.startswith('close_synthetic_'):
         return 0
+
+    elif '_shift_' in indicator:
+        lst_split = indicator.split("_")
+        if len(lst_split) == 3:
+            return int(lst_split[2])
+        else:
+            return 0
 
     elif indicator == 'vsa':
         return 60

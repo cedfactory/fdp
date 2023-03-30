@@ -210,7 +210,8 @@ class TestIndicators:
             "tv_1h": 0,
             "vsa": 60,
             "super_trend_direction": 15,
-            "foobar": 0
+            "foobar": 0,
+            "close_shift_10": 10
         }
         for indicator, expected_window_size in dict_tests.items():
             window_size = indicators.get_window_size(indicator)
