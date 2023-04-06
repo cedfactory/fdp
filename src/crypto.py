@@ -194,7 +194,7 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d"
 
     # request a start earlier according to what the indicators need
     start_with_period = start
-    max_period = inc_indicators.get_max_window_size(indicators) # MODIF CEDE to be confirmed by CL
+    max_period = inc_indicators.get_max_window_size(indicators) + 1 # MODIF CEDE to be confirmed by CL
     #max_period = utils.max_from_dict_values(indicators)
     if max_period != 0:
         if timeframe == "1d":
