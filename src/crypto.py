@@ -139,7 +139,7 @@ def get_symbol_ticker(exchange_market, symbol):
     ticker = exchange.fetch_ticker(symbol)
     return ticker
 
-def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d", length=None, indicators={}):
+def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d", length=None, indicators={}, exchange=None):
 
     # hack : find a better way
     if exchange_name == "bitget":
@@ -149,11 +149,11 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d"
     if exchange_name == "hitbtc" and length and length > 1000:
         return "for hitbtc, length must be in [1, 1000]"
 
-    exchange = _get_exchange(exchange_name)
     if exchange == None:
-        return "exchange not found"
-
-    exchange.load_markets()
+        exchange = _get_exchange(exchange_name)
+        if exchange == None:
+            return "exchange not found"
+        exchange.load_markets()
 
     # CEDE DEBUG:
     # lst_symbol = []
