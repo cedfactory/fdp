@@ -95,11 +95,32 @@ def get_window_size(indicator):
 def get_max_window_size(indicators):
     if len(indicators) == 0:
         return 0
-    list_indicators = indicators
-    if isinstance(list_indicators, dict):
-        list_indicators = list_indicators.keys()
 
-    return max([get_window_size(indicator) for indicator in indicators])
+    if isinstance(indicators, list):
+        return max([get_window_size(indicator) for indicator in indicators])
+    elif isinstance(indicators, dict):
+        # if the parameters of all the indicators are dictionaries...
+        #window_sizes = [parameters["window_size"] if "window_size" in parameters else get_window_size(indicator) for indicator, parameters in indicators.items()]
+        # but just in case there is something else :
+        window_sizes = [0]
+        for indicator in indicators:
+            parameters = indicators[indicator]
+            if isinstance(parameters, dict):
+                parameters = indicators[indicator]
+                if "window_size" in parameters:
+                    window_size = parameters["window_size"]
+                else:
+                    window_size = get_window_size(indicator)
+                window_sizes.append(window_size)
+            elif isinstance(parameters, int):
+                window_sizes.append(parameters)
+            else:
+                window_size = get_window_size(indicator)
+                window_sizes.append(window_size)
+
+        return max(window_sizes)
+
+    return 0
 
 def compute_indicators(df, indicators, keep_only_requested_indicators = False, params = None):
     if not isinstance(df, pd.DataFrame):
