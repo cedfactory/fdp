@@ -167,15 +167,12 @@ def api_history_parse_parameters(request, last=False):
         str_end = datetime.today().strftime('%Y-%m-%d')
 
     if last == True:
-        if len(str_start) != 0 and isinstance(str_start, str):
-            pass
-        else:
-            if str_interval == "1m":
-                str_start = datetime.today().strftime('%Y-%m-%d %H:%M:00')
-            elif str_interval == "1h":
-                str_start = datetime.today().strftime('%Y-%m-%d %H:00:00')
-            elif str_interval == "1d":
-                str_start = datetime.today().strftime('%Y-%m-%d')
+        if str_interval == "1m":
+            str_start = datetime.today().strftime('%Y-%m-%d %H:%M:00')
+        elif str_interval == "1h":
+            str_start = datetime.today().strftime('%Y-%m-%d %H:00:00')
+        elif str_interval == "1d":
+            str_start = datetime.today().strftime('%Y-%m-%d')
         str_end = str_start
         length = 1
 
