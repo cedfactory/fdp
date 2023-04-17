@@ -284,8 +284,6 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
             df["ma_band"+suffix] = bol_band.bollinger_mavg()
             df['long_ma'+suffix] = ta.trend.sma_indicator(close=df['close'], window=long_ma_window)
 
-            df = utils.get_n_columns(df, ["ma_band"+suffix, "lower_band"+suffix, "higher_band"+suffix, "close"], 1)
-            
             df['bollinger'+suffix] = True # bollinger indicator trigger
 
         elif indicator == 'synthetic_bollinger':
