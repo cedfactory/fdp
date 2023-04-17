@@ -109,6 +109,8 @@ def get_max_window_size(indicators):
                 parameters = indicators[indicator]
                 if "window_size" in parameters:
                     window_size = parameters["window_size"]
+                    if isinstance(window_size, str):
+                        window_size = int(window_size)
                 else:
                     window_size = get_window_size(indicator)
                 window_sizes.append(window_size)
@@ -122,6 +124,33 @@ def get_max_window_size(indicators):
 
     return 0
 
+def get_feature_from_fdp_features(fdp_features):
+    lst_features = []
+    for feature in fdp_features:
+        if len(fdp_features[feature]) == 0:
+            lst_features.append(feature)
+        elif fdp_features[feature] != None:
+            lst_param = list(fdp_features[feature])
+            if "id" in lst_param:
+                id = "_" + fdp_features[feature]["id"]
+            else:
+                id = ""
+            if "n" in lst_param:
+                n = "n" + fdp_features[feature]["n"] + "_"
+            else:
+                n = ""
+            if not feature.startswith("postprocess"):
+                lst_features.append(fdp_features[feature]["indicator"] + id)
+            if "output" in lst_param:
+                for output in fdp_features[feature]["output"]:
+                    lst_features.append(output + id)
+            if "indicator" in fdp_features[feature] \
+                    and fdp_features[feature]["indicator"] == "shift" \
+                    and "input" in lst_param:
+                for input in fdp_features[feature]["input"]:
+                    lst_features.append(n + input + id)
+    return lst_features
+
 def compute_indicators(df, indicators, keep_only_requested_indicators = False, params = None):
     if not isinstance(df, pd.DataFrame):
         return df
@@ -134,7 +163,7 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
     stock = Sdf.retype(df.copy())
 
     if isinstance(indicators, dict):
-        keep_indicators = list(indicators.keys())
+        keep_indicators = get_feature_from_fdp_features(indicators)
     else:
         keep_indicators = indicators
 
@@ -144,14 +173,29 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
         if indicator in columns:
             continue
     
+        # check if one deals with a postprocess
+        if indicator.startswith("postprocess"):
+            if "input" in parameters and "indicator" in parameters and "n" in parameters:
+                indicator = parameters["indicator"]
+                id = ""
+                if "id" in parameters:
+                    id = "_"+parameters["id"]
+                n = parameters["n"]
+                if isinstance(n, str):
+                    n = int(n)
+                input = parameters["input"]
+                if isinstance(input, list):
+                    if all(item in list(df.columns) for item in input):
+                        utils.get_n_columns(df, input, n, "new")
+
+        # check if the indicator is overriden
         if "indicator" in parameters:
             indicator = parameters["indicator"]
 
+        # prepare the suffix if an id is specified
         suffix = ""
         if 'id' in parameters:
             suffix = "_"+parameters["id"]
-
-        keep_indicators.append(indicator+suffix)
 
         trend_parsed = parse('trend_{}d', indicator)
         sma_parsed = parse('sma_{}', indicator)
@@ -163,6 +207,30 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
             seq = int(trend_parsed[0])
             diff = df["close"] - df["close"].shift(seq)
             df["trend_"+str(seq)+"d"+suffix] = diff.gt(0).map({False: 0, True: 1})
+
+        elif indicator == "sma":
+            seq = 10
+            if "window_size" in parameters:
+                seq = parameters["window_size"]
+                if isinstance(seq, str):
+                    seq = int(seq)
+            df["sma"+suffix] = TA.SMA(stock, seq).copy()
+
+        elif indicator == "ema":
+            period = 10
+            if "window_size" in parameters:
+                period = parameters["window_size"]
+                if isinstance(period, str):
+                    period = int(period)
+            df["ema"+suffix] = TA.EMA(stock, period = period).copy()
+
+        elif indicator == "wma":
+            period = 10
+            if "window_size" in parameters:
+                period = parameters["window_size"]
+                if isinstance(period, str):
+                    period = int(period)
+            df["wma"+suffix] = TA.WMA(stock, period = period).copy()
 
         elif sma_parsed != None and sma_parsed[0].isdigit():
             seq = int(sma_parsed[0])
@@ -199,7 +267,15 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
 
         elif indicator == 'bollinger':
             bol_window = 100
+            if "window_size" in parameters:
+                bol_window = parameters["window_size"]
+                if isinstance(bol_window, str):
+                    bol_window = int(bol_window)
             bol_std = 2.25
+            if "bol_std" in parameters:
+                bol_std = parameters["bol_std"]
+                if isinstance(bol_std, str):
+                    bol_std = float(bol_std)
             long_ma_window = 500
 
             bol_band = ta.volatility.BollingerBands(close=df["close"], window=bol_window, window_dev=bol_std)
@@ -210,10 +286,6 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
 
             df = utils.get_n_columns(df, ["ma_band"+suffix, "lower_band"+suffix, "higher_band"+suffix, "close"], 1)
             
-            if "output" in parameters:
-                for output in parameters["output"]:
-                    keep_indicators.append("n1_"+output+suffix)
-
             df['bollinger'+suffix] = True # bollinger indicator trigger
 
         elif indicator == 'synthetic_bollinger':
