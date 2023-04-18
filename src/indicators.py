@@ -183,10 +183,10 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
                 n = parameters["n"]
                 if isinstance(n, str):
                     n = int(n)
-                input = parameters["input"]
+                input = [item+id for item in parameters["input"]]
                 if isinstance(input, list):
                     if all(item in list(df.columns) for item in input):
-                        utils.get_n_columns(df, input, n)
+                        df = utils.get_n_columns(df, input, n)
 
         # check if the indicator is overriden
         if "indicator" in parameters:
