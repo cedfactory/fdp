@@ -265,6 +265,14 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
             df.rename(columns={'BB_MIDDLE': 'bb_middle'+suffix}, inplace=True)
             df.rename(columns={'BB_LOWER': 'bb_lower'+suffix}, inplace=True)
 
+        elif indicator == 'rsi':
+            rsi_window = 14
+            if "window_size" in parameters:
+                rsi_window = parameters["window_size"]
+                if isinstance(rsi_window, str):
+                    bol_window = int(rsi_window)
+            df['rsi'+suffix] = ta.momentum.rsi(close=df["close"], window=rsi_window)
+
         elif indicator == 'bollinger':
             bol_window = 100
             if "window_size" in parameters:
@@ -374,9 +382,6 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
 
             df['syntheticbollinger'+suffix] = True  # bollinger indicator trigger
 
-        elif indicator == 'rsi_30':
-            df['rsi_30'+suffix] = stock.get('rsi_30').copy()
-        
         elif indicator == 'cci_30':
             df['cci_30'+suffix] = stock.get('cci_30').copy()
         
