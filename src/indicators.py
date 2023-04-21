@@ -270,7 +270,7 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
             if "window_size" in parameters:
                 rsi_window = parameters["window_size"]
                 if isinstance(rsi_window, str):
-                    bol_window = int(rsi_window)
+                    rsi_window = int(rsi_window)
             df['rsi'+suffix] = ta.momentum.rsi(close=df["close"], window=rsi_window)
 
         elif indicator == 'bollinger':
