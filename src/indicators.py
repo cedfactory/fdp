@@ -40,6 +40,9 @@ def get_window_size(indicator):
     elif indicator in ["rsi_30", "cci_30", "dx_30"]:
         return 30
     
+    elif indicator == "rsi":
+        return 14
+
     elif indicator == 'williams_%r':
         return 14
 
