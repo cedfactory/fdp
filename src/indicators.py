@@ -3,6 +3,7 @@ from parse import parse
 from stockstats import StockDataFrame as Sdf
 from finta import TA
 import ta
+from collections import OrderedDict
 import numpy as np
 from . import indicators_vsa as vsa
 from . import indicators_flabeling as flabeling
@@ -172,7 +173,18 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
 
     # compute the indicators
     columns = list(df.columns)
+
+    # be sure postprocess are treated at the end
+    oindicators = OrderedDict()
     for indicator, parameters in indicators.items():
+        if not indicator.startswith("postprocess"):
+            oindicators[indicator] = parameters
+    for indicator, parameters in indicators.items():
+        if indicator.startswith("postprocess"):
+            oindicators[indicator] = parameters
+  
+
+    for indicator, parameters in oindicators.items():
         if indicator in columns:
             continue
     
