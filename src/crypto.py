@@ -229,7 +229,7 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d"
         ohlcv = inc_indicators.compute_indicators(ohlcv, indicators, True, indicator_params)
 
     if max_period != 0:
-        ohlcv = ohlcv.iloc[max_period:]
+        ohlcv = ohlcv.iloc[max_period-1:-1] # WARNING CEDE to get the second to last candle instead of the last
 
     ohlcv.interpolate(inplace=True) # CEDE WORKAROUND TO BE DISCUSSED WITH CL
     return ohlcv

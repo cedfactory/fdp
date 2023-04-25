@@ -193,6 +193,7 @@ class TestIndicators:
             "macds": 26,
             "macdh": 26,
             "bbands": 20,
+            "rsi": 14,
             "rsi_30": 30,
             "cci_30": 30,
             "dx_30": 30,
