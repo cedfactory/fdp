@@ -288,6 +288,14 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
                     rsi_window = int(rsi_window)
             df['rsi'+suffix] = ta.momentum.rsi(close=df["close"], window=rsi_window)
 
+        elif indicator == 'atr':
+            atr_window = 14
+            if "window_size" in parameters:
+                atr_window = parameters["window_size"]
+                if isinstance(atr_window, str):
+                    atr_window = int(atr_window)
+            df['atr'+suffix] = ta.volatility.AverageTrueRange(high=df["high"], low=df["low"], close=df["close"], window=atr_window).average_true_range()
+
         elif indicator == 'bollinger':
             bol_window = 100
             if "window_size" in parameters:
@@ -417,9 +425,6 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
            
         elif indicator == 'stc':
             df['stc'+suffix] = TA.STC(stock).copy()
-           
-        elif indicator == 'atr':
-            df['atr'+suffix] = TA.ATR(stock).copy()
            
         elif indicator == 'adx':
             df['adx'+suffix] = TA.ADX(stock).copy()
