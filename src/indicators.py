@@ -317,6 +317,48 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
 
             df['bollinger'+suffix] = True # bollinger indicator trigger
 
+        elif indicator == 'envelope':
+            envelope_window = 5
+            if "window_size" in parameters:
+                envelope_window = parameters["window_size"]
+                if isinstance(envelope_window, str):
+                    envelope_window = int(envelope_window)
+
+            ma = "sma"
+            if "ma" in parameters:
+                ma = parameters["ma"]
+                if not isinstance("ma", str):
+                    ma = "sma"
+
+            ma_offset_1 = 3
+            ma_offset_2 = 5
+            ma_offset_3 = 7
+            if "ma_offset_1" in parameters:
+                ma_offset_1 = parameters["ma_offset_1"]
+                if isinstance(ma_offset_1, str):
+                    ma_offset_1 = float(ma_offset_1)
+            if "ma_offset_2" in parameters:
+                ma_offset_2 = parameters["ma_offset_2"]
+                if isinstance(ma_offset_2, str):
+                    ma_offset_2 = float(ma_offset_2)
+            if "ma_offset_3" in parameters:
+                ma_offset_3 = parameters["ma_offset_3"]
+                if isinstance(ma_offset_3, str):
+                    ma_offset_3 = float(ma_offset_3)
+
+            if ma == "sma":
+                df["ma_base"+suffix] = ta.trend.SMAIndicator(close=df["close"], window=envelope_window).sma_indicator()
+
+            df["envelope_long_1"+suffix] = df["ma_base"+suffix] - df["ma_base"+suffix] * ma_offset_1 / 100
+            df["envelope_long_2"+suffix] = df["ma_base"+suffix] - df["ma_base"+suffix] * ma_offset_2 / 100
+            df["envelope_long_3"+suffix] = df["ma_base"+suffix] - df["ma_base"+suffix] * ma_offset_3 / 100
+
+            df["envelope_short_1"+suffix] = df["ma_base"+suffix] + df["ma_base"+suffix] * ma_offset_1 / 100
+            df["envelope_short_2"+suffix] = df["ma_base"+suffix] + df["ma_base"+suffix] * ma_offset_2 / 100
+            df["envelope_short_3"+suffix] = df["ma_base"+suffix] + df["ma_base"+suffix] * ma_offset_3 / 100
+
+            df['envelope'+suffix] = True # bollinger indicator trigger
+
         elif indicator == 'synthetic_bollinger':
             df.reset_index(inplace=True)
             # TEST SCENARIO
