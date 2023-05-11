@@ -57,8 +57,8 @@ def get_history():
     
     return response
 
-@app.route('/history_last', methods=['OPTIONS', 'GET', 'POST'])
-def get_history_last():
+@app.route('/last', methods=['OPTIONS', 'GET', 'POST'])
+def get_last():
     history_params = api.api_history_parse_parameters(request, True)
     if history_params.get("status") == "ko":
         response = {
@@ -66,8 +66,7 @@ def get_history_last():
             "status":"ok"
             }
     else:
-        response = api.api_history(history_params)
-    print(response)
+        response = api.api_last(history_params)
     response = jsonify(response)
     response = add_headers(response)
     

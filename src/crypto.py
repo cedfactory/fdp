@@ -234,6 +234,104 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d"
     ohlcv.interpolate(inplace=True) # CEDE WORKAROUND TO BE DISCUSSED WITH CL
     return ohlcv
 
+def get_symbol_ohlcv_last(exchange_name, symbol, start=None, end=None, timeframe="1d", length=None, indicators={}, exchange=None, candle_stick="released"):
+
+    # hack : find a better way
+    if exchange_name == "bitget":
+        symbol = symbol + "/USDT"
+
+    # manage some errors
+    if exchange_name == "hitbtc" and length and length > 1000:
+        return "for hitbtc, length must be in [1, 1000]"
+
+    if exchange == None:
+        exchange = _get_exchange(exchange_name)
+        if exchange == None:
+            return "exchange not found"
+        exchange.load_markets()
+
+    # CEDE DEBUG:
+    # lst_symbol = []
+    # for exchange_symbol in exchange.symbols:
+    #     if symbol in exchange_symbol:
+    #         lst_symbol.append(exchange_symbol)
+    # print(lst_symbol)
+
+    if symbol not in exchange.symbols or exchange.has['fetchOHLCV'] == False:
+        print("symbol not found: ", symbol)
+        return "symbol not found"
+
+    if start == 'None' and end == 'None':
+        end = datetime.datetime.now()
+        end = end.replace(second=0, microsecond=0)
+        if timeframe == "1d":
+            end = end.replace(hour=0, minute=0, second=0, microsecond=0)
+            start = end + datetime.timedelta(days=-1)
+        elif timeframe == "1h":
+            end = end.replace(minute=0, second=0, microsecond=0)
+            start = end + datetime.timedelta(hours=-1)
+        elif timeframe == "1m":
+            end = end.replace(second=0, microsecond=0)
+            start = end + datetime.timedelta(minutes=-1)
+    else:
+        start = utils.convert_string_to_datetime(start)
+        end = utils.convert_string_to_datetime(end)
+        # as we want the end date included, one adds a delta
+        if timeframe == "1d":
+            end = end.replace(hour=0, minute=0, second=0, microsecond=0)
+            end += datetime.timedelta(days=1)
+        elif timeframe == "1h":
+            end = end.replace(minute=0, second=0, microsecond=0)
+            end += datetime.timedelta(hours=1)
+        elif timeframe == "1m":
+            end = end.replace(second=0, microsecond=0)
+            end += datetime.timedelta(minutes=1)
+
+    # request a start earlier according to what the indicators need
+    start_with_period = start
+    max_period = inc_indicators.get_max_window_size(indicators) + 1 # MODIF CEDE to be confirmed by CL
+    #max_period = utils.max_from_dict_values(indicators)
+    if max_period != 0:
+        if timeframe == "1d":
+            start_with_period = start_with_period + datetime.timedelta(days=-max_period)
+        elif timeframe == "1h":
+            start_with_period = start_with_period + datetime.timedelta(hours=-max_period)
+        elif timeframe == "1m":
+            start_with_period = start_with_period + datetime.timedelta(minutes=-max_period)
+
+    ohlcv = _get_ohlcv(exchange, symbol, start_with_period, end, timeframe, length)
+    if not isinstance(ohlcv, pd.DataFrame):
+        return ohlcv
+
+    # remove dupicates
+    ohlcv = ohlcv[~ohlcv.index.duplicated()]
+
+    # add potential missing dates
+    map_timeframe_freq = {"1h": "H", "1d": "D", "1m": "min"}
+    freq = map_timeframe_freq[timeframe]
+    if end == None and length == None:
+        end = date.today()
+        end = end.strftime("%Y-%m-%d")
+
+    # TEST CEDE FOR LIVE
+    # USED FOR SIM:
+    # expected_range = pd.date_range(start=start_with_period, end=end, freq=freq, inclusive="left")
+    # ohlcv.index = pd.DatetimeIndex(ohlcv.index)
+    # ohlcv = ohlcv.reindex(expected_range, fill_value=np.nan)
+
+    if len(indicators) != 0:
+        indicator_params = {"symbol": symbol, "exchange": exchange_name}
+        ohlcv = inc_indicators.compute_indicators(ohlcv, indicators, True, indicator_params)
+
+    if max_period != 0:
+        if candle_stick == "alive":
+            ohlcv = ohlcv.iloc[max_period:]
+        else:
+            ohlcv = ohlcv.iloc[max_period-1:-1]
+
+    ohlcv.interpolate(inplace=True) # CEDE WORKAROUND TO BE DISCUSSED WITH CL
+    return ohlcv
+
 ###
 ### gainers
 ###

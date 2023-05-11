@@ -110,6 +110,7 @@ def api_history_parse_parameters(request, last=False):
     str_end = None
     str_interval = "1d"
     length = 100
+    candle_stick = "released"
     indicators = {}
     if request.method == 'GET':
         str_exchange = request.args.get("exchange")
@@ -120,6 +121,7 @@ def api_history_parse_parameters(request, last=False):
         length = request.args.get("length", 100)
         if length != None:
             length = int(length)
+        candle_stick = request.args.get("candle_stick", "released")
         indicators= request.args.get("indicators", {})
         if isinstance(indicators, str):
             indicatorsArray = indicators.split(',')
@@ -133,6 +135,7 @@ def api_history_parse_parameters(request, last=False):
             str_end = params.get("end", str_end)
             str_interval = params.get("interval", str_interval)
             length = params.get("length", length)
+            candle_stick = params.get("candle_stick", candle_stick)
             indicators = params.get("indicators", indicators)
         else:
             if "exchange" in request.form:
@@ -148,6 +151,8 @@ def api_history_parse_parameters(request, last=False):
             if "length" in request.form:
                 length = request.form['length']
                 length = int(length)
+            if "candle_stick" in request.form:
+                candle_stick = request.form['candle_stick']
             if "indicators" in request.form:
                 indicators = request.form["indicators"]
                 indicators = json.loads(indicators)
@@ -180,7 +185,7 @@ def api_history_parse_parameters(request, last=False):
         "status":status, "reason":reason,
         "str_exchange":str_exchange, "str_symbol":str_symbol,
         "str_start":str_start, "str_end":str_end, "str_interval":str_interval,
-        "length":length, "indicators":indicators}
+        "length":length, "candle_stick":candle_stick, "indicators":indicators}
 
 def api_history(history_params):
     str_exchange = history_params.get("str_exchange")
@@ -230,6 +235,57 @@ def api_history(history_params):
     }
 
     return final_response
+
+def api_last(history_params):
+    str_exchange = history_params.get("str_exchange")
+    str_symbol = history_params.get("str_symbol")
+    str_start = history_params.get("str_start")
+    str_end = history_params.get("str_end")
+    str_interval = history_params.get("str_interval", "1d")
+    length = history_params.get("length", None)
+    candle_stick = history_params.get("candle_stick", None)
+    indicators = history_params.get("indicators", {})
+
+    if len(str_start) != 0 and isinstance(str_start, str):
+        start = utils.convert_string_to_datetime(str_start)
+    else:
+        start = datetime.now()
+
+    start_process = datetime.now()
+    result_for_response = {}
+
+    symbols = str_symbol.split(',')
+    real_symbols = symbols # [symbol.replace("_", "/") for symbol in symbols]
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        get_symbol_ohlcv_fn = None
+        if config.use_mock:
+            get_symbol_ohlcv_fn = config.g_data.get_symbol_ohlcv_last
+        else:
+            get_symbol_ohlcv_fn = crypto.get_symbol_ohlcv_last
+        exchange, markets = crypto.get_exchange_and_markets(str_exchange)
+        futures = {executor.submit(get_symbol_ohlcv_fn, exchange_name=str_exchange, symbol=real_symbol, start=str_start, end=str_end, timeframe=str_interval, length=length, candle_stick=candle_stick, indicators=indicators, exchange=exchange): real_symbol for real_symbol in real_symbols}
+
+        for future in concurrent.futures.as_completed(futures):
+            real_symbol = futures[future]
+            symbol = real_symbol.replace('/', '_')
+            df = future.result()
+            if isinstance(df, pd.DataFrame):
+                df.reset_index(inplace=True)
+                result_for_response[symbol] = {"status": "ok", "info": df.to_json()}
+            else:
+                result_for_response[symbol] = {"status": "ko", "reason": "", "info": df}
+              
+    end = datetime.now()
+    elapsed_time = str(end - start_process)
+
+    final_response = {
+        "result":result_for_response,
+        "status":"ok",
+        "elapsed_time":elapsed_time
+    }
+
+    return final_response
+
 
 def api_recommendations(screener, exchange, str_symbols = None, interval = "1h"):
     result_for_response = {}
