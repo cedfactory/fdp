@@ -11,6 +11,8 @@ from . import indicators_supertrend as supertrend
 from . import indicators_tradingview as tv
 from . import utils
 
+from sklearn.linear_model import LinearRegression
+
 def get_window_size(indicator):
     trend_parsed = parse('trend_{}d', indicator)
     sma_parsed = parse('sma_{}', indicator)
@@ -320,7 +322,7 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
         elif indicator == 'envelope':
             envelope_window = 5
             if "window_size" in parameters:
-                envelope_window = parameters["window_size"]
+                envelope_window = parameters["ma_window_size"]
                 if isinstance(envelope_window, str):
                     envelope_window = int(envelope_window)
 
@@ -348,6 +350,31 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
 
             if ma == "sma":
                 df["ma_base"+suffix] = ta.trend.SMAIndicator(close=df["close"], window=envelope_window).sma_indicator()
+                # df["ma_base"+suffix] = ta.trend.sma_indicator(close=df["close"], window=envelope_window)
+                # df["ma_base"+suffix] = TA.SMA(df, envelope_window, "close")
+
+            df_y = pd.DataFrame()
+            df_y["ma_base"+suffix] = df["ma_base"+suffix]
+            df_y.dropna(inplace=True)
+            df_y = df_y.iloc[-(envelope_window-1):]
+            df_y.reset_index(inplace=True, drop=True)
+            y = df_y.to_numpy()
+
+            df_x = df_y.copy()
+            df_x.reset_index(inplace=True)
+            df_x.drop(columns=["ma_base"+suffix], inplace=True)
+            x = df_x.to_numpy()
+
+            model = LinearRegression()
+            model.fit(x, y)
+
+            # predict y from the data
+            x_new = np.linspace(0, y.shape[0]-1, y.shape[0])
+            y_new = model.predict(x_new[:, np.newaxis])
+
+            predict_val = y_new[len(y_new)-1][0]
+            print('df value: ', df.at[df.index[-1], "ma_base" + suffix], ' predicted val: ', predict_val, ' diff: ', df.at[df.index[-1], "ma_base" + suffix] - predict_val)
+            df.at[df.index[-1], "ma_base" + suffix] = predict_val
 
             df["envelope_long_1"+suffix] = df["ma_base"+suffix] - df["ma_base"+suffix] * ma_offset_1 / 100
             df["envelope_long_2"+suffix] = df["ma_base"+suffix] - df["ma_base"+suffix] * ma_offset_2 / 100
