@@ -373,7 +373,7 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
             y_new = model.predict(x_new[:, np.newaxis])
 
             predict_val = y_new[len(y_new)-1][0]
-            print('df value: ', df.at[df.index[-1], "ma_base" + suffix], ' predicted val: ', predict_val, ' diff: ', df.at[df.index[-1], "ma_base" + suffix] - predict_val)
+            # print('df value: ', df.at[df.index[-1], "ma_base" + suffix], ' predicted val: ', predict_val, ' diff: ', df.at[df.index[-1], "ma_base" + suffix] - predict_val)
             df.at[df.index[-1], "ma_base" + suffix] = predict_val
 
             df["envelope_long_1"+suffix] = df["ma_base"+suffix] - df["ma_base"+suffix] * ma_offset_1 / 100
