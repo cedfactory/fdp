@@ -22,3 +22,4 @@ gunicorn==20.1.0
 stockstats==0.4.1
 finta==1.3
 ta==0.10.2
+scikit-learn==1.2.2
