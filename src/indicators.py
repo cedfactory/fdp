@@ -356,7 +356,7 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
             df_y = pd.DataFrame()
             df_y["ma_base"+suffix] = df["ma_base"+suffix]
             df_y.dropna(inplace=True)
-            df_y = df_y.iloc[-(envelope_window-1):]
+            df_y = df_y.iloc[-(envelope_window-1):-1]
             df_y.reset_index(inplace=True, drop=True)
             y = df_y.to_numpy()
 
@@ -369,7 +369,7 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
             model.fit(x, y)
 
             # predict y from the data
-            x_new = np.linspace(0, y.shape[0]-1, y.shape[0])
+            x_new = np.linspace(0, y.shape[0], y.shape[0]+1)
             y_new = model.predict(x_new[:, np.newaxis])
 
             predict_val = y_new[len(y_new)-1][0]
