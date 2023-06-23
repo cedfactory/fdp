@@ -250,13 +250,6 @@ def get_symbol_ohlcv_last(exchange_name, symbol, start=None, end=None, timeframe
             return "exchange not found"
         exchange.load_markets()
 
-    # CEDE DEBUG:
-    # lst_symbol = []
-    # for exchange_symbol in exchange.symbols:
-    #     if symbol in exchange_symbol:
-    #         lst_symbol.append(exchange_symbol)
-    # print(lst_symbol)
-
     if symbol not in exchange.symbols or exchange.has['fetchOHLCV'] == False:
         print("symbol not found: ", symbol)
         return "symbol not found"

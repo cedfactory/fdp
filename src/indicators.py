@@ -239,7 +239,17 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
                 period = parameters["window_size"]
                 if isinstance(period, str):
                     period = int(period)
-            df["ema"+suffix] = TA.EMA(stock, period = period).copy()
+            # df["ema"+suffix] = TA.EMA(stock, period = period).copy()
+            df["ema"+suffix] = ta.trend.ema_indicator(close=df['close'], window=period).copy()
+
+        elif indicator == 'willr':
+            period = 14
+            if "window_size" in parameters:
+                period = parameters["window_size"]
+                if isinstance(period, str):
+                    period = int(period)
+            # df['willr'+suffix] = TA.WILLIAMS(stock).copy()
+            df['willr'] = ta.momentum.williams_r(high=df['high'], low=df['low'], close=df['close'], lbp=period).copy()
 
         elif indicator == "wma":
             period = 10
@@ -290,6 +300,14 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
                     rsi_window = int(rsi_window)
             df['rsi'+suffix] = ta.momentum.rsi(close=df["close"], window=rsi_window)
 
+        elif indicator == 'stoch_rsi':
+            rsi_window = 14
+            if "window_size" in parameters:
+                rsi_window = parameters["window_size"]
+                if isinstance(rsi_window, str):
+                    rsi_window = int(rsi_window)
+            df['stoch_rsi'+suffix] = ta.momentum.stochrsi(close=df["close"], window=rsi_window)
+
         elif indicator == 'atr':
             atr_window = 14
             if "window_size" in parameters:
@@ -297,6 +315,21 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
                 if isinstance(atr_window, str):
                     atr_window = int(atr_window)
             df['atr'+suffix] = ta.volatility.AverageTrueRange(high=df["high"], low=df["low"], close=df["close"], window=atr_window).average_true_range()
+
+        elif indicator == 'ao':
+            ao_window_1 = 6
+            if "ao_window_1" in parameters:
+                ao_window_1 = parameters["ao_window_1"]
+                if isinstance(ao_window_1, str):
+                    ao_window_1 = int(ao_window_1)
+
+            ao_window_2 = 22
+            if "ao_window_2" in parameters:
+                ao_window_2 = parameters["ao_window_2"]
+                if isinstance(ao_window_2, str):
+                    ao_window_2 = int(ao_window_2)
+
+            df['ao'] = ta.momentum.awesome_oscillator(df['high'], df['low'], window1=ao_window_1, window2=ao_window_2).copy()
 
         elif indicator == 'bollinger':
             bol_window = 100
