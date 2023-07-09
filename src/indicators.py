@@ -302,11 +302,11 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
 
         elif indicator == 'stoch_rsi':
             rsi_window = 14
-            if "window_size" in parameters:
-                rsi_window = parameters["window_size"]
+            if "stoch_rsi_window_size" in parameters:
+                rsi_window = parameters["stoch_rsi_window_size"]
                 if isinstance(rsi_window, str):
                     rsi_window = int(rsi_window)
-            df['stoch_rsi'+suffix] = ta.momentum.stochrsi(close=df["close"], window=rsi_window)
+            df['stoch_rsi'+suffix] = ta.momentum.StochRSIIndicator(close=df["close"], window=rsi_window).stochrsi()
 
         elif indicator == 'atr':
             atr_window = 14
