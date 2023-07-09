@@ -269,11 +269,14 @@ def api_last(history_params):
             real_symbol = futures[future]
             symbol = real_symbol.replace('/', '_')
             df = future.result()
-            if False and isinstance(df, pd.DataFrame):
+            # Rollback red alert
+            # if False and isinstance(df, pd.DataFrame):
+            if isinstance(df, pd.DataFrame):
                 df.reset_index(inplace=True)
                 result_for_response[symbol] = {"status": "ok", "info": df.to_json()}
             else:
-                df = "red alert"
+                # Rollback red alert
+                # df = "red alert"
                 result_for_response[symbol] = {"status": "ko", "reason": "", "info": df}
               
     end = datetime.now()
