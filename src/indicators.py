@@ -11,8 +11,6 @@ from . import indicators_supertrend as supertrend
 from . import indicators_tradingview as tv
 from . import utils
 
-from sklearn.linear_model import LinearRegression
-
 def get_window_size(indicator):
     trend_parsed = parse('trend_{}d', indicator)
     sma_parsed = parse('sma_{}', indicator)
@@ -308,6 +306,25 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
                     rsi_window = int(rsi_window)
             df['stoch_rsi'+suffix] = ta.momentum.StochRSIIndicator(close=df["close"], window=rsi_window).stochrsi()
 
+        elif indicator == 'predicted_stoch_rsi':
+            rsi_window = 14
+            if "stoch_rsi_window_size" in parameters:
+                rsi_window = parameters["stoch_rsi_window_size"]
+                if isinstance(rsi_window, str):
+                    rsi_window = int(rsi_window)
+                predict_window = parameters["pred_window_size"]
+                if isinstance(predict_window, str):
+                    predict_window = int(predict_window)
+            df['predicted_stoch_rsi'+suffix] = ta.momentum.StochRSIIndicator(close=df["close"], window=rsi_window).stochrsi()
+            df['predicted_stoch_rsi' + suffix] = df['predicted_stoch_rsi' + suffix].shift(-1)
+            df.at[df.index[-1], "predicted_stoch_rsi" + suffix] = 0
+            predict_val = utils.predict_next_LinearRegression(df, 'predicted_stoch_rsi'+suffix, predict_window)
+            if predict_val < 0:
+                predict_val = 0
+            elif predict_val > 1:
+                predict_val = 1
+            df.at[df.index[-1], "predicted_stoch_rsi" + suffix] = predict_val
+
         elif indicator == 'atr':
             atr_window = 14
             if "window_size" in parameters:
@@ -386,27 +403,7 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
                 # df["ma_base"+suffix] = ta.trend.sma_indicator(close=df["close"], window=envelope_window)
                 # df["ma_base"+suffix] = TA.SMA(df, envelope_window, "close")
 
-            df_y = pd.DataFrame()
-            df_y["ma_base"+suffix] = df["ma_base"+suffix]
-            df_y.dropna(inplace=True)
-            df_y = df_y.iloc[-(envelope_window-1):-1]
-            df_y.reset_index(inplace=True, drop=True)
-            y = df_y.to_numpy()
-
-            df_x = df_y.copy()
-            df_x.reset_index(inplace=True)
-            df_x.drop(columns=["ma_base"+suffix], inplace=True)
-            x = df_x.to_numpy()
-
-            model = LinearRegression()
-            model.fit(x, y)
-
-            # predict y from the data
-            x_new = np.linspace(0, y.shape[0], y.shape[0]+1)
-            y_new = model.predict(x_new[:, np.newaxis])
-
-            predict_val = y_new[len(y_new)-1][0]
-            # print('df value: ', df.at[df.index[-1], "ma_base" + suffix], ' predicted val: ', predict_val, ' diff: ', df.at[df.index[-1], "ma_base" + suffix] - predict_val)
+            predict_val = utils.predict_next_LinearRegression(df, "ma_base"+suffix, envelope_window)
             df.at[df.index[-1], "ma_base" + suffix] = predict_val
 
             df["envelope_long_1"+suffix] = df["ma_base"+suffix] - df["ma_base"+suffix] * ma_offset_1 / 100

@@ -1,7 +1,10 @@
 import pandas as pd
+import numpy as np
 import os, shutil
 from inspect import getframeinfo, stack
 from datetime import datetime
+
+from sklearn.linear_model import LinearRegression
 
 def print_exception_info(exception):
     caller = getframeinfo(stack()[2][0])
@@ -68,3 +71,25 @@ def get_n_columns(df, columns, n=1):
     for col in columns:
         dt["n"+str(n)+"_"+col] = dt[col].shift(n)
     return dt
+
+def predict_next_LinearRegression(df, str_col, pred_window):
+    df_y = pd.DataFrame()
+    df_y[str_col] = df[str_col]
+    df_y.dropna(inplace=True)
+    df_y = df_y.iloc[-(pred_window - 1):-1]
+    df_y.reset_index(inplace=True, drop=True)
+    y = df_y.to_numpy()
+
+    df_x = df_y.copy()
+    df_x.reset_index(inplace=True)
+    df_x.drop(columns=[str_col], inplace=True)
+    x = df_x.to_numpy()
+
+    model = LinearRegression()
+    model.fit(x, y)
+
+    # predict y from the data
+    x_new = np.linspace(0, y.shape[0], y.shape[0] + 1)
+    y_new = model.predict(x_new[:, np.newaxis])
+
+    return y_new[len(y_new) - 1][0]
