@@ -92,4 +92,12 @@ def predict_next_LinearRegression(df, str_col, pred_window):
     x_new = np.linspace(0, y.shape[0], y.shape[0] + 1)
     y_new = model.predict(x_new[:, np.newaxis])
 
-    return y_new[len(y_new) - 1][0]
+    return y_new[len(y_new) - 1][0], model.coef_[0][0]
+
+def discret_coef(coef):
+    if coef > 0:
+        return "UP"
+    elif coef < 0:
+        return "DOWN"
+    elif coef == 0:
+        return "FLAT"

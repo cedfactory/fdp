@@ -221,7 +221,7 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
         if trend_parsed != None and trend_parsed[0].isdigit():
             seq = int(trend_parsed[0])
             diff = df["close"] - df["close"].shift(seq)
-            df["trend_"+str(seq)+"d"+suffix] = diff.gt(0).map({False: 0, True: 1})
+            df["trend_"+str(seq)+"d"+ suffix] = diff.gt(0).map({False: 0, True: 1})
 
         elif indicator == "sma":
             seq = 10
@@ -229,7 +229,7 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
                 seq = parameters["window_size"]
                 if isinstance(seq, str):
                     seq = int(seq)
-            df["sma"+suffix] = TA.SMA(stock, seq).copy()
+            df["sma"+ suffix] = TA.SMA(stock, seq).copy()
 
         elif indicator == "ema":
             period = 10
@@ -237,8 +237,8 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
                 period = parameters["window_size"]
                 if isinstance(period, str):
                     period = int(period)
-            # df["ema"+suffix] = TA.EMA(stock, period = period).copy()
-            df["ema"+suffix] = ta.trend.ema_indicator(close=df['close'], window=period).copy()
+            # df["ema"+ suffix] = TA.EMA(stock, period = period).copy()
+            df["ema"+ suffix] = ta.trend.ema_indicator(close=df['close'], window=period).copy()
 
         elif indicator == 'willr':
             period = 14
@@ -246,8 +246,28 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
                 period = parameters["window_size"]
                 if isinstance(period, str):
                     period = int(period)
-            # df['willr'+suffix] = TA.WILLIAMS(stock).copy()
             df['willr'] = ta.momentum.williams_r(high=df['high'], low=df['low'], close=df['close'], lbp=period).copy()
+
+        elif indicator == 'willr_trend':
+            period = 14
+            if "window_size" in parameters:
+                period = parameters["window_size"]
+                if isinstance(period, str):
+                    period = int(period)
+
+            predict_window = 4
+            if "pred_window_size" in parameters:
+                predict_window = parameters["pred_window_size"]
+                if isinstance(predict_window, str):
+                    predict_window = int(predict_window)
+
+            df['willr_trend'] = ta.momentum.williams_r(high=df['high'], low=df['low'], close=df['close'], lbp=period).copy()
+
+            df['willr_trend' + suffix] = df['willr_trend' + suffix].shift(-1)
+            df.at[df.index[-1], "willr_trend" + suffix] = 0
+            predict_val, coef = utils.predict_next_LinearRegression(df, 'willr_trend' + suffix, predict_window)
+
+            df["willr_trend" + suffix] = utils.discret_coef(coef)
 
         elif indicator == "wma":
             period = 10
@@ -255,40 +275,40 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
                 period = parameters["window_size"]
                 if isinstance(period, str):
                     period = int(period)
-            df["wma"+suffix] = TA.WMA(stock, period = period).copy()
+            df["wma"+ suffix] = TA.WMA(stock, period = period).copy()
 
         elif sma_parsed != None and sma_parsed[0].isdigit():
             seq = int(sma_parsed[0])
-            df["sma_"+str(seq)+suffix] = TA.SMA(stock, seq).copy()
+            df["sma_"+str(seq)+ suffix] = TA.SMA(stock, seq).copy()
 
         elif ema_parsed != None and ema_parsed[0].isdigit():
             period = int(ema_parsed[0])
-            df["ema_"+str(period)+suffix] = TA.EMA(stock, period = period).copy()
+            df["ema_"+str(period)+ suffix] = TA.EMA(stock, period = period).copy()
 
         elif wma_parsed != None and wma_parsed[0].isdigit():
             period = int(wma_parsed[0])
-            df["wma_"+str(period)+suffix] = TA.WMA(stock, period = period).copy()
+            df["wma_"+str(period)+ suffix] = TA.WMA(stock, period = period).copy()
 
         elif slope_parsed != None and slope_parsed[0].isdigit():
             period = int(slope_parsed[0])
-            df["slope_"+str(period)+suffix] = df["close"].rolling(window=period).apply(lambda x: np.polyfit(range(len(x)), x, 1)[0])
+            df["slope_"+str(period)+ suffix] = df["close"].rolling(window=period).apply(lambda x: np.polyfit(range(len(x)), x, 1)[0])
 
         elif indicator == 'macd':
-            df['macd'+suffix] = stock.get('macd').copy() # from stockstats
+            df['macd' + suffix] = stock.get('macd').copy() # from stockstats
             #df['macd'] = TA.MACD(stock)['MACD'].copy() # from finta
 
         elif indicator == 'macds':
-            df['macds'+suffix] = stock.get('macds').copy() # from stockstats
+            df['macds' + suffix] = stock.get('macds').copy() # from stockstats
 
         elif indicator == 'macdh':
-            df['macdh'+suffix] = stock.get('macdh').copy() # from stockstats
+            df['macdh' + suffix] = stock.get('macdh').copy() # from stockstats
 
         elif indicator == 'bbands':
             bbands = TA.BBANDS(stock).copy()
             df = pd.concat([df, bbands], axis = 1)
-            df.rename(columns={'BB_UPPER': 'bb_upper'+suffix}, inplace=True)
-            df.rename(columns={'BB_MIDDLE': 'bb_middle'+suffix}, inplace=True)
-            df.rename(columns={'BB_LOWER': 'bb_lower'+suffix}, inplace=True)
+            df.rename(columns={'BB_UPPER': 'bb_upper' + suffix}, inplace=True)
+            df.rename(columns={'BB_MIDDLE': 'bb_middle' + suffix}, inplace=True)
+            df.rename(columns={'BB_LOWER': 'bb_lower' + suffix}, inplace=True)
 
         elif indicator == 'rsi':
             rsi_window = 14
@@ -296,7 +316,7 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
                 rsi_window = parameters["window_size"]
                 if isinstance(rsi_window, str):
                     rsi_window = int(rsi_window)
-            df['rsi'+suffix] = ta.momentum.rsi(close=df["close"], window=rsi_window)
+            df['rsi' + suffix] = ta.momentum.rsi(close=df["close"], window=rsi_window)
 
         elif indicator == 'stoch_rsi':
             rsi_window = 14
@@ -304,7 +324,7 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
                 rsi_window = parameters["stoch_rsi_window_size"]
                 if isinstance(rsi_window, str):
                     rsi_window = int(rsi_window)
-            df['stoch_rsi'+suffix] = ta.momentum.StochRSIIndicator(close=df["close"], window=rsi_window).stochrsi()
+            df['stoch_rsi' + suffix] = ta.momentum.StochRSIIndicator(close=df["close"], window=rsi_window).stochrsi()
 
         elif indicator == 'predicted_stoch_rsi':
             rsi_window = 14
@@ -312,18 +332,42 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
                 rsi_window = parameters["stoch_rsi_window_size"]
                 if isinstance(rsi_window, str):
                     rsi_window = int(rsi_window)
+            
+            predict_window = 4
+            if "pred_window_size" in parameters:
                 predict_window = parameters["pred_window_size"]
                 if isinstance(predict_window, str):
                     predict_window = int(predict_window)
-            df['predicted_stoch_rsi'+suffix] = ta.momentum.StochRSIIndicator(close=df["close"], window=rsi_window).stochrsi()
+                    
+            df['predicted_stoch_rsi' + suffix] = ta.momentum.StochRSIIndicator(close=df["close"], window=rsi_window).stochrsi()
             df['predicted_stoch_rsi' + suffix] = df['predicted_stoch_rsi' + suffix].shift(-1)
             df.at[df.index[-1], "predicted_stoch_rsi" + suffix] = 0
-            predict_val = utils.predict_next_LinearRegression(df, 'predicted_stoch_rsi'+suffix, predict_window)
+            predict_val, coef = utils.predict_next_LinearRegression(df, 'predicted_stoch_rsi' + suffix, predict_window)
             if predict_val < 0:
                 predict_val = 0
             elif predict_val > 1:
                 predict_val = 1
             df.at[df.index[-1], "predicted_stoch_rsi" + suffix] = predict_val
+
+        elif indicator == 'stoch_rsi_trend':
+            rsi_window = 14
+            if "stoch_rsi_window_size" in parameters:
+                rsi_window = parameters["stoch_rsi_window_size"]
+                if isinstance(rsi_window, str):
+                    rsi_window = int(rsi_window)
+
+            predict_window = 4
+            if "pred_window_size" in parameters:
+                predict_window = parameters["pred_window_size"]
+                if isinstance(predict_window, str):
+                    predict_window = int(predict_window)
+                    
+            df['stoch_rsi_trend' + suffix] = ta.momentum.StochRSIIndicator(close=df["close"], window=rsi_window).stochrsi()
+            df['stoch_rsi_trend' + suffix] = df['stoch_rsi_trend' + suffix].shift(-1)
+            df.at[df.index[-1], "stoch_rsi_trend" + suffix] = 0
+            predict_val, coef = utils.predict_next_LinearRegression(df, 'stoch_rsi_trend' + suffix, predict_window)
+
+            df["stoch_rsi_trend" + suffix] = utils.discret_coef(coef)
 
         elif indicator == 'atr':
             atr_window = 14
@@ -331,7 +375,7 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
                 atr_window = parameters["window_size"]
                 if isinstance(atr_window, str):
                     atr_window = int(atr_window)
-            df['atr'+suffix] = ta.volatility.AverageTrueRange(high=df["high"], low=df["low"], close=df["close"], window=atr_window).average_true_range()
+            df['atr' + suffix] = ta.volatility.AverageTrueRange(high=df["high"], low=df["low"], close=df["close"], window=atr_window).average_true_range()
 
         elif indicator == 'ao':
             ao_window_1 = 6
@@ -347,6 +391,32 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
                     ao_window_2 = int(ao_window_2)
 
             df['ao'] = ta.momentum.awesome_oscillator(df['high'], df['low'], window1=ao_window_1, window2=ao_window_2).copy()
+        
+        elif indicator == 'ao_trend':
+            ao_window_1 = 6
+            if "ao_window_1" in parameters:
+                ao_window_1 = parameters["ao_window_1"]
+                if isinstance(ao_window_1, str):
+                    ao_window_1 = int(ao_window_1)
+
+            ao_window_2 = 22
+            if "ao_window_2" in parameters:
+                ao_window_2 = parameters["ao_window_2"]
+                if isinstance(ao_window_2, str):
+                    ao_window_2 = int(ao_window_2)
+                    
+            predict_window = 4
+            if "pred_window_size" in parameters:
+                predict_window = parameters["pred_window_size"]
+                if isinstance(predict_window, str):
+                    predict_window = int(predict_window)
+
+            df['ao_trend'] = ta.momentum.awesome_oscillator(df['high'], df['low'], window1=ao_window_1, window2=ao_window_2).copy()
+            df['ao_trend' + suffix] = df['ao_trend' + suffix].shift(-1)
+            df.at[df.index[-1], "ao_trend" + suffix] = 0
+            predict_val, coef = utils.predict_next_LinearRegression(df, 'ao_trend' + suffix, predict_window)
+            
+            df["ao_trend" + suffix] = utils.discret_coef(coef)
 
         elif indicator == 'bollinger':
             bol_window = 100
@@ -362,12 +432,12 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
             long_ma_window = 500
 
             bol_band = ta.volatility.BollingerBands(close=df["close"], window=bol_window, window_dev=bol_std)
-            df["lower_band"+suffix] = bol_band.bollinger_lband()
-            df["higher_band"+suffix] = bol_band.bollinger_hband()
-            df["ma_band"+suffix] = bol_band.bollinger_mavg()
-            df['long_ma'+suffix] = ta.trend.sma_indicator(close=df['close'], window=long_ma_window)
+            df["lower_band"+ suffix] = bol_band.bollinger_lband()
+            df["higher_band"+ suffix] = bol_band.bollinger_hband()
+            df["ma_band"+ suffix] = bol_band.bollinger_mavg()
+            df['long_ma' + suffix] = ta.trend.sma_indicator(close=df['close'], window=long_ma_window)
 
-            df['bollinger'+suffix] = True # bollinger indicator trigger
+            df['bollinger' + suffix] = True # bollinger indicator trigger
 
         elif indicator == 'envelope':
             envelope_window = 5
@@ -399,49 +469,49 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
                     ma_offset_3 = float(ma_offset_3)
 
             if ma == "sma":
-                df["ma_base"+suffix] = ta.trend.SMAIndicator(close=df["close"], window=envelope_window).sma_indicator()
-                # df["ma_base"+suffix] = ta.trend.sma_indicator(close=df["close"], window=envelope_window)
-                # df["ma_base"+suffix] = TA.SMA(df, envelope_window, "close")
+                df["ma_base"+ suffix] = ta.trend.SMAIndicator(close=df["close"], window=envelope_window).sma_indicator()
+                # df["ma_base"+ suffix] = ta.trend.sma_indicator(close=df["close"], window=envelope_window)
+                # df["ma_base"+ suffix] = TA.SMA(df, envelope_window, "close")
 
-            predict_val = utils.predict_next_LinearRegression(df, "ma_base"+suffix, envelope_window)
+            predict_val, coef = utils.predict_next_LinearRegression(df, "ma_base"+ suffix, envelope_window)
             df.at[df.index[-1], "ma_base" + suffix] = predict_val
 
-            df["envelope_long_1"+suffix] = df["ma_base"+suffix] - df["ma_base"+suffix] * ma_offset_1 / 100
-            df["envelope_long_2"+suffix] = df["ma_base"+suffix] - df["ma_base"+suffix] * ma_offset_2 / 100
-            df["envelope_long_3"+suffix] = df["ma_base"+suffix] - df["ma_base"+suffix] * ma_offset_3 / 100
+            df["envelope_long_1"+ suffix] = df["ma_base"+ suffix] - df["ma_base"+ suffix] * ma_offset_1 / 100
+            df["envelope_long_2"+ suffix] = df["ma_base"+ suffix] - df["ma_base"+ suffix] * ma_offset_2 / 100
+            df["envelope_long_3"+ suffix] = df["ma_base"+ suffix] - df["ma_base"+ suffix] * ma_offset_3 / 100
 
-            df["envelope_short_1"+suffix] = df["ma_base"+suffix] + df["ma_base"+suffix] * ma_offset_1 / 100
-            df["envelope_short_2"+suffix] = df["ma_base"+suffix] + df["ma_base"+suffix] * ma_offset_2 / 100
-            df["envelope_short_3"+suffix] = df["ma_base"+suffix] + df["ma_base"+suffix] * ma_offset_3 / 100
+            df["envelope_short_1"+ suffix] = df["ma_base"+ suffix] + df["ma_base"+ suffix] * ma_offset_1 / 100
+            df["envelope_short_2"+ suffix] = df["ma_base"+ suffix] + df["ma_base"+ suffix] * ma_offset_2 / 100
+            df["envelope_short_3"+ suffix] = df["ma_base"+ suffix] + df["ma_base"+ suffix] * ma_offset_3 / 100
 
-            df['envelope'+suffix] = True # bollinger indicator trigger
+            df['envelope' + suffix] = True # bollinger indicator trigger
 
         elif indicator == 'synthetic_bollinger':
             df.reset_index(inplace=True)
             # TEST SCENARIO
             df['close'] = 10
-            df["lower_band"+suffix] = 9
-            df["higher_band"+suffix] = 11
-            df["ma_band"+suffix] = 9.5
-            df["long_ma"+suffix] = 7
+            df["lower_band"+ suffix] = 9
+            df["higher_band"+ suffix] = 11
+            df["ma_band"+ suffix] = 9.5
+            df["long_ma"+ suffix] = 7
 
             t = 1000 + 50
             t_plus = 25
-            df.at[t, "close"] = df["higher_band"+suffix].iloc[t] + 0.01
+            df.at[t, "close"] = df["higher_band"+ suffix].iloc[t] + 0.01
             # OPEN LONG
-            df['close'] = np.where(df.index >= t, df["higher_band"+suffix] + 0.5, df['close'])
+            df['close'] = np.where(df.index >= t, df["higher_band"+ suffix] + 0.5, df['close'])
             t = t + t_plus
-            df['close'] = np.where(df.index >= t, df["higher_band"+suffix] + 1, df['close'])
+            df['close'] = np.where(df.index >= t, df["higher_band"+ suffix] + 1, df['close'])
             t = t + t_plus
-            df['close'] = np.where(df.index >= t, df["higher_band"+suffix] + 1.5, df['close'])
+            df['close'] = np.where(df.index >= t, df["higher_band"+ suffix] + 1.5, df['close'])
             # CLOSE LONG
             t = t + t_plus
-            df['ma_band'+suffix] = np.where(df.index >= t, df["close"] + 1, df['ma_band'+suffix])
+            df['ma_band' + suffix] = np.where(df.index >= t, df["close"] + 1, df['ma_band' + suffix])
 
             # OPEN SHORT
             t = t + t_plus
-            df['lower_band'+suffix] = np.where(df.index >= t, df["close"] + 0.6, df['lower_band'+suffix])
-            df['long_ma+suffix'] = np.where(df.index >= t, df["close"] + 0.3, df['long_ma'+suffix])
+            df['lower_band' + suffix] = np.where(df.index >= t, df["close"] + 0.6, df['lower_band' + suffix])
+            df['long_ma+ suffix'] = np.where(df.index >= t, df["close"] + 0.3, df['long_ma' + suffix])
 
             t = t + t_plus
             df['close'] = np.where(df.index >= t, df["close"] - 0.5, df['close'])
@@ -451,13 +521,13 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
             df['close'] = np.where(df.index >= t, df["close"] - 1.5, df['close'])
             t = t + t_plus
             # CLOSE SHORT
-            df['ma_band'+suffix] = np.where(df.index >= t, df["close"] - 2.5, df['ma_band'+suffix])
+            df['ma_band' + suffix] = np.where(df.index >= t, df["close"] - 2.5, df['ma_band' + suffix])
 
             # OPEN LONG
             t = t + t_plus
-            df['long_ma'+suffix] = np.where(df.index >= t, df["close"] - 0.3, df['long_ma'+suffix])
+            df['long_ma' + suffix] = np.where(df.index >= t, df["close"] - 0.3, df['long_ma' + suffix])
             t = t + t_plus
-            df['close'] = np.where(df.index >= t, df["higher_band"+suffix] + 0.5, df['close'])
+            df['close'] = np.where(df.index >= t, df["higher_band"+ suffix] + 0.5, df['close'])
             t = t + t_plus
             df['close'] = np.where(df.index >= t, df["close"] - 0.5, df['close'])
             t = t + t_plus
@@ -466,16 +536,16 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
             df['close'] = np.where(df.index >= t, df["close"] - 1.5, df['close'])
             # CLOSE LONG
             t = t + t_plus
-            df['ma_band'+suffix] = np.where(df.index >= t, df["close"] + 2, df['ma_band'+suffix])
+            df['ma_band' + suffix] = np.where(df.index >= t, df["close"] + 2, df['ma_band' + suffix])
 
             t = t + t_plus
-            df['higher_band'+suffix] = np.where(df.index >= t, df["higher_band"+suffix] + 4, df['higher_band'+suffix])
+            df['higher_band' + suffix] = np.where(df.index >= t, df["higher_band"+ suffix] + 4, df['higher_band' + suffix])
 
             # OPEN SHORT
             t = t + t_plus
-            df['lower_band'+suffix] = np.where(df.index >= t, df["close"] - 1, df['lower_band'+suffix])
+            df['lower_band' + suffix] = np.where(df.index >= t, df["close"] - 1, df['lower_band' + suffix])
             t = t + t_plus
-            df['lower_band'+suffix] = np.where(df.index >= t, df["close"] + 1, df['lower_band'+suffix])
+            df['lower_band' + suffix] = np.where(df.index >= t, df["close"] + 1, df['lower_band' + suffix])
             t = t + t_plus
             df['close'] = np.where(df.index >= t, df["close"] + 0.5, df['close'])
             t = t + t_plus
@@ -486,7 +556,7 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
 
             # OPEN LONG
             t = t + t_plus
-            df['higher_band'+suffix] = np.where(df.index >= t, df["higher_band"+suffix] - 4, df['higher_band'+suffix])
+            df['higher_band' + suffix] = np.where(df.index >= t, df["higher_band"+ suffix] - 4, df['higher_band' + suffix])
             t = t + t_plus
             df['close'] = np.where(df.index >= t, df["close"] + 0.5, df['close'])
             t = t + t_plus
@@ -496,46 +566,46 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
 
             # CLOSE LONG
             t = t + t_plus
-            df['ma_band'+suffix] = np.where(df.index >= t, df["close"] + 0.5, df['ma_band'+suffix])
+            df['ma_band' + suffix] = np.where(df.index >= t, df["close"] + 0.5, df['ma_band' + suffix])
 
             # END OF SCENARIO
             df.set_index(['timestamp'], inplace=True, drop=True)
-            df = utils.get_n_columns(df, ["ma_band"+suffix, "lower_band"+suffix, "higher_band"+suffix, "close"], 1)
+            df = utils.get_n_columns(df, ["ma_band"+ suffix, "lower_band"+ suffix, "higher_band"+ suffix, "close"], 1)
 
-            df['syntheticbollinger'+suffix] = True  # bollinger indicator trigger
+            df['syntheticbollinger' + suffix] = True  # bollinger indicator trigger
 
         elif indicator == 'cci_30':
-            df['cci_30'+suffix] = stock.get('cci_30').copy()
+            df['cci_30' + suffix] = stock.get('cci_30').copy()
         
         elif indicator == 'dx_30':
-            df['dx_30'+suffix] = stock.get('dx_30').copy()
+            df['dx_30' + suffix] = stock.get('dx_30').copy()
         
         elif indicator == 'williams_%r':
-            df['williams_%r'+suffix] = TA.WILLIAMS(stock).copy()
+            df['williams_%r' + suffix] = TA.WILLIAMS(stock).copy()
 
         elif indicator == 'stoch_%k':
-            df['stoch_%k'+suffix] = TA.STOCH(stock).copy()
+            df['stoch_%k' + suffix] = TA.STOCH(stock).copy()
 
         elif indicator == 'stoch_%d':
-            df['stoch_%d'+suffix] = TA.STOCHD(stock).copy()
+            df['stoch_%d' + suffix] = TA.STOCHD(stock).copy()
            
         elif indicator == 'er':
-            df['er'+suffix] = TA.ER(stock).copy()
+            df['er' + suffix] = TA.ER(stock).copy()
            
         elif indicator == 'stc':
-            df['stc'+suffix] = TA.STC(stock).copy()
+            df['stc' + suffix] = TA.STC(stock).copy()
            
         elif indicator == 'adx':
-            df['adx'+suffix] = TA.ADX(stock).copy()
+            df['adx' + suffix] = TA.ADX(stock).copy()
            
         elif indicator == 'roc':
-            df['roc'+suffix] = TA.ROC(stock).copy()
+            df['roc' + suffix] = TA.ROC(stock).copy()
 
         elif indicator == 'mom':
-            df['mom'+suffix] = TA.MOM(stock).copy()
+            df['mom' + suffix] = TA.MOM(stock).copy()
 
         elif indicator == 'simple_rtn':
-            df['simple_rtn'+suffix] = df['close'].pct_change()
+            df['simple_rtn' + suffix] = df['close'].pct_change()
 
         elif indicator == 'labeling':
             df = flabeling.data_labeling(df, params)
@@ -546,12 +616,12 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
         # shift feature: column_shift_nb ex: close_shift_5
         elif '_shift_' in indicator:
             lst_split = indicator.split("_")
-            df[indicator+suffix] = df[lst_split[0]].shift(int(lst_split[2]), axis=0)
+            df[indicator+ suffix] = df[lst_split[0]].shift(int(lst_split[2]), axis=0)
 
         elif indicator == 'vsa':
             days = [1, 2, 3, 5, 20, 40, 60]
             df = vsa.create_bunch_of_vsa_features(df, days)
-            df['outcomes_vsa'+suffix] = df.close.pct_change(-1)
+            df['outcomes_vsa' + suffix] = df.close.pct_change(-1)
 
         elif indicator == "super_trend_direction":
             st = supertrend.SuperTrend(
@@ -562,7 +632,7 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
                     5 # self.st_short_atr_multiplier
                 )
                 
-            df['super_trend_direction'+suffix] = st.super_trend_direction()
+            df['super_trend_direction' + suffix] = st.super_trend_direction()
             #df['super_trend_direction'] = df['super_trend_direction'].shift(1)
 
         elif indicator == "super_reversal":
@@ -576,13 +646,13 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
                 long_ema_window,
                 short_ema_window
             )
-            df['super_trend_direction'+suffix] = super_trend.super_trend_direction()
-            df['ema_short'+suffix] = ta.trend.ema_indicator(close=df['close'], window=short_ema_window)
-            df['ema_long'+suffix] = ta.trend.ema_indicator(close=df['close'], window=long_ema_window)
+            df['super_trend_direction' + suffix] = super_trend.super_trend_direction()
+            df['ema_short' + suffix] = ta.trend.ema_indicator(close=df['close'], window=short_ema_window)
+            df['ema_long' + suffix] = ta.trend.ema_indicator(close=df['close'], window=long_ema_window)
 
-            df = utils.get_n_columns(df, ["super_trend_direction"+suffix, "ema_short"+suffix, "ema_long"+suffix], 1)
-            df['superreversal'+suffix] = True  # super_reversal indicator trigger
-            df['super_reversal'+suffix] = True  # super_reversal indicator trigger
+            df = utils.get_n_columns(df, ["super_trend_direction"+ suffix, "ema_short"+ suffix, "ema_long"+ suffix], 1)
+            df['superreversal' + suffix] = True  # super_reversal indicator trigger
+            df['super_reversal' + suffix] = True  # super_reversal indicator trigger
 
         elif indicator == 'syntheticsuperreversal':
             df.reset_index(inplace=True)
@@ -590,52 +660,52 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
             df['close'] = 5
             df["high"] = 10
             df["low"] = 17
-            df["n1_ema_short"+suffix] = 14
-            df["n1_ema_long"+suffix] = 15
-            df["n1_super_trend_direction"+suffix] = False
+            df["n1_ema_short"+ suffix] = 14
+            df["n1_ema_long"+ suffix] = 15
+            df["n1_super_trend_direction"+ suffix] = False
 
             # OPEN LONG AT t
             t = 100 + 400
-            df['n1_ema_short'+suffix] = np.where(df.index >= t, df["n1_ema_long"+suffix] + 1, df['n1_ema_short'+suffix])
-            df['n1_super_trend_direction+suffix'] = np.where(df.index >= t, True, df['n1_super_trend_direction'+suffix])
-            df['low'] = np.where(df.index >= t, df["n1_ema_short"+suffix] - 1, df['low'])
+            df['n1_ema_short' + suffix] = np.where(df.index >= t, df["n1_ema_long"+ suffix] + 1, df['n1_ema_short' + suffix])
+            df['n1_super_trend_direction+ suffix'] = np.where(df.index >= t, True, df['n1_super_trend_direction' + suffix])
+            df['low'] = np.where(df.index >= t, df["n1_ema_short"+ suffix] - 1, df['low'])
 
             df['close'] = np.where(df.index >= t + 10, df["close"] + 1, df['close'])
 
             # CLOSING SHORT
             t = t + 100
-            df['n1_ema_short'+suffix] = np.where(df.index >= t, df["n1_ema_long"+suffix] - 1, df['n1_ema_short'+suffix])
-            df['n1_super_trend_direction'+suffix] = np.where(df.index >= t, False, df['n1_super_trend_direction'+suffix])
-            df['high'] = np.where(df.index >= t, df["n1_ema_short"+suffix] + 5, df['high'])
+            df['n1_ema_short' + suffix] = np.where(df.index >= t, df["n1_ema_long"+ suffix] - 1, df['n1_ema_short' + suffix])
+            df['n1_super_trend_direction' + suffix] = np.where(df.index >= t, False, df['n1_super_trend_direction' + suffix])
+            df['high'] = np.where(df.index >= t, df["n1_ema_short"+ suffix] + 5, df['high'])
 
             # CLOSING SHORT
             t = t + 100
-            df['n1_ema_short'+suffix] = np.where(df.index >= t, 20, df['n1_ema_short'+suffix])
-            df['n1_ema_long'+suffix] = np.where(df.index >= t, df['n1_ema_short'+suffix] -1, df['n1_ema_long'+suffix])
-            df['n1_super_trend_direction'+suffix] = np.where(df.index >= t, True, df['n1_super_trend_direction'+suffix])
-            df['low'] = np.where(df.index >= t,  df['n1_ema_short'+suffix] -1, df['low'])
+            df['n1_ema_short' + suffix] = np.where(df.index >= t, 20, df['n1_ema_short' + suffix])
+            df['n1_ema_long' + suffix] = np.where(df.index >= t, df['n1_ema_short' + suffix] -1, df['n1_ema_long' + suffix])
+            df['n1_super_trend_direction' + suffix] = np.where(df.index >= t, True, df['n1_super_trend_direction' + suffix])
+            df['low'] = np.where(df.index >= t,  df['n1_ema_short' + suffix] -1, df['low'])
 
             # OPENING SHORT
             t = t + 100
-            df['n1_ema_short'+suffix] = np.where(df.index >= t, 25, df['n1_ema_short'+suffix])
-            df['n1_ema_long'+suffix] = np.where(df.index >= t, df['n1_ema_short'+suffix] +1, df['n1_ema_long'+suffix])
-            df['n1_super_trend_direction'+suffix] = np.where(df.index >= t, False, df['n1_super_trend_direction'+suffix])
-            df['high'] = np.where(df.index >= t,  df['n1_ema_short'+suffix] +2, df['high'])
+            df['n1_ema_short' + suffix] = np.where(df.index >= t, 25, df['n1_ema_short' + suffix])
+            df['n1_ema_long' + suffix] = np.where(df.index >= t, df['n1_ema_short' + suffix] +1, df['n1_ema_long' + suffix])
+            df['n1_super_trend_direction' + suffix] = np.where(df.index >= t, False, df['n1_super_trend_direction' + suffix])
+            df['high'] = np.where(df.index >= t,  df['n1_ema_short' + suffix] +2, df['high'])
 
             df['close'] = np.where(df.index >= t + 10, df["close"] - 1, df['close'])
 
             # CLOSING SHORT
             t = t + 100
-            df['n1_ema_short'+suffix] = np.where(df.index >= t, 30, df['n1_ema_short'+suffix])
-            df['n1_ema_long'+suffix] = np.where(df.index >= t, df['n1_ema_short'+suffix] -1, df['n1_ema_long'+suffix])
-            df['n1_super_trend_direction'+suffix] = np.where(df.index >= t, True, df['n1_super_trend_direction'+suffix])
-            df['low'] = np.where(df.index >= t,  df['n1_ema_short'+suffix] -1, df['low'])
+            df['n1_ema_short' + suffix] = np.where(df.index >= t, 30, df['n1_ema_short' + suffix])
+            df['n1_ema_long' + suffix] = np.where(df.index >= t, df['n1_ema_short' + suffix] -1, df['n1_ema_long' + suffix])
+            df['n1_super_trend_direction' + suffix] = np.where(df.index >= t, True, df['n1_super_trend_direction' + suffix])
+            df['low'] = np.where(df.index >= t,  df['n1_ema_short' + suffix] -1, df['low'])
 
-            df["ema_short"+suffix] = df["n1_ema_short"+suffix]
-            df["ema_long"+suffix] =  df["n1_ema_long"+suffix]
-            df["super_trend_direction"+suffix] =  df["n1_super_trend_direction"+suffix]
+            df["ema_short"+ suffix] = df["n1_ema_short"+ suffix]
+            df["ema_long"+ suffix] =  df["n1_ema_long"+ suffix]
+            df["super_trend_direction"+ suffix] =  df["n1_super_trend_direction"+ suffix]
 
-            df['syntheticsuperreversal'+suffix] = True
+            df['syntheticsuperreversal' + suffix] = True
 
             df.set_index(['timestamp'], inplace=True, drop=True)
 
