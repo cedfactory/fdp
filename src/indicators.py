@@ -320,13 +320,20 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
 
         elif indicator == 'stoch_rsi':
             rsi_window = 14
+            smooth_k = 3
+            smooth_d = 3
             if "stoch_rsi_window_size" in parameters:
                 rsi_window = parameters["stoch_rsi_window_size"]
                 if isinstance(rsi_window, str):
                     rsi_window = int(rsi_window)
-            df['stoch_rsi' + suffix] = ta.momentum.StochRSIIndicator(close=df["close"], window=rsi_window).stochrsi()
 
-        elif indicator == 'predicted_stoch_rsi':
+            df['stoch_rsi' + suffix] = ta.momentum.stochrsi(close=df["close"]
+                                                            , window=rsi_window) * 100
+            df['stoch_rsi_k' + suffix] = ta.momentum.StochRSIIndicator(close=df["close"],
+                                                                       window=rsi_window).stochrsi_k() * 100
+            df['stoch_rsi_d' + suffix] = ta.momentum.StochRSIIndicator(close=df["close"],
+                                                                       window=rsi_window).stochrsi_d() * 100
+        elif indicator == 'stoch_rsi_pred':
             rsi_window = 14
             if "stoch_rsi_window_size" in parameters:
                 rsi_window = parameters["stoch_rsi_window_size"]
@@ -339,15 +346,15 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
                 if isinstance(predict_window, str):
                     predict_window = int(predict_window)
                     
-            df['predicted_stoch_rsi' + suffix] = ta.momentum.StochRSIIndicator(close=df["close"], window=rsi_window).stochrsi()
-            df['predicted_stoch_rsi' + suffix] = df['predicted_stoch_rsi' + suffix].shift(-1)
-            df.at[df.index[-1], "predicted_stoch_rsi" + suffix] = 0
-            predict_val, coef = utils.predict_next_LinearRegression(df, 'predicted_stoch_rsi' + suffix, predict_window)
+            df['stoch_rsi_pred' + suffix] = ta.momentum.StochRSIIndicator(close=df["close"], window=rsi_window).stochrsi() * 100
+            df['stoch_rsi_pred' + suffix] = df['stoch_rsi_pred' + suffix].shift(-1)
+            df.at[df.index[-1], "stoch_rsi_pred" + suffix] = 0
+            predict_val, coef = utils.predict_next_LinearRegression(df, 'stoch_rsi_pred' + suffix, predict_window)
             if predict_val < 0:
                 predict_val = 0
-            elif predict_val > 1:
-                predict_val = 1
-            df.at[df.index[-1], "predicted_stoch_rsi" + suffix] = predict_val
+            elif predict_val > 100:
+                predict_val = 100
+            df.at[df.index[-1], "stoch_rsi_pred" + suffix] = predict_val
 
         elif indicator == 'stoch_rsi_trend':
             rsi_window = 14
@@ -362,12 +369,27 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
                 if isinstance(predict_window, str):
                     predict_window = int(predict_window)
                     
-            df['stoch_rsi_trend' + suffix] = ta.momentum.StochRSIIndicator(close=df["close"], window=rsi_window).stochrsi()
+            df['stoch_rsi_trend' + suffix] = ta.momentum.StochRSIIndicator(close=df["close"],
+                                                                           window=rsi_window).stochrsi() * 100
+            df['stoch_rsi_k_trend' + suffix] = ta.momentum.StochRSIIndicator(close=df["close"],
+                                                                             window=rsi_window).stochrsi_k() * 100
+            df['stoch_rsi_d_trend' + suffix] = ta.momentum.StochRSIIndicator(close=df["close"],
+                                                                             window=rsi_window).stochrsi_d() * 100
             df['stoch_rsi_trend' + suffix] = df['stoch_rsi_trend' + suffix].shift(-1)
+            df['stoch_rsi_k_trend' + suffix] = df['stoch_rsi_k_trend' + suffix].shift(-1)
+            df['stoch_rsi_d_trend' + suffix] = df['stoch_rsi_d_trend' + suffix].shift(-1)
+
             df.at[df.index[-1], "stoch_rsi_trend" + suffix] = 0
             predict_val, coef = utils.predict_next_LinearRegression(df, 'stoch_rsi_trend' + suffix, predict_window)
-
             df["stoch_rsi_trend" + suffix] = utils.discret_coef(coef)
+
+            df.at[df.index[-1], "stoch_rsi_k_trend" + suffix] = 0
+            predict_val, coef = utils.predict_next_LinearRegression(df, 'stoch_rsi_k_trend' + suffix, predict_window)
+            df["stoch_rsi_k_trend" + suffix] = utils.discret_coef(coef)
+
+            df.at[df.index[-1], "stoch_rsi_d_trend" + suffix] = 0
+            predict_val, coef = utils.predict_next_LinearRegression(df, 'stoch_rsi_d_trend' + suffix, predict_window)
+            df["stoch_rsi_d_trend" + suffix] = utils.discret_coef(coef)
 
         elif indicator == 'atr':
             atr_window = 14
