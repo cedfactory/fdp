@@ -1,6 +1,5 @@
 import time
 import yfinance as yf
-from . import utils
 
 def get_info(value):
     if value == None:
@@ -11,36 +10,11 @@ def get_info(value):
 
     info = {}
     info["symbol"] = value
-    try:
-        info["isin"] = yf_value.isin
-    except BaseException as e:
-        info["isin"] = '-'
-        utils.print_exception_info(e)
-        raise e
-    try:
-        info["industry"] = yf_value.info['industry']
-    except BaseException as e:
-        utils.print_exception_info(e)
-        raise e
-    try:
-        info["sector"] = yf_value.info['sector']
-    except BaseException as e:
-        utils.print_exception_info(e)
-        raise e
-    try:
-        info["short_name"] = yf_value.info['shortName']
-    except BaseException as e:
-        utils.print_exception_info(e)
-        raise e
-    try:
-        info["country"] = yf_value.info['country']
-    except BaseException as e:
-        utils.print_exception_info(e)
-        raise e
-    try:
-        info["exchange"] = yf_value.info['exchange']
-    except BaseException as e:
-        utils.print_exception_info(e)
-        raise e 
+    info["isin"] = yf_value.info.get("isin", "")
+    info["industry"] = yf_value.info.get("industry", "")
+    info["sector"] = yf_value.info.get("sector", "")
+    info["shortName"] = yf_value.info.get("shortName", "")
+    info["country"] = yf_value.info.get("country", "")
+    info["exchange"] = yf_value.info.get("exchange", "")
 
-    return {"status":"ok", "info":info}
+    return {"status": "ok", "info": info}

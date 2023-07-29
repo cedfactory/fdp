@@ -22,7 +22,7 @@ class TestIndicators:
         assert(len(list(df.columns)) == 6)
 
         # first set of technical indicators
-        technical_indicators = ["macd", "macds", "macdh", "rsi_30", "cci_30", "dx_30", "williams_%r", "stoch_%k", "stoch_%d", "er"]
+        technical_indicators = ["macd", "macds", "macdh", "rsi", "cci_30", "dx_30", "williams_%r", "stoch_%k", "stoch_%d", "er"]
         df = indicators.compute_indicators(df, technical_indicators)
         assert(len(list(df.columns)) == 16)
 

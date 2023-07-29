@@ -9,10 +9,10 @@ class TestCryptoCache:
         # context
         data = [["BTC/USDT","hitbtc","2022-01-01 00:00:00","2022-02-01 00:00:00","1d"]]
         df_symbols_param = pd.DataFrame(data, columns=["symbol", "exchange_name", "start_date", "end_date", "interval"])
-        features = {"close": None, "low": None, "high": None, "ema_5": None}
+        features = {"close": {}, "low": {}, "high": {}, "ema_5": {}}
 
         # action
-        cache = data_recorder.CryptoCache(df_symbols_param, "BTC/USDT", features)
+        cache = data_recorder.CryptoCache(df_symbols_param, "BTC/USDT", features, "./test/generated/")
 
         # expectations
         assert(cache.symbol == "BTC/USDT")

@@ -108,7 +108,7 @@ class TestCrypto:
     '''
 
     def test_get_symbol_ohlcv_with_indicators(self):
-        ohlcv = crypto.get_symbol_ohlcv("hitbtc", "BTC/EURS", "2020-01-12", "2020-01-16", "1d", None, ["er"])
+        ohlcv = crypto.get_symbol_ohlcv("hitbtc", "BTC/EURS", "2020-01-12", "2020-01-16", "1d", {}, ["er"])
         assert(isinstance(ohlcv, pd.DataFrame))
         assert(len(ohlcv.index) == 5)
         assert(ohlcv["er"][0] == pytest.approx(0.502285, 0.0001))

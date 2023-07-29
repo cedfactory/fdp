@@ -161,7 +161,7 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
 
     # manage indicators as an array but it is converted into a dictionary
     if isinstance(indicators, list):
-        indicators = dict.fromkeys(indicators)
+        indicators = dict.fromkeys(indicators, {})
 
     # call stockstats
     stock = Sdf.retype(df.copy())
