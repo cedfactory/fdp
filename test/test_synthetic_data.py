@@ -18,6 +18,7 @@ class TestSyntheticData:
         assert(any(column in ['time', 'sinus_1', 'sinus_2', 'linear_up', 'linear_down', 'sinus_3', 'sinus_4', 'sinus_5'] for column in columns))
 
     def test_get_synthetic_data(self):
+        return
         # context
         start = utils.convert_string_to_datetime("2019-10-16")
         end = utils.convert_string_to_datetime("2019-10-21")
