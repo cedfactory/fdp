@@ -220,7 +220,8 @@ def api_history(history_params):
             symbol = real_symbol.replace('/', '_')
             df = future.result()
             if isinstance(df, pd.DataFrame):
-                df.reset_index(inplace=True)
+                drop = df.index.name in df.columns
+                df.reset_index(inplace=True, drop=drop)
                 result_for_response[symbol] = {"status": "ok", "info": df.to_json()}
             else:
                 result_for_response[symbol] = {"status": "ko", "reason": "", "info": df}
