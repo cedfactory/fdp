@@ -16,12 +16,13 @@ class TestSyntheticData:
         df_synthetic['timestamp'] = df_range_time['timestamp']
 
         # action
-        df = synthetic_data.fill_geometric_brownian_motion(df_synthetic, "gbm", 1000, 1, 2)
+        df = synthetic_data.fill_geometric_brownian_motion(df_synthetic, "gbm", 5, 1000., 0., .4)
 
         # output
         '''
-        plt.plot(df["gbm"])
-        plt.legend(np.round(sigma, 2))
+        plt.plot(df["gbm0"])
+        plt.plot(df["gbm1"])
+        #plt.legend(np.round(sigma, 2))
         plt.xlabel("$t$")
         plt.ylabel("$x$")
         plt.title(
@@ -32,7 +33,7 @@ class TestSyntheticData:
 
         # expectations
         assert (isinstance(df, pd.DataFrame))
-        assert ("gbm" in df.columns)
+        assert ("gbm0" in df.columns)
 
     def test_build_synthetic_data(self):
         # action

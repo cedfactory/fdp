@@ -72,23 +72,24 @@ def fill_df_combined_linear(df, column, a, b):
     return df
 
 # ref : https://en.wikipedia.org/wiki/Geometric_Brownian_motion
-def fill_geometric_brownian_motion(df, column, val0, param_mu, param_sigma):
+def fill_geometric_brownian_motion(df, column, n_samples, val0, param_mu, param_sigma):
     mu = param_mu
     n = len(df.index)
     dt = 0.1
-    x0 = 100
     np.random.seed(1)
 
-    sigma = np.arange(0.8, param_sigma, 0.2)
+    sigma = param_sigma*np.ones(n_samples)
 
     x = np.exp(
         (mu - sigma ** 2 / 2) * dt
         + sigma * np.random.normal(0, np.sqrt(dt), size=(len(sigma), n)).T
     )
     x = np.vstack([np.ones(len(sigma)), x])
-    x = x0 * x.cumprod(axis=0)
+    x = val0 * x.cumprod(axis=0)
 
-    df[column] = pd.Series(x[:, 0])
+    for i in range(n_samples):
+        df["{}{}".format(column, i)] = pd.Series(x[:, i])
+
     return df
 
 def fill_ohl(df):
