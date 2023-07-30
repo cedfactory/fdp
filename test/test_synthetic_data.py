@@ -1,10 +1,38 @@
 
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from src import synthetic_data,utils
 import pytest
 
-from src import synthetic_data,utils
 
 class TestSyntheticData:
+
+    def test_fill_geometric_brownian_motion(self):
+        # context
+        df_range_time = pd.DataFrame({"timestamp": pd.date_range(start="2022/01/01", end="2022/04/01", freq="1d")})
+
+        df_synthetic = pd.DataFrame(columns=['timestamp', 'sinus_1', 'sinus_2', 'linear_up', 'linear_down'])
+        df_synthetic['timestamp'] = df_range_time['timestamp']
+
+        # action
+        df = synthetic_data.fill_geometric_brownian_motion(df_synthetic, "gbm", 1000, 1, 2)
+
+        # output
+        '''
+        plt.plot(df["gbm"])
+        plt.legend(np.round(sigma, 2))
+        plt.xlabel("$t$")
+        plt.ylabel("$x$")
+        plt.title(
+            "Realizations of Geometric Brownian Motion with different variances\n $\mu=1$"
+        )
+        plt.show()
+        '''
+
+        # expectations
+        assert (isinstance(df, pd.DataFrame))
+        assert ("gbm" in df.columns)
 
     def test_build_synthetic_data(self):
         # action
