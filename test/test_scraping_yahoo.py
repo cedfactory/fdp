@@ -19,20 +19,6 @@ class TestScrapingYahoo:
     def test_get_list_dow(self):
         df = yahoo.get_list_dow()
         utils.check_expectations(df, "yahoo_list_dow.csv")
-       
-    def test_get_list_ftse100(self):
-        # TODO : yahoo_fin needs an update
-        # replace table.EPIC.tolist() with table.Ticker.tolist()
-        return
-        df = yahoo.get_list_ftse100()
-        utils.check_expectations(df, "yahoo_list_ftse100.csv")
-
-    def test_get_list_ftse250(self):
-        # TODO : yahoo_fin needs an update
-        # replace table.EPIC.tolist() with table.Ticker.tolist()
-        return
-        df = yahoo.get_list_ftse250()
-        utils.check_expectations(df, "yahoo_list_ftse250.csv")
 
     def test_get_list_ibovespa(self):
         df = yahoo.get_list_ibovespa()
@@ -45,12 +31,6 @@ class TestScrapingYahoo:
     def test_get_list_nifty_bank(self):
         df = yahoo.get_list_nifty_bank()
         utils.check_expectations(df, "yahoo_list_nifty_bank.csv")
-
-    def test_get_list_euronext(self):
-        # TODO to update
-        return
-        df = yahoo.get_list_euronext()
-        utils.check_expectations(df, "yahoo_list_euronext.csv")
 
     def test_get_list_undervalued(self):
         df = yahoo.get_list_undervalued()

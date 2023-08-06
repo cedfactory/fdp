@@ -32,18 +32,6 @@ def get_list_dow():
     df = utils.make_df_stock_info(list_dow, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
     return df
 
-def get_list_ftse100():
-    list_ftse = si.tickers_ftse100()
-    n = len(list_ftse)
-    df = utils.make_df_stock_info(list_ftse, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
-    return df
-
-def get_list_ftse250():
-    list_ftse = si.tickers_ftse250()
-    n = len(list_ftse)
-    df = utils.make_df_stock_info(list_ftse, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
-    return df
-
 def get_list_ibovespa():
     list_ibovespa = si.tickers_ibovespa()
     n = len(list_ibovespa)
@@ -62,26 +50,6 @@ def get_list_nifty_bank():
     list_nifty = si.tickers_niftybank()
     n = len(list_nifty)
     df = utils.make_df_stock_info(list_nifty, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n, [''] * n)
-    return df
-
-def get_list_euronext():
-    """
-    list stock EURONEXT downloaded:
-        https://live.euronext.com/en/products/equities/list
-    """
-    df_euronext = pd.read_csv("./data/Euronext_Equities.csv")
-
-    list_euronext = df_euronext["symbol"].tolist()
-    list_exchange = df_euronext["market"].tolist()
-    list_isin = df_euronext["ISIN"].tolist()
-    list_company_name = df_euronext["name"].tolist()
-
-    n = len(list_euronext)
-    list_country = [''] * n
-    list_industry = [''] * n
-    list_sectors = [''] * n
-
-    df = utils.make_df_stock_info(list_euronext, list_company_name, list_isin, list_sectors, list_industry, list_country, list_exchange)
     return df
 
 def get_list_undervalued():
