@@ -2,9 +2,37 @@ import pandas as pd
 import numpy as np
 import os, shutil
 from inspect import getframeinfo, stack
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from sklearn.linear_model import LinearRegression
+
+def parse_params_to_str(params):
+    url = '?'
+    for key, value in params.items():
+        url = url + str(key) + '=' + str(value) + '&'
+
+    return url[0:-1]
+
+def get_start_datetime(end, interval, length):
+    # Map the interval to a timedelta object
+    if interval.endswith('m'):
+        # Interval is in minutes
+        minutes = int(interval[:-1])
+        delta = timedelta(minutes=minutes)
+    elif interval.endswith('h'):
+        # Interval is in hours
+        hours = int(interval[:-1])
+        delta = timedelta(hours=hours)
+    else:
+        raise ValueError("Unsupported interval format")
+
+    # Calculate the total duration by multiplying delta by length
+    total_duration = delta * length
+
+    # Calculate the start datetime
+    start = end - total_duration
+
+    return start
 
 def print_exception_info(exception):
     caller = getframeinfo(stack()[2][0])

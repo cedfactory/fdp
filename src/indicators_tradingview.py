@@ -52,7 +52,7 @@ def get_recommendation(df, indicator, params):
         except:
             sleep(1)
             try_cpt = try_cpt + 1
-            if cpt == 3:
+            if try_cpt == 3:
                 print('no recommention for: ', symbol, ' interval: ', interval)
                 tv_recommendation = "FAILED"
                 return tv_recommendation
