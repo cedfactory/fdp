@@ -10,7 +10,6 @@ from . import indicators_flabeling as flabeling
 from . import indicators_supertrend as supertrend
 from . import indicators_tradingview as tv
 from . import utils
-from custom_indicators import Trix
 
 def get_window_size(indicator):
     trend_parsed = parse('trend_{}d', indicator)
@@ -310,23 +309,33 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
                     rsi_window = int(rsi_window)
             df['rsi' + suffix] = ta.momentum.rsi(close=df["close"], window=rsi_window)
 
-        elif indicator == "trix":
-            trix_obj = Trix(
-                close=df["close"],
-                trix_length=parameters["trix_length"],
-                trix_signal_length=parameters["trix_signal_length"],
-                trix_signal_type=parameters["trix_signal_type"],
-            )
-            df["trix" + suffix] = trix_obj.get_trix_pct_line()
-            df["trix_signal" + suffix] = trix_obj.get_trix_signal_line()
-            df["trix_hist" + suffix] = df["trix" + suffix] - df["trix_signal" + suffix]
-            if len(df["close"]) < parameters["long_ma_length"]:
-                long_ma_length = len(df["close"])
-            else:
-                long_ma_length = parameters["long_ma_length"]
-            df["long_ma" + suffix] = ta.trend.ema_indicator(
-                df["close"], window=long_ma_length
-            )
+        elif indicator == "trix_histo":
+            n = 9  # Length for TEMA
+            signal_period = 3  # Length for the TRIX signal line
+
+            # Function to calculate the Exponential Moving Average (EMA)
+            def ema(series, span):
+                return series.ewm(span=span, adjust=False).mean()
+
+            # Calculate TEMA
+            ema1 = ema(df['close'], n)
+            ema2 = ema(ema1, n)
+            ema3 = ema(ema2, n)
+            tema = 3 * ema1 - 3 * ema2 + ema3
+
+            # Calculate TRIX
+            trix = tema.pct_change() * 100  # Convert to percentage
+
+            # Calculate TRIX signal line (SMA of TRIX)
+            trix_signal = trix.rolling(window=signal_period).mean()
+
+            # Calculate TRIX Histogram
+            trix_histo = trix - trix_signal
+
+            # Add to DataFrame
+            df['trix' + suffix] = trix
+            df['trix_signal' + suffix] = trix_signal
+            df['trix_histo' + suffix] = trix_histo
 
         elif indicator == 'stoch_rsi':
             rsi_window = 14
