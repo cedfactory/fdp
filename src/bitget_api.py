@@ -1,8 +1,9 @@
 import requests
 import json
+import utils
 import pandas as pd
 from datetime import datetime
-from src import consts
+import consts
 
 def _request_with_params(url):
 

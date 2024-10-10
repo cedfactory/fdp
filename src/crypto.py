@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import ccxt
 import time
-from src import bitget_api
+import bitget_api
 from datetime import datetime, timedelta
 from datetime import date
 import datetime
