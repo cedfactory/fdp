@@ -93,29 +93,38 @@ def get_window_size(indicator):
     elif indicator == "super_trend_direction":
         return 15
 
+    print("unknown window size for ", indicator)
     return 0
 
 def get_max_window_size(indicators):
-    if not indicators:  # Check for empty or None
+    if len(indicators) == 0:
         return 0
 
     if isinstance(indicators, list):
-        return max(get_window_size(indicator) for indicator in indicators)
-
+        return max([get_window_size(indicator) for indicator in indicators])
     elif isinstance(indicators, dict):
-        window_sizes = []
-        for indicator, parameters in indicators.items():
+        # if the parameters of all the indicators are dictionaries...
+        #window_sizes = [parameters["window_size"] if "window_size" in parameters else get_window_size(indicator) for indicator, parameters in indicators.items()]
+        # but just in case there is something else :
+        window_sizes = [0]
+        for indicator in indicators:
+            parameters = indicators[indicator]
             if isinstance(parameters, dict):
-                window_size = parameters.get("window_size", get_window_size(indicator))
-                window_size = int(window_size) if isinstance(window_size, str) else window_size
+                parameters = indicators[indicator]
+                if "window_size" in parameters:
+                    window_size = parameters["window_size"]
+                    if isinstance(window_size, str):
+                        window_size = int(window_size)
+                else:
+                    window_size = get_window_size(indicator)
+                window_sizes.append(window_size)
             elif isinstance(parameters, int):
-                window_size = parameters
+                window_sizes.append(parameters)
             else:
                 window_size = get_window_size(indicator)
+                window_sizes.append(window_size)
 
-            window_sizes.append(window_size)
-
-        return max(window_sizes) if window_sizes else 0
+        return max(window_sizes)
 
     return 0
 
@@ -308,34 +317,6 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
                 if isinstance(rsi_window, str):
                     rsi_window = int(rsi_window)
             df['rsi' + suffix] = ta.momentum.rsi(close=df["close"], window=rsi_window)
-
-        elif indicator == "trix_histo":
-            n = 9  # Length for TEMA
-            signal_period = 3  # Length for the TRIX signal line
-
-            # Function to calculate the Exponential Moving Average (EMA)
-            def ema(series, span):
-                return series.ewm(span=span, adjust=False).mean()
-
-            # Calculate TEMA
-            ema1 = ema(df['close'], n)
-            ema2 = ema(ema1, n)
-            ema3 = ema(ema2, n)
-            tema = 3 * ema1 - 3 * ema2 + ema3
-
-            # Calculate TRIX
-            trix = tema.pct_change() * 100  # Convert to percentage
-
-            # Calculate TRIX signal line (SMA of TRIX)
-            trix_signal = trix.rolling(window=signal_period).mean()
-
-            # Calculate TRIX Histogram
-            trix_histo = trix - trix_signal
-
-            # Add to DataFrame
-            df['trix' + suffix] = trix
-            df['trix_signal' + suffix] = trix_signal
-            df['trix_histo' + suffix] = trix_histo
 
         elif indicator == 'stoch_rsi':
             rsi_window = 14

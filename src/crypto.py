@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np
 import ccxt
 import time
-import bitget_api
 from datetime import datetime, timedelta
 from datetime import date
 import datetime
@@ -13,10 +12,53 @@ import concurrent.futures
 def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1d", limit=None):
     if exchange == None or symbol == None or start == None:
         return None
-    timeframe = "1m"
-    result = bitget_api.history_mark_candles(symbol, timeframe, start, end)
-    df_result = bitget_api.process_data(result)
+    since = int(start.timestamp())*1000
+    if end != None:
+        delta = end - start
+        if timeframe == "1d":
+            limit = delta.days # days
+        elif timeframe == "1h":
+            limit = int(delta.total_seconds() / 3600)
+        elif timeframe == "1m":
+            limit = int(delta.total_seconds() / 60)
+    if limit == None:
+        return None
 
+    intervals = []
+    # offset is a param depending on the exchanger properties
+    # binance offset = 1000
+    if timeframe == "1d" or timeframe == "1h" or timeframe == "1m" : # split into requests with limit = 5000
+        if timeframe == "1d":
+            offset = 1000 * 24 * 60 * 60 * 1000
+        if timeframe == "1h":
+            offset = 1000 * 60 * 60 * 1000
+        if timeframe == "1m":
+            offset = 1000 * 60 * 1000
+        while limit > 1000:
+            since_next = since + offset
+            intervals.append({'since': since, 'limit': 1000})
+            since = since_next
+            limit = limit - 1000
+        intervals.append({'since': since, 'limit': limit})
+
+    everything_ok = True
+    df_results = {}
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        futures = {executor.submit(exchange.fetch_ohlcv, symbol, timeframe, interval["since"], interval["limit"]): interval["since"] for interval in intervals}
+        for future in concurrent.futures.as_completed(futures):
+            current_since = futures[future]
+            res = future.result()
+            df = pd.DataFrame(res)
+            df_results[current_since] = df
+
+    if not everything_ok:
+        return None
+
+    ordered_df_results = [df_results[interval['since']] for interval in intervals]
+    df_result = pd.concat(ordered_df_results)
+    df_result = df_result.rename(columns={0: 'timestamp', 1: 'open', 2: 'high', 3: 'low', 4: 'close', 5: 'volume'})
+    if df_result.empty:
+        return "no data"
     df_result = df_result.set_index(df_result['timestamp'])
     df_result.index = pd.to_datetime(df_result.index, unit='ms')
 
@@ -212,14 +254,63 @@ def get_symbol_ohlcv_last(exchange_name, symbol, start=None, end=None, timeframe
         print("symbol not found: ", symbol)
         return "symbol not found"
 
-    max_period = inc_indicators.get_max_window_size(indicators) + 1
-    start = utils.get_start_datetime(end, timeframe, max_period)
+    if start == 'None' and end == 'None':
+        end = datetime.datetime.now()
+        end = end.replace(second=0, microsecond=0)
+        if timeframe == "1d":
+            end = end.replace(hour=0, minute=0, second=0, microsecond=0)
+            start = end + datetime.timedelta(days=-1)
+        elif timeframe == "1h":
+            end = end.replace(minute=0, second=0, microsecond=0)
+            start = end + datetime.timedelta(hours=-1)
+        elif timeframe == "1m":
+            end = end.replace(second=0, microsecond=0)
+            start = end + datetime.timedelta(minutes=-1)
+    else:
+        start = utils.convert_string_to_datetime(start)
+        end = utils.convert_string_to_datetime(end)
+        # as we want the end date included, one adds a delta
+        if timeframe == "1d":
+            end = end.replace(hour=0, minute=0, second=0, microsecond=0)
+            end += datetime.timedelta(days=1)
+        elif timeframe == "1h":
+            end = end.replace(minute=0, second=0, microsecond=0)
+            end += datetime.timedelta(hours=1)
+        elif timeframe == "1m":
+            end = end.replace(second=0, microsecond=0)
+            end += datetime.timedelta(minutes=1)
 
-    ohlcv = _get_ohlcv(exchange, symbol, start, end, timeframe, max_period)
+    # request a start earlier according to what the indicators need
+    start_with_period = start
+    max_period = inc_indicators.get_max_window_size(indicators) + 1 # MODIF CEDE to be confirmed by CL
+    #max_period = utils.max_from_dict_values(indicators)
+    if max_period != 0:
+        if timeframe == "1d":
+            start_with_period = start_with_period + datetime.timedelta(days=-max_period)
+        elif timeframe == "1h":
+            start_with_period = start_with_period + datetime.timedelta(hours=-max_period)
+        elif timeframe == "1m":
+            start_with_period = start_with_period + datetime.timedelta(minutes=-max_period)
+
+    ohlcv = _get_ohlcv(exchange, symbol, start_with_period, end, timeframe, length)
     if not isinstance(ohlcv, pd.DataFrame):
         return ohlcv
 
+    # remove dupicates
     ohlcv = ohlcv[~ohlcv.index.duplicated()]
+
+    # add potential missing dates
+    map_timeframe_freq = {"1h": "H", "1d": "D", "1m": "min"}
+    freq = map_timeframe_freq[timeframe]
+    if end == None and length == None:
+        end = date.today()
+        end = end.strftime("%Y-%m-%d")
+
+    # TEST CEDE FOR LIVE
+    # USED FOR SIM:
+    # expected_range = pd.date_range(start=start_with_period, end=end, freq=freq, inclusive="left")
+    # ohlcv.index = pd.DatetimeIndex(ohlcv.index)
+    # ohlcv = ohlcv.reindex(expected_range, fill_value=np.nan)
 
     if len(indicators) != 0:
         indicator_params = {"symbol": symbol, "exchange": exchange_name}
@@ -231,7 +322,7 @@ def get_symbol_ohlcv_last(exchange_name, symbol, start=None, end=None, timeframe
         else:
             ohlcv = ohlcv.iloc[max_period-1:-1]
 
-    # ohlcv.interpolate(inplace=True)
+    ohlcv.interpolate(inplace=True) # CEDE WORKAROUND TO BE DISCUSSED WITH CL
     return ohlcv
 
 ###

@@ -1,5 +1,5 @@
 import pandas as pd
-from datetime import datetime, timedelta
+from datetime import datetime
 from . import wiki,yahoo,yf_wrapper,crypto,tradingview,portfolio,indicators,utils
 from src import config
 import concurrent.futures
@@ -98,43 +98,6 @@ def api_symbol(str_screener, str_exchange, str_symbols):
 
     return final_response
 
-def calculate_start_end(str_interval, length):
-    # Determine the end time based on the interval
-    if str_interval == "1m":
-        str_end = datetime.today().strftime('%Y-%m-%d %H:%M:00')
-        end_time = datetime.strptime(str_end, '%Y-%m-%d %H:%M:00')
-        delta = timedelta(minutes=length)
-    elif str_interval == "3m":
-        str_end = datetime.today().strftime('%Y-%m-%d %H:%M:00')
-        end_time = datetime.strptime(str_end, '%Y-%m-%d %H:%M:00')
-        delta = timedelta(minutes=3 * length)
-    elif str_interval == "5m":
-        str_end = datetime.today().strftime('%Y-%m-%d %H:%M:00')
-        end_time = datetime.strptime(str_end, '%Y-%m-%d %H:%M:00')
-        delta = timedelta(minutes=5 * length)
-    elif str_interval == "15m":
-        str_end = datetime.today().strftime('%Y-%m-%d %H:%M:00')
-        end_time = datetime.strptime(str_end, '%Y-%m-%d %H:%M:00')
-        delta = timedelta(minutes=15 * length)
-    elif str_interval == "1h":
-        str_end = datetime.today().strftime('%Y-%m-%d %H:00:00')
-        end_time = datetime.strptime(str_end, '%Y-%m-%d %H:00:00')
-        delta = timedelta(hours=length)
-    elif str_interval == "4h":
-        str_end = datetime.today().strftime('%Y-%m-%d %H:00:00')
-        end_time = datetime.strptime(str_end, '%Y-%m-%d %H:00:00')
-        delta = timedelta(hours=4 * length)
-    elif str_interval == "1d":
-        str_end = datetime.today().strftime('%Y-%m-%d')
-        end_time = datetime.strptime(str_end, '%Y-%m-%d')
-        delta = timedelta(days=length)
-    else:
-        raise ValueError("Invalid interval. Supported intervals are '1m', '3m', '5m', '15m', '1h', '4h', and '1d'.")
-
-    # Calculate the start time by subtracting the delta from the end time
-    start_time = end_time - delta
-    return start_time, end_time
-
 def api_history_parse_parameters(request, last=False):
     status = "ok"
     reason = ""
@@ -202,12 +165,24 @@ def api_history_parse_parameters(request, last=False):
     if reason != "":
         status = "ko"
 
+    if str_end == None:
+        str_end = datetime.today().strftime('%Y-%m-%d')
+
+    if last == True:
+        if str_interval == "1m":
+            str_start = datetime.today().strftime('%Y-%m-%d %H:%M:00')
+        elif str_interval == "1h":
+            str_start = datetime.today().strftime('%Y-%m-%d %H:00:00')
+        elif str_interval == "1d":
+            str_start = datetime.today().strftime('%Y-%m-%d')
+        str_end = str_start
+        length = 1
+
     return {
         "status":status, "reason":reason,
         "str_exchange":str_exchange, "str_symbol":str_symbol,
         "str_start":str_start, "str_end":str_end, "str_interval":str_interval,
-        "length":length, "candle_stick":candle_stick, "indicators":indicators
-    }
+        "length":length, "candle_stick":candle_stick, "indicators":indicators}
 
 def api_history(history_params):
     str_exchange = history_params.get("str_exchange")
@@ -269,7 +244,10 @@ def api_last(history_params):
     candle_stick = history_params.get("candle_stick", None)
     indicators = history_params.get("indicators", {})
 
-    str_start, str_end = calculate_start_end(str_interval, length)
+    if len(str_start) != 0 and isinstance(str_start, str):
+        start = utils.convert_string_to_datetime(str_start)
+    else:
+        start = datetime.now()
 
     start_process = datetime.now()
     result_for_response = {}
@@ -283,10 +261,7 @@ def api_last(history_params):
         else:
             get_symbol_ohlcv_fn = crypto.get_symbol_ohlcv_last
         exchange, markets = crypto.get_exchange_and_markets(str_exchange)
-        futures = {executor.submit(get_symbol_ohlcv_fn,
-                                   exchange_name=str_exchange, symbol=real_symbol, start=str_start, end=str_end,
-                                   timeframe=str_interval, length=length, candle_stick=candle_stick,
-                                   indicators=indicators, exchange=exchange): real_symbol for real_symbol in real_symbols}
+        futures = {executor.submit(get_symbol_ohlcv_fn, exchange_name=str_exchange, symbol=real_symbol, start=str_start, end=str_end, timeframe=str_interval, length=length, candle_stick=candle_stick, indicators=indicators, exchange=exchange): real_symbol for real_symbol in real_symbols}
 
         for future in concurrent.futures.as_completed(futures):
             real_symbol = futures[future]
