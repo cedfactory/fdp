@@ -160,10 +160,10 @@ class TestApi:
 
 
     def test_api_history(self):
-        symbol = "BTC/EURST"
+        symbol = "BTC/EURS"
         params_history = {"str_exchange":"hitbtc", "str_symbol":symbol, "str_start":"2021-12-05", "str_end": "2022-01-05", "str_interval":"1d"}
         response = api.api_history(params_history)
-        symbol = "BTC_EURST"
+        symbol = "BTC_EURS"
         assert("status" in response)
         assert(response["status"] == "ok")
         assert("result" in response)
@@ -178,8 +178,8 @@ class TestApi:
         assert(len(ohlcv.index) == 32)
 
     def test_api_indicators(self):
-        symbol = "BTC/EURST"
-        expected_symbol = "BTC_EURST"
+        symbol = "BTC/EURS"
+        expected_symbol = "BTC_EURS"
         indicators = {"close": {}, "high": {}, "ema_30": {}}
         params_history = {"str_exchange":"hitbtc", "str_symbol":symbol, "str_start":"2021-12-05", "str_end": "2022-01-05", "str_interval":"1d", "indicators":indicators}
         response = api.api_history(params_history)

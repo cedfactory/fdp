@@ -19,7 +19,9 @@ class TestCrypto:
     '''
     def test_get_list_symbols_kraken(self):
         symbols = crypto.get_list_symbols_kraken()
-        assert(symbols == ["BTC/EUR", "BTC/USD", "ETH/EUR", "ETH/USD", "ETHW/EUR", "ETHW/USD", "TBTC/EUR", "TBTC/USD", "WBTC/EUR", "WBTC/USD"])
+        assert(symbols == ["BTC/EUR", "BTC/USD",
+                           "ETH/EUR", "ETH/USD", "ETHFI/EUR", "ETHFI/USD", "ETHW/EUR", "ETHW/USD",
+                           "TBTC/EUR", "TBTC/USD", "WBTC/EUR", "WBTC/USD"])
     '''
     def test_get_dataframe_symbols(slef):
         df_symbols = crypto.get_dataframe_symbols("binance")

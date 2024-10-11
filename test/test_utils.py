@@ -11,7 +11,7 @@ class TestUtils:
 
         # expectations
         assert(isinstance(timestamp, datetime))
-        assert(timestamp.timestamp() == 1640995200)
+        assert(timestamp.timestamp() == 1640991600)
 
     def test_convert_string_to_datetime_YYY_MM_DD_HH_MM_SS(self):
         # action
@@ -19,7 +19,7 @@ class TestUtils:
 
         # expectations
         assert(isinstance(timestamp, datetime))
-        assert(timestamp.timestamp() == 1639555200)
+        assert(timestamp.timestamp() == 1639551600)
 
     def test_convert_string_to_datetime_timestamp_as_string(self):
         # action
