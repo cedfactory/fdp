@@ -181,7 +181,7 @@ class TestApi:
         symbol = "XRP"
         params_history = {"str_exchange": "bitget",
                           "str_symbol": symbol,
-                          "str_length": "20",
+                          "length": "20",
                           "str_interval": "1d"}
         response = api.api_last(params_history)
         symbol = "XRP"

@@ -116,7 +116,7 @@ def api_history_parse_parameters(request, last=False):
         str_end = request.args.get("end")
         str_interval = request.args.get("interval", "1d")
         length = request.args.get("length", 100)
-        if length != None:
+        if isinstance(length, str):
             length = int(length)
         candle_stick = request.args.get("candle_stick", "released")
         indicators= request.args.get("indicators", {})
@@ -168,6 +168,7 @@ def api_history_parse_parameters(request, last=False):
     if str_end == None:
         str_end = datetime.today().strftime('%Y-%m-%d')
 
+
     if last == True:
         if str_interval == "1m":
             str_start = datetime.today().strftime('%Y-%m-%d %H:%M:00')
@@ -176,7 +177,8 @@ def api_history_parse_parameters(request, last=False):
         elif str_interval == "1d":
             str_start = datetime.today().strftime('%Y-%m-%d')
         str_end = str_start
-        length = 1
+        str_start = ""
+        str_end = ""
 
     return {
         "status":status, "reason":reason,
@@ -240,9 +242,9 @@ def api_last(history_params):
     str_start = history_params.get("str_start")
     str_end = history_params.get("str_end")
     str_interval = history_params.get("str_interval", "1d")
-    str_length = history_params.get("str_length", None)
-    if str_length:
-        length = int(str_length)
+    length = history_params.get("length", 1)
+    if isinstance(length, str):
+        length = int(length)
     candle_stick = history_params.get("candle_stick", None)
     indicators = history_params.get("indicators", {})
 

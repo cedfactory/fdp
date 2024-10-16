@@ -234,7 +234,7 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d"
     ohlcv.interpolate(inplace=True) # CEDE WORKAROUND TO BE DISCUSSED WITH CL
     return ohlcv
 
-def get_symbol_ohlcv_last(exchange_name, symbol, start=None, end=None, timeframe="1d", length=None, indicators={}, exchange=None, candle_stick="released"):
+def get_symbol_ohlcv_last(exchange_name, symbol, start=None, end=None, timeframe="1d", length=1, indicators={}, exchange=None, candle_stick="released"):
 
     # hack : find a better way
     if exchange_name == "bitget":
@@ -253,9 +253,6 @@ def get_symbol_ohlcv_last(exchange_name, symbol, start=None, end=None, timeframe
     if symbol not in exchange.symbols or exchange.has['fetchOHLCV'] == False:
         print("symbol not found: ", symbol)
         return "symbol not found"
-
-    if not length:
-        length = 1
 
     if (not start or start == 'None') and (not end or end == 'None'):
         end = datetime.datetime.now()
