@@ -240,14 +240,11 @@ def api_last(history_params):
     str_start = history_params.get("str_start")
     str_end = history_params.get("str_end")
     str_interval = history_params.get("str_interval", "1d")
-    length = history_params.get("length", None)
+    str_length = history_params.get("str_length", None)
+    if str_length:
+        length = int(str_length)
     candle_stick = history_params.get("candle_stick", None)
     indicators = history_params.get("indicators", {})
-
-    if len(str_start) != 0 and isinstance(str_start, str):
-        start = utils.convert_string_to_datetime(str_start)
-    else:
-        start = datetime.now()
 
     start_process = datetime.now()
     result_for_response = {}
@@ -270,7 +267,7 @@ def api_last(history_params):
             # Rollback red alert
             # if False and isinstance(df, pd.DataFrame):
             if isinstance(df, pd.DataFrame):
-                df.reset_index(inplace=True)
+                df.reset_index(inplace=True, drop=True)
                 result_for_response[symbol] = {"status": "ok", "info": df.to_json()}
             else:
                 # Rollback red alert
@@ -281,9 +278,9 @@ def api_last(history_params):
     elapsed_time = str(end - start_process)
 
     final_response = {
-        "result":result_for_response,
-        "status":"ok",
-        "elapsed_time":elapsed_time
+        "result": result_for_response,
+        "status": "ok",
+        "elapsed_time": elapsed_time
     }
 
     return final_response

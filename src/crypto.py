@@ -254,31 +254,34 @@ def get_symbol_ohlcv_last(exchange_name, symbol, start=None, end=None, timeframe
         print("symbol not found: ", symbol)
         return "symbol not found"
 
-    if start == 'None' and end == 'None':
+    if not length:
+        length = 1
+
+    if (not start or start == 'None') and (not end or end == 'None'):
         end = datetime.datetime.now()
         end = end.replace(second=0, microsecond=0)
         if timeframe == "1d":
             end = end.replace(hour=0, minute=0, second=0, microsecond=0)
-            start = end + datetime.timedelta(days=-1)
+            start = end + datetime.timedelta(days=-length)
         elif timeframe == "1h":
             end = end.replace(minute=0, second=0, microsecond=0)
-            start = end + datetime.timedelta(hours=-1)
+            start = end + datetime.timedelta(hours=-length)
         elif timeframe == "1m":
             end = end.replace(second=0, microsecond=0)
-            start = end + datetime.timedelta(minutes=-1)
+            start = end + datetime.timedelta(minutes=-length)
     else:
         start = utils.convert_string_to_datetime(start)
         end = utils.convert_string_to_datetime(end)
         # as we want the end date included, one adds a delta
         if timeframe == "1d":
             end = end.replace(hour=0, minute=0, second=0, microsecond=0)
-            end += datetime.timedelta(days=1)
+            end += datetime.timedelta(days=length)
         elif timeframe == "1h":
             end = end.replace(minute=0, second=0, microsecond=0)
-            end += datetime.timedelta(hours=1)
+            end += datetime.timedelta(hours=length)
         elif timeframe == "1m":
             end = end.replace(second=0, microsecond=0)
-            end += datetime.timedelta(minutes=1)
+            end += datetime.timedelta(minutes=length)
 
     # request a start earlier according to what the indicators need
     start_with_period = start

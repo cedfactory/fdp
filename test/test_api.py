@@ -177,6 +177,28 @@ class TestApi:
         assert(isinstance(ohlcv, pd.DataFrame))
         assert(len(ohlcv.index) == 32)
 
+    def test_api_last(self):
+        symbol = "XRP"
+        params_history = {"str_exchange": "bitget",
+                          "str_symbol": symbol,
+                          "str_length": "20",
+                          "str_interval": "1d"}
+        response = api.api_last(params_history)
+        symbol = "XRP"
+        assert("status" in response)
+        assert(response["status"] == "ok")
+        assert("result" in response)
+        assert(symbol in response["result"])
+        assert(response["result"][symbol]["status"] == "ok")
+        assert("status" in response["result"][symbol])
+        assert(response["result"][symbol]["status"] == "ok")
+        assert("info" in response["result"][symbol])
+        df_data = response["result"][symbol]["info"]
+        ohlcv = pd.read_json(df_data)
+        assert(isinstance(ohlcv, pd.DataFrame))
+        assert(len(ohlcv.index) == 20)
+
+
     def test_api_indicators(self):
         symbol = "BTC/EURS"
         expected_symbol = "BTC_EURS"
