@@ -10,7 +10,7 @@ from . import indicators_flabeling as flabeling
 from . import indicators_supertrend as supertrend
 from . import indicators_tradingview as tv
 from . import utils
-from custom_indicators import Trix
+from . import custom_indicators as ci
 
 def get_window_size(indicator):
     trend_parsed = parse('trend_{}d', indicator)
@@ -320,7 +320,7 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
             df['rsi' + suffix] = ta.momentum.rsi(close=df["close"], window=rsi_window)
 
         elif indicator == "trix":
-            trix_obj = Trix(
+            trix_obj = ci.Trix(
                 close=df["close"],
                 trix_length=parameters["trix_length"],
                 trix_signal_length=parameters["trix_signal_length"],
