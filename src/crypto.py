@@ -316,13 +316,8 @@ def get_symbol_ohlcv_last(exchange_name, symbol, start=None, end=None, timeframe
         indicator_params = {"symbol": symbol, "exchange": exchange_name}
         ohlcv = inc_indicators.compute_indicators(ohlcv, indicators, True, indicator_params)
 
-    if max_period != 0:
-        if candle_stick == "alive":
-            ohlcv = ohlcv.iloc[max_period:]
-        else:
-            ohlcv = ohlcv.iloc[max_period-1:-1]
-
-    ohlcv.interpolate(inplace=True) # CEDE WORKAROUND TO BE DISCUSSED WITH CL
+    #ohlcv.interpolate(inplace=True)
+    ohlcv = ohlcv.iloc[[-1]]
     return ohlcv
 
 ###

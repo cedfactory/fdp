@@ -10,6 +10,7 @@ from . import indicators_flabeling as flabeling
 from . import indicators_supertrend as supertrend
 from . import indicators_tradingview as tv
 from . import utils
+from custom_indicators import Trix
 
 def get_window_size(indicator):
     trend_parsed = parse('trend_{}d', indicator)
@@ -317,6 +318,24 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
                 if isinstance(rsi_window, str):
                     rsi_window = int(rsi_window)
             df['rsi' + suffix] = ta.momentum.rsi(close=df["close"], window=rsi_window)
+
+        elif indicator == "trix":
+            trix_obj = Trix(
+                close=df["close"],
+                trix_length=parameters["trix_length"],
+                trix_signal_length=parameters["trix_signal_length"],
+                trix_signal_type=parameters["trix_signal_type"],
+            )
+            df["trix" + suffix] = trix_obj.get_trix_pct_line()
+            df["trix_signal" + suffix] = trix_obj.get_trix_signal_line()
+            df["trix_hist" + suffix] = df["trix" + suffix] - df["trix_signal" + suffix]
+            if len(df["close"]) < parameters["long_ma_length"]:
+                long_ma_length = len(df["close"])
+            else:
+                long_ma_length = parameters["long_ma_length"]
+            df["long_ma" + suffix] = ta.trend.ema_indicator(
+                df["close"], window=long_ma_length
+            )
 
         elif indicator == 'stoch_rsi':
             rsi_window = 14
