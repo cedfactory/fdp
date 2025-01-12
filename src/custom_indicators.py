@@ -5,6 +5,9 @@ import ta
 import math
 import requests
 
+import talib
+import pandas_ta as pandas_ta
+
 
 def get_n_columns(df, columns, n=1):
     dt = df.copy()
@@ -47,6 +50,203 @@ def fear_and_greed(close):
     df['FEAR'] = df.FEAR.astype(float)
     return pd.Series(df['FEAR'], name="FEAR")
 
+class Ichimoku():
+    def __init__(
+            self,
+            data,
+            conversion_line_period,
+            base_line_periods,
+            lagging_span,
+            displacement,
+            ssl_atr_period
+    ):
+        self.data = data
+        self.conversion_line_period = conversion_line_period
+        self.base_line_periods = base_line_periods
+        self.lagging_span = lagging_span
+        self.displacement = displacement
+        self.ssl_atr_period = ssl_atr_period
+
+        # Input data
+        self.high = self.data['high'].to_numpy()  # Ensure data is in NumPy format
+        self.low = self.data['low'].to_numpy()
+        self.close = self.data['close'].to_numpy()
+
+        self._run()
+
+    def _run(self):
+        ssl_down, ssl_up = self.ssl_atr(period=self.ssl_atr_period)
+
+        self.ssl_ok = (ssl_up > ssl_down).astype(int)
+        self.ssl_bear = (ssl_up < ssl_down).astype(int)
+
+        self.ichimoku()
+
+    def ssl_atr(self, period=7):
+        # Calculate ATR (Average True Range) with a window of 14
+        atr = talib.ATR(self.high, self.low, self.close, timeperiod=14)
+
+        # Calculate SMA of high and low with the given period
+        sma_high = talib.SMA(self.high, timeperiod=period) + atr
+        sma_low = talib.SMA(self.low, timeperiod=period) - atr
+
+        # Determine HLV (High-Low Value)
+        hlv = np.where(self.close > sma_high, 1, np.where(self.close < sma_low, -1, np.nan))
+
+        # Convert HLV to DataFrame and forward-fill NaN values
+        hlv = pd.Series(hlv, index=self.data.index).ffill()
+
+        # Calculate SSL Down and SSL Up
+        ssl_down = np.where(hlv < 0, sma_high, sma_low)
+        ssl_up = np.where(hlv < 0, sma_low, sma_high)
+
+        # Return the resulting DataFrames for SSL Down and SSL Up
+        return pd.Series(ssl_down, index=self.data.index), pd.Series(ssl_up, index=self.data.index)
+
+    def ichimoku(self):
+        # Extract parameters from the class instance
+        conv_period = self.conversion_line_period
+        base_period = self.base_line_periods
+        lag_span = self.lagging_span
+        displacement = self.displacement
+
+        # Convert data to Pandas Series for rolling operations
+        high = pd.Series(self.high)
+        low = pd.Series(self.low)
+        close = pd.Series(self.close)
+
+        # Compute Ichimoku components
+        self.tenkan_sen = (high.rolling(window=conv_period).max() + low.rolling(window=conv_period).min()) / 2
+        self.kijun_sen = (high.rolling(window=base_period).max() + low.rolling(window=base_period).min()) / 2
+        self.senkou_span_a = ((self.tenkan_sen + self.kijun_sen) / 2).shift(displacement)
+        self.senkou_span_b = ((high.rolling(window=lag_span).max() + low.rolling(window=lag_span).min()) / 2).shift(
+            displacement)
+        self.chikou_span = close.shift(-displacement)
+
+        # Future cloud indicators
+        self.future_green = (self.senkou_span_a > self.senkou_span_b).astype(int)
+        self.future_red = (self.senkou_span_a < self.senkou_span_b).astype(int)
+
+        # Cloud boundaries
+        self.cloud_top = self.senkou_span_a.combine(self.senkou_span_b, np.maximum)
+        self.cloud_bottom = self.senkou_span_a.combine(self.senkou_span_b, np.minimum)
+
+        # Calculate Ichimoku bullish signal
+        ichimoku_ok = (
+                (self.tenkan_sen > self.kijun_sen) &
+                (close > self.cloud_top) &
+                (self.future_green > 0) &
+                (self.chikou_span > self.cloud_top.shift(-displacement))
+        ).astype(int)
+
+        # Calculate Ichimoku bearish signal
+        ichimoku_bear = (
+                (self.tenkan_sen < self.kijun_sen) &
+                (close < self.cloud_bottom) &
+                (self.future_red > 0) &
+                (self.chikou_span < self.cloud_bottom.shift(-displacement))
+        ).astype(int)
+
+        # Validate Ichimoku data
+        self.ichimoku_valid = (~self.senkou_span_b.isna()).astype(int)
+
+        # Align indices
+        ichimoku_ok = pd.Series(ichimoku_ok.values, index=self.ssl_ok.index)
+        ichimoku_bear = pd.Series(ichimoku_bear.values, index=self.ssl_bear.index)
+
+        # Combine Ichimoku and SSL signals for bullish trend pulse
+        self.trend_pulse = (
+                (ichimoku_ok > 0) &
+                (self.ssl_ok > 0)
+        ).astype(int)
+
+        # Combine Ichimoku and SSL signals for bearish trend pulse
+        self.bear_trend_pulse = (
+                (ichimoku_bear > 0) &
+                (self.ssl_bear > 0)
+        ).astype(int)
+
+        # Reindex to match the main data's index
+        self.ichimoku_valid.index = self.data.index
+        self.ichimoku_valid = self.ichimoku_valid.reindex(self.data.index, method='ffill')
+        self.trend_pulse = self.trend_pulse.reindex(self.data.index, method='ffill')
+        self.bear_trend_pulse = self.bear_trend_pulse.reindex(self.data.index, method='ffill')
+
+    def get_ichimoku_valid(self) -> pd.Series:
+        return pd.Series(self.ichimoku_valid, name="ichimoku_valid")
+
+    def get_trend_pulse(self) -> pd.Series:
+        return pd.Series(self.trend_pulse, name="trend_pulse")
+
+    def get_bear_trend_pulse(self) -> pd.Series:
+        return pd.Series(self.bear_trend_pulse, name="bear_trend_pulse")
+
+class ZeroLagMa():
+    def __init__(
+            self,
+            close: pd.Series,
+            ma_type,
+            high_offset,
+            low_offset,
+            zema_len_buy,
+            zema_len_sell
+    ):
+        self.close = close
+        self.ma_type = ma_type
+        self.high_offset = high_offset
+        self.low_offset = low_offset
+        self.zema_len_buy = zema_len_buy
+        self.zema_len_sell = zema_len_sell
+        self._run()
+
+    def _run(self):
+        if self.ma_type == "ZLEMA":
+            zlema_buy = talib.EMA(self.close, timeperiod=self.zema_len_buy)
+            self.zerolag_ma_buy_adj = zlema_buy * self.low_offset
+            zlema_sell = talib.EMA(self.close, timeperiod=self.zema_len_sell)
+            self.zerolag_ma_sell_adj = zlema_sell * self.high_offset
+
+        elif self.ma_type == "ZLMA":
+            zlma_buy = pandas_ta.zlma(self.close, length=self.zema_len_buy)
+            self.zerolag_ma_buy_adj = zlma_buy * self.low_offset
+            zlma_sell = pandas_ta.zlma(self.close, length=self.zema_len_sell)
+            self.zerolag_ma_sell_adj = zlma_sell * self.high_offset
+
+        elif self.ma_type == "TEMA":
+            tema_buy = talib.TEMA(self.close, timeperiod=self.zema_len_buy)
+            self.zerolag_ma_buy_adj = tema_buy * self.low_offset
+            tema_sell = talib.TEMA(self.close, timeperiod=self.zema_len_sell)
+            self.zerolag_ma_sell_adj = tema_sell * self.high_offset
+
+        elif self.ma_type == "DEMA":
+            dema_buy = talib.DEMA(self.close, timeperiod=self.zema_len_buy)
+            self.zerolag_ma_buy_adj = dema_buy * self.low_offset
+            dema_sell = talib.DEMA(self.close, timeperiod=self.zema_len_sell)
+            self.zerolag_ma_sell_adj = dema_sell * self.high_offset
+
+        elif self.ma_type == "ALMA":
+            alma_buy = pandas_ta.alma(self.close, length=self.zema_len_buy)
+            self.zerolag_ma_buy_adj = alma_buy * self.low_offset
+            alma_sell = pandas_ta.alma(self.close, length=self.zema_len_sell)
+            self.zerolag_ma_sell_adj = alma_sell * self.high_offset
+
+        elif self.ma_type == "KAMA":
+            kama_buy = talib.KAMA(self.close, timeperiod=self.zema_len_buy)
+            self.zerolag_ma_buy_adj = kama_buy * self.low_offset
+            kama_sell = talib.KAMA(self.close, timeperiod=self.zema_len_sell)
+            self.zerolag_ma_sell_adj = kama_sell * self.high_offset
+
+        elif self.ma_type == "HMA":
+            hma_buy = pandas_ta.hma(self.close, length=self.zema_len_buy)
+            self.zerolag_ma_buy_adj = hma_buy * self.low_offset
+            hma_sell = pandas_ta.hma(self.close, length=self.zema_len_sell)
+            self.zerolag_ma_sell_adj = hma_sell * self.high_offset
+
+    def get_zerolag_ma_buy_adj(self) -> pd.Series:
+        return pd.Series(self.zerolag_ma_buy_adj, name="zerolag_ma_buy_adj")
+
+    def get_zerolag_ma_sell_adj(self) -> pd.Series:
+        return pd.Series(self.zerolag_ma_sell_adj, name="zerolag_ma_sell_adj")
 
 class Trix():
     """ Trix indicator

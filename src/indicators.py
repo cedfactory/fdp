@@ -324,7 +324,7 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
                 close=df["close"],
                 trix_length=parameters["trix_length"],
                 trix_signal_length=parameters["trix_signal_length"],
-                trix_signal_type=parameters["trix_signal_type"],
+                trix_signal_type=parameters["trix_signal_type"]
             )
             df["trix" + suffix] = trix_obj.get_trix_pct_line()
             df["trix_signal" + suffix] = trix_obj.get_trix_signal_line()
@@ -336,6 +336,35 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
             df["long_ma" + suffix] = ta.trend.ema_indicator(
                 df["close"], window=long_ma_length
             )
+
+        elif indicator == "zerolag_ma":
+            zerolag_ma_obj = ci.ZeroLagMa(
+                close=df["close"],
+                ma_type=parameters["ma_type"],
+                high_offset=parameters["high_offset"],
+                low_offset=parameters["low_offset"],
+                zema_len_buy=parameters["zema_len_buy"],
+                zema_len_sell=parameters["zema_len_sell"]
+            )
+
+            df[indicator + suffix] = 0
+            df["zerolag_ma_buy_adj" + suffix] = zerolag_ma_obj.get_zerolag_ma_buy_adj()
+            df["zerolag_ma_sell_adj" + suffix] = zerolag_ma_obj.get_zerolag_ma_sell_adj()
+
+        elif indicator == "ichimoku":
+            ichimoku_obj = ci.Ichimoku(
+                data=df,
+                conversion_line_period=parameters["conversion_line_period"],
+                base_line_periods=parameters["base_line_periods"],
+                lagging_span=parameters["lagging_span"],
+                displacement=parameters["displacement"],
+                ssl_atr_period=parameters["ssl_atr_period"]
+            )
+
+            df[indicator + suffix] = 0
+            df["ichimoku_valid" + suffix] = ichimoku_obj.get_ichimoku_valid()
+            df["trend_pulse" + suffix] = ichimoku_obj.get_trend_pulse()
+            df["bear_trend_pulse" + suffix] = ichimoku_obj.get_bear_trend_pulse()
 
         elif indicator == 'stoch_rsi':
             rsi_window = 14

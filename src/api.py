@@ -170,12 +170,34 @@ def api_history_parse_parameters(request, last=False):
 
 
     if last == True:
+        now = datetime.now()
+
         if str_interval == "1m":
-            str_start = datetime.today().strftime('%Y-%m-%d %H:%M:00')
+            str_start = now.strftime('%Y-%m-%d %H:%M:00')
+        elif str_interval == "5m":
+            # Adjust to the nearest 5-minute mark
+            minute = (now.minute // 5) * 5
+            str_start = now.replace(minute=minute, second=0, microsecond=0).strftime('%Y-%m-%d %H:%M:00')
+        elif str_interval == "15m":
+            # Adjust to the nearest 15-minute mark
+            minute = (now.minute // 15) * 15
+            str_start = now.replace(minute=minute, second=0, microsecond=0).strftime('%Y-%m-%d %H:%M:00')
+        elif str_interval == "30m":
+            # Adjust to the nearest 30-minute mark
+            minute = (now.minute // 30) * 30
+            str_start = now.replace(minute=minute, second=0, microsecond=0).strftime('%Y-%m-%d %H:%M:00')
         elif str_interval == "1h":
-            str_start = datetime.today().strftime('%Y-%m-%d %H:00:00')
+            str_start = now.strftime('%Y-%m-%d %H:00:00')
+        elif str_interval == "2h":
+            # Adjust to the nearest 2-hour mark starting at 00:00
+            hour = (now.hour // 2) * 2
+            str_start = now.replace(hour=hour, minute=0, second=0, microsecond=0).strftime('%Y-%m-%d %H:00:00')
+        elif str_interval == "4h":
+            # Adjust to the nearest 4-hour mark starting at 00:00
+            hour = (now.hour // 4) * 4
+            str_start = now.replace(hour=hour, minute=0, second=0, microsecond=0).strftime('%Y-%m-%d %H:00:00')
         elif str_interval == "1d":
-            str_start = datetime.today().strftime('%Y-%m-%d')
+            str_start = now.strftime('%Y-%m-%d')
         str_end = str_start
         str_start = ""
         str_end = ""

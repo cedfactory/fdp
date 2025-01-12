@@ -10,30 +10,56 @@ from . import indicators as inc_indicators
 import concurrent.futures
 
 def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1d", limit=None):
+
     if exchange == None or symbol == None or start == None:
         return None
-    since = int(start.timestamp())*1000
-    if end != None:
+
+    since = int(start.timestamp()) * 1000
+
+    if end is not None:
         delta = end - start
         if timeframe == "1d":
-            limit = delta.days # days
+            limit = delta.days  # days
         elif timeframe == "1h":
-            limit = int(delta.total_seconds() / 3600)
+            limit = int(delta.total_seconds() / 3600)  # hours
+        elif timeframe == "2h":
+            limit = int(delta.total_seconds() / (2 * 3600))  # 2-hour intervals
+        elif timeframe == "4h":
+            limit = int(delta.total_seconds() / (4 * 3600))  # 4-hour intervals
         elif timeframe == "1m":
-            limit = int(delta.total_seconds() / 60)
+            limit = int(delta.total_seconds() / 60)  # minutes
+        elif timeframe == "5m":
+            limit = int(delta.total_seconds() / (5 * 60))  # 5-minute intervals
+        elif timeframe == "15m":
+            limit = int(delta.total_seconds() / (15 * 60))  # 15-minute intervals
+        elif timeframe == "30m":
+            limit = int(delta.total_seconds() / (30 * 60))  # 30-minute intervals
+
     if limit == None:
         return None
 
     intervals = []
     # offset is a param depending on the exchanger properties
     # binance offset = 1000
-    if timeframe == "1d" or timeframe == "1h" or timeframe == "1m" : # split into requests with limit = 5000
+    if timeframe in ["1d", "1h", "1m", "5m", "15m", "30m", "2h", "4h"]:  # split into requests with limit = 5000
         if timeframe == "1d":
-            offset = 1000 * 24 * 60 * 60 * 1000
-        if timeframe == "1h":
-            offset = 1000 * 60 * 60 * 1000
-        if timeframe == "1m":
-            offset = 1000 * 60 * 1000
+            offset = 1000 * 24 * 60 * 60 * 1000  # 1 day in milliseconds
+        elif timeframe == "1h":
+            offset = 1000 * 60 * 60 * 1000  # 1 hour in milliseconds
+        elif timeframe == "2h":
+            offset = 2 * 1000 * 60 * 60 * 1000  # 2 hours in milliseconds
+        elif timeframe == "4h":
+            offset = 4 * 1000 * 60 * 60 * 1000  # 4 hours in milliseconds
+        elif timeframe == "1m":
+            offset = 1000 * 60 * 1000  # 1 minute in milliseconds
+        elif timeframe == "5m":
+            offset = 5 * 1000 * 60 * 1000  # 5 minutes in milliseconds
+        elif timeframe == "15m":
+            offset = 15 * 1000 * 60 * 1000  # 15 minutes in milliseconds
+        elif timeframe == "30m":
+            offset = 30 * 1000 * 60 * 1000  # 30 minutes in milliseconds
+
+        # Split into requests with limit = 5000
         while limit > 1000:
             since_next = since + offset
             intervals.append({'since': since, 'limit': 1000})
@@ -43,6 +69,7 @@ def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1d", limit=None):
 
     everything_ok = True
     df_results = {}
+
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = {executor.submit(exchange.fetch_ohlcv, symbol, timeframe, interval["since"], interval["limit"]): interval["since"] for interval in intervals}
         for future in concurrent.futures.as_completed(futures):
@@ -166,31 +193,7 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d"
         print("symbol not found: ", symbol)
         return "symbol not found"
 
-    if start == 'None' and end == 'None':
-        end = datetime.datetime.now()
-        end = end.replace(second=0, microsecond=0)
-        if timeframe == "1d":
-            end = end.replace(hour=0, minute=0, second=0, microsecond=0)
-            start = end + datetime.timedelta(days=-1)
-        elif timeframe == "1h":
-            end = end.replace(minute=0, second=0, microsecond=0)
-            start = end + datetime.timedelta(hours=-1)
-        elif timeframe == "1m":
-            end = end.replace(second=0, microsecond=0)
-            start = end + datetime.timedelta(minutes=-1)
-    else:
-        start = utils.convert_string_to_datetime(start)
-        end = utils.convert_string_to_datetime(end)
-        # as we want the end date included, one adds a delta
-        if timeframe == "1d":
-            end = end.replace(hour=0, minute=0, second=0, microsecond=0)
-            end += datetime.timedelta(days=1)
-        elif timeframe == "1h":
-            end = end.replace(minute=0, second=0, microsecond=0)
-            end += datetime.timedelta(hours=1)
-        elif timeframe == "1m":
-            end = end.replace(second=0, microsecond=0)
-            end += datetime.timedelta(minutes=1)
+    start, end = utils.get_date_range(start, end, timeframe, length)
 
     # request a start earlier according to what the indicators need
     start_with_period = start
@@ -201,8 +204,18 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d"
             start_with_period = start_with_period + datetime.timedelta(days=-max_period)
         elif timeframe == "1h":
             start_with_period = start_with_period + datetime.timedelta(hours=-max_period)
+        elif timeframe == "2h":
+            start_with_period = start_with_period + datetime.timedelta(hours=-2 * max_period)
+        elif timeframe == "4h":
+            start_with_period = start_with_period + datetime.timedelta(hours=-4 * max_period)
         elif timeframe == "1m":
             start_with_period = start_with_period + datetime.timedelta(minutes=-max_period)
+        elif timeframe == "5m":
+            start_with_period = start_with_period + datetime.timedelta(minutes=-5 * max_period)
+        elif timeframe == "15m":
+            start_with_period = start_with_period + datetime.timedelta(minutes=-15 * max_period)
+        elif timeframe == "30m":
+            start_with_period = start_with_period + datetime.timedelta(minutes=-30 * max_period)
 
     ohlcv = _get_ohlcv(exchange, symbol, start_with_period, end, timeframe, length)
     if not isinstance(ohlcv, pd.DataFrame):
@@ -211,19 +224,6 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d"
     # remove dupicates
     ohlcv = ohlcv[~ohlcv.index.duplicated()]
 
-    # add potential missing dates
-    map_timeframe_freq = {"1h": "H", "1d": "D", "1m": "min"}
-    freq = map_timeframe_freq[timeframe]
-    if end == None and length == None:
-        end = date.today()
-        end = end.strftime("%Y-%m-%d")
-
-    # TEST CEDE FOR LIVE
-    # USED FOR SIM:
-    # expected_range = pd.date_range(start=start_with_period, end=end, freq=freq, inclusive="left")
-    # ohlcv.index = pd.DatetimeIndex(ohlcv.index)
-    # ohlcv = ohlcv.reindex(expected_range, fill_value=np.nan)
-
     if len(indicators) != 0:
         indicator_params = {"symbol": symbol, "exchange": exchange_name}
         ohlcv = inc_indicators.compute_indicators(ohlcv, indicators, True, indicator_params)
@@ -231,7 +231,7 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d"
     if max_period != 0:
         ohlcv = ohlcv.iloc[max_period-1:-1] # WARNING CEDE to get the second to last candle instead of the last
 
-    ohlcv.interpolate(inplace=True) # CEDE WORKAROUND TO BE DISCUSSED WITH CL
+    # ohlcv.interpolate(inplace=True) # CEDE WORKAROUND TO BE DISCUSSED WITH CL
     return ohlcv
 
 def get_symbol_ohlcv_last(exchange_name, symbol, start=None, end=None, timeframe="1d", length=1, indicators={}, exchange=None, candle_stick="released"):
@@ -254,31 +254,7 @@ def get_symbol_ohlcv_last(exchange_name, symbol, start=None, end=None, timeframe
         print("symbol not found: ", symbol)
         return "symbol not found"
 
-    if (not start or start == 'None') and (not end or end == 'None'):
-        end = datetime.datetime.now()
-        end = end.replace(second=0, microsecond=0)
-        if timeframe == "1d":
-            end = end.replace(hour=0, minute=0, second=0, microsecond=0)
-            start = end + datetime.timedelta(days=-length)
-        elif timeframe == "1h":
-            end = end.replace(minute=0, second=0, microsecond=0)
-            start = end + datetime.timedelta(hours=-length)
-        elif timeframe == "1m":
-            end = end.replace(second=0, microsecond=0)
-            start = end + datetime.timedelta(minutes=-length)
-    else:
-        start = utils.convert_string_to_datetime(start)
-        end = utils.convert_string_to_datetime(end)
-        # as we want the end date included, one adds a delta
-        if timeframe == "1d":
-            end = end.replace(hour=0, minute=0, second=0, microsecond=0)
-            end += datetime.timedelta(days=length)
-        elif timeframe == "1h":
-            end = end.replace(minute=0, second=0, microsecond=0)
-            end += datetime.timedelta(hours=length)
-        elif timeframe == "1m":
-            end = end.replace(second=0, microsecond=0)
-            end += datetime.timedelta(minutes=length)
+    start, end = utils.get_date_range(start, end, timeframe, length)
 
     # request a start earlier according to what the indicators need
     start_with_period = start
@@ -289,8 +265,18 @@ def get_symbol_ohlcv_last(exchange_name, symbol, start=None, end=None, timeframe
             start_with_period = start_with_period + datetime.timedelta(days=-max_period)
         elif timeframe == "1h":
             start_with_period = start_with_period + datetime.timedelta(hours=-max_period)
+        elif timeframe == "2h":
+            start_with_period = start_with_period + datetime.timedelta(hours=-2 * max_period)
+        elif timeframe == "4h":
+            start_with_period = start_with_period + datetime.timedelta(hours=-4 * max_period)
         elif timeframe == "1m":
             start_with_period = start_with_period + datetime.timedelta(minutes=-max_period)
+        elif timeframe == "5m":
+            start_with_period = start_with_period + datetime.timedelta(minutes=-5 * max_period)
+        elif timeframe == "15m":
+            start_with_period = start_with_period + datetime.timedelta(minutes=-15 * max_period)
+        elif timeframe == "30m":
+            start_with_period = start_with_period + datetime.timedelta(minutes=-30 * max_period)
 
     ohlcv = _get_ohlcv(exchange, symbol, start_with_period, end, timeframe, length)
     if not isinstance(ohlcv, pd.DataFrame):
@@ -299,24 +285,10 @@ def get_symbol_ohlcv_last(exchange_name, symbol, start=None, end=None, timeframe
     # remove dupicates
     ohlcv = ohlcv[~ohlcv.index.duplicated()]
 
-    # add potential missing dates
-    map_timeframe_freq = {"1h": "H", "1d": "D", "1m": "min"}
-    freq = map_timeframe_freq[timeframe]
-    if end == None and length == None:
-        end = date.today()
-        end = end.strftime("%Y-%m-%d")
-
-    # TEST CEDE FOR LIVE
-    # USED FOR SIM:
-    # expected_range = pd.date_range(start=start_with_period, end=end, freq=freq, inclusive="left")
-    # ohlcv.index = pd.DatetimeIndex(ohlcv.index)
-    # ohlcv = ohlcv.reindex(expected_range, fill_value=np.nan)
-
     if len(indicators) != 0:
         indicator_params = {"symbol": symbol, "exchange": exchange_name}
         ohlcv = inc_indicators.compute_indicators(ohlcv, indicators, True, indicator_params)
 
-    #ohlcv.interpolate(inplace=True)
     ohlcv = ohlcv.iloc[[-1]]
     return ohlcv
 

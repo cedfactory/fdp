@@ -6,6 +6,113 @@ from datetime import datetime
 
 from sklearn.linear_model import LinearRegression
 
+import datetime
+import utils  # assumed from your code
+
+def get_date_range(start, end, timeframe, length=100):
+    """
+    If no start/end is provided, generate them by subtracting `length` intervals from now.
+    Otherwise, parse start/end from strings and expand end by `length` intervals (so it's inclusive).
+    """
+
+    # 1) If start/end is not provided, auto-generate them
+    if (not start or start == 'None') and (not end or end == 'None'):
+        end = datetime.datetime.now().replace(second=0, microsecond=0)
+
+        if timeframe == "1d":
+            # Round to 00:00:00
+            end = end.replace(hour=0, minute=0, second=0, microsecond=0)
+            start = end + datetime.timedelta(days=-length)
+
+        elif timeframe == "1h":
+            # Round to XX:00:00
+            end = end.replace(minute=0, second=0, microsecond=0)
+            start = end + datetime.timedelta(hours=-length)
+
+        elif timeframe == "1m":
+            # Round to XX:XX:00
+            end = end.replace(second=0, microsecond=0)
+            start = end + datetime.timedelta(minutes=-length)
+
+        elif timeframe == "5m":
+            # Round to a multiple of 5 minutes (optional)
+            # end = end.replace(minute=(end.minute // 5) * 5, second=0, microsecond=0)
+            end = end.replace(second=0, microsecond=0)
+            start = end + datetime.timedelta(minutes=-length * 5)
+
+        elif timeframe == "15m":
+            # Round to a multiple of 15 minutes (optional)
+            # end = end.replace(minute=(end.minute // 15) * 15, second=0, microsecond=0)
+            end = end.replace(second=0, microsecond=0)
+            start = end + datetime.timedelta(minutes=-length * 15)
+
+        elif timeframe == "30m":
+            # Round to a multiple of 30 minutes (optional)
+            # end = end.replace(minute=(end.minute // 30) * 30, second=0, microsecond=0)
+            end = end.replace(second=0, microsecond=0)
+            start = end + datetime.timedelta(minutes=-length * 30)
+
+        elif timeframe == "2h":
+            # Round to nearest multiple of 2 hours (optional)
+            # end = end.replace(hour=(end.hour // 2) * 2, minute=0, second=0, microsecond=0)
+            end = end.replace(minute=0, second=0, microsecond=0)
+            start = end + datetime.timedelta(hours=-length * 2)
+
+        elif timeframe == "4h":
+            # Round to nearest multiple of 4 hours (optional)
+            # end = end.replace(hour=(end.hour // 4) * 4, minute=0, second=0, microsecond=0)
+            end = end.replace(minute=0, second=0, microsecond=0)
+            start = end + datetime.timedelta(hours=-length * 4)
+
+        else:
+            # Default fallback if needed
+            pass
+
+    # 2) If start/end is provided, parse them and adjust end forward by `length` intervals
+    else:
+        start = utils.convert_string_to_datetime(start)
+        end = utils.convert_string_to_datetime(end)
+
+        # As we want the end date included, we add the delta
+        if timeframe == "1d":
+            end = end.replace(hour=0, minute=0, second=0, microsecond=0)
+            end += datetime.timedelta(days=length)
+
+        elif timeframe == "1h":
+            end = end.replace(minute=0, second=0, microsecond=0)
+            end += datetime.timedelta(hours=length)
+
+        elif timeframe == "1m":
+            end = end.replace(second=0, microsecond=0)
+            end += datetime.timedelta(minutes=length)
+
+        elif timeframe == "5m":
+            # Round down or simply remove seconds
+            end = end.replace(second=0, microsecond=0)
+            end += datetime.timedelta(minutes=length * 5)
+
+        elif timeframe == "15m":
+            end = end.replace(second=0, microsecond=0)
+            end += datetime.timedelta(minutes=length * 15)
+
+        elif timeframe == "30m":
+            end = end.replace(second=0, microsecond=0)
+            end += datetime.timedelta(minutes=length * 30)
+
+        elif timeframe == "2h":
+            end = end.replace(minute=0, second=0, microsecond=0)
+            end += datetime.timedelta(hours=length * 2)
+
+        elif timeframe == "4h":
+            end = end.replace(minute=0, second=0, microsecond=0)
+            end += datetime.timedelta(hours=length * 4)
+
+        else:
+            # Default fallback if needed
+            pass
+
+    return start, end
+
 def print_exception_info(exception):
     caller = getframeinfo(stack()[2][0])
     print("[{}:{}] - {}".format(caller.filename, caller.lineno, exception))
