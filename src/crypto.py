@@ -258,7 +258,7 @@ def get_symbol_ohlcv_last(exchange_name, symbol, start=None, end=None, timeframe
 
     # request a start earlier according to what the indicators need
     start_with_period = start
-    max_period = inc_indicators.get_max_window_size(indicators) + 1 # MODIF CEDE to be confirmed by CL
+    max_period = inc_indicators.get_max_window_size(indicators) + 1
     #max_period = utils.max_from_dict_values(indicators)
     if max_period != 0:
         if timeframe == "1d":
@@ -281,6 +281,9 @@ def get_symbol_ohlcv_last(exchange_name, symbol, start=None, end=None, timeframe
     ohlcv = _get_ohlcv(exchange, symbol, start_with_period, end, timeframe, length)
     if not isinstance(ohlcv, pd.DataFrame):
         return ohlcv
+
+    if candle_stick == "released":
+        ohlcv = ohlcv.iloc[:-1]
 
     # remove dupicates
     ohlcv = ohlcv[~ohlcv.index.duplicated()]

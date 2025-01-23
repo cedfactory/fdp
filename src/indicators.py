@@ -347,7 +347,7 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
                 zema_len_sell=parameters["zema_len_sell"]
             )
 
-            df[indicator + suffix] = 0
+            df[indicator + suffix] = df["close"]
             df["zerolag_ma_buy_adj" + suffix] = zerolag_ma_obj.get_zerolag_ma_buy_adj()
             df["zerolag_ma_sell_adj" + suffix] = zerolag_ma_obj.get_zerolag_ma_sell_adj()
 
@@ -361,7 +361,7 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
                 ssl_atr_period=parameters["ssl_atr_period"]
             )
 
-            df[indicator + suffix] = 0
+            df[indicator + suffix] = df["close"]
             df["ichimoku_valid" + suffix] = ichimoku_obj.get_ichimoku_valid()
             df["trend_pulse" + suffix] = ichimoku_obj.get_trend_pulse()
             df["bear_trend_pulse" + suffix] = ichimoku_obj.get_bear_trend_pulse()
