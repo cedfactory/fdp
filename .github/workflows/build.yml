@@ -43,8 +43,14 @@ jobs:
         fetch-depth: 0
  
     # Setup gcloud CLI
+    - id: 'auth'
+      uses: 'google-github-actions/auth@v2'
+      with:
+        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+        
     - uses: google-github-actions/setup-gcloud@v2
       with:
+        version: '>= 363.0.0'
         service_account_email: ${{ secrets.GCP_EMAIL }}
         service_account_key: ${{ secrets.GCP_CREDENTIALS }}
         export_default_credentials: true
