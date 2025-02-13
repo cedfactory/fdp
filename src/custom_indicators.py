@@ -225,6 +225,11 @@ class ZeroLagMa():
             self.zerolag_ma_sell_adj = dema_sell * self.high_offset
 
         elif self.ma_type == "ALMA":
+            # Calculate the ALMA with custom parameters:
+            # length: number of periods (e.g., 10)
+            # sigma: smooth factor (e.g., 6)
+            # offset: weight offset (e.g., 0.85)
+            # df.ta.alma(length=10, sigma=6, offset=0.85, append=True)
             alma_buy = pandas_ta.alma(self.close, length=self.zema_len_buy)
             self.zerolag_ma_buy_adj = alma_buy * self.low_offset
             alma_sell = pandas_ta.alma(self.close, length=self.zema_len_sell)
@@ -603,3 +608,125 @@ class MaSlope():
                 pd.Series: x_angle
         """
         return self.df['xangle']
+
+class TrendIndicator():
+    def __init__(
+            self,
+            close: pd.Series,
+            open: pd.Series,
+            low: pd.Series,
+            high: pd.Series,
+            volume: pd.Series,
+            trend_type,
+    ):
+        self.close = close
+        self.open = open
+        self.low = low
+        self.high = high
+        self.volume = volume
+        self.trend_type = trend_type
+        self._run()
+
+    def _run(self):
+        if self.trend_type == 'TSI':
+            # True Strength Index (TSI)
+            df_tsi = pandas_ta.tsi(self.close, long=25, short=13)
+            # Dynamically grab the first two columns regardless of their names
+            raw_tsi_col, signal_tsi_col = df_tsi.columns[:2]
+            # Create a trend difference column
+            df_tsi['trend_diff'] = df_tsi[raw_tsi_col] - df_tsi[signal_tsi_col]
+
+            # Create a trend column: 1 if uptrend (raw TSI > signal), -1 if downtrend
+            trend_array = np.where(df_tsi[raw_tsi_col] > df_tsi[signal_tsi_col], 1, -1)
+
+        elif self.trend_type == 'FISHER':
+            # Fisher Transform
+            df_fisher = pandas_ta.fisher(self.high, self.low, length=9)
+
+            # Dynamically grab the first two columns regardless of their names
+            raw_fisher_col, signal_fisher_col = df_fisher.columns[:2]
+
+            # Create a trend difference column
+            df_fisher['trend_diff'] = df_fisher[raw_fisher_col] - df_fisher[signal_fisher_col]
+
+            # Create a trend column: 1 if uptrend (raw Fisher > signal Fisher), -1 if downtrend
+            trend_array = np.where(df_fisher[raw_fisher_col] > df_fisher[signal_fisher_col], 1, -1)
+
+        elif self.trend_type == 'KALMAN':
+            # Kalman Filter: often you compare the price to the filter output.
+            s_Kalman = self.kalman_filter_numpy(self.close)
+            # Bullish if the current close is above the Kalman filter value, bearish otherwise.
+            trend_array = np.where(self.close > s_Kalman, 1, -1)
+
+        elif self.trend_type == 'SAR':
+            # Compute Parabolic SAR using TA-Lib.
+            s_SAR = talib.SAR(self.high, self.low, acceleration=0.02, maximum=0.2)
+            # For SAR, if the close is above the SAR value, the trend is bullish; if below, bearish.
+            trend_array = np.where(self.close > s_SAR, 1, -1)
+
+        elif self.trend_type == 'PRICE_ACTION':
+            # Compute highest and lowest window over 10 periods
+            s_highest_window = self.high.rolling(window=10).max()
+            s_lowest_window = self.low.rolling(window=10).min()
+
+            # Identify buy and sell signals
+            buy_signal = self.close > s_highest_window.shift(1)
+            sell_signal = self.close < s_lowest_window.shift(1)
+
+            # Create trend array based on price action
+            trend_array = np.zeros(len(buy_signal), dtype=int)
+            trend_array[buy_signal] = 1  # Uptrend when close breaks highest_window
+            trend_array[sell_signal] = -1  # Downtrend when close breaks lowest_window
+
+        self.trend_series = pd.Series(trend_array, index=self.close.index)
+
+    def get_trend(self) -> pd.Series:
+        return self.trend_series
+
+    def kalman_filter_numpy(self, series, process_variance=1e-5, measurement_variance=1e-1):
+        x = series.values  # Convert to a Numpy array
+        n = x.size
+        estimates = np.empty(n)
+
+        # Initialize with the first observation
+        estimates[0] = x[0]
+        posteri_estimate = x[0]
+        posteri_error_estimate = 1.0
+
+        for t in range(1, n):
+            # Prediction step
+            priori_estimate = posteri_estimate
+            priori_error_estimate = posteri_error_estimate + process_variance
+
+            # Update step
+            blending_factor = priori_error_estimate / (priori_error_estimate + measurement_variance)
+            posteri_estimate = priori_estimate + blending_factor * (x[t] - priori_estimate)
+            posteri_error_estimate = (1 - blending_factor) * priori_error_estimate
+
+            estimates[t] = posteri_estimate
+
+        return pd.Series(estimates, index=series.index)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
