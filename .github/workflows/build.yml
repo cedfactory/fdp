@@ -20,9 +20,12 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install ta-lib
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
+          wget https://github.com/ta-lib/ta-lib/releases/download/v0.6.4/ta-lib_0.6.4_amd64.deb
+          dpkg -i ta-lib_0.6.4_amd64.deb
+          pip install TA-Lib
 
       - name: Run pytest
         run: pytest --cov=. --cov-report=xml && coverage xml -i
