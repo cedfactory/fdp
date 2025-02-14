@@ -1,3 +1,4 @@
+@@ -0,0 +1,22 @@
 FROM ubuntu:20.04
 MAINTAINER cedfactory
 LABEL version="0.1"
@@ -14,6 +15,11 @@ RUN apt-get install -y wget python3-pip
 #RUN pip install --upgrade pip
 
 RUN pip install -r requirements.txt
+
+# TA-Lib
+RUN wget https://github.com/ta-lib/ta-lib/releases/download/v0.6.4/ta-lib_0.6.4_amd64.deb
+RUN dpkg -i ta-lib_0.6.4_amd64.deb
+RUN pip install TA-Lib
 
 # Run the web service on container startup. Here we use the gunicorn
 # webserver, with one worker process and 8 threads.
