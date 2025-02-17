@@ -1,3 +1,5 @@
 {
-  "build": { "dockerfile": "Dockerfile" }
+  "name": "fdp",
+  "build": { "dockerfile": "Dockerfile" },
+  "forwardPorts": [5000, 5000]
 }
