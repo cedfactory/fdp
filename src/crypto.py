@@ -9,7 +9,72 @@ from . import utils
 from . import indicators as inc_indicators
 import concurrent.futures
 
-def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1d", limit=None):
+import requests
+
+def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1h", limit=100, product_type="USDT-FUTURES"):
+        """
+        Fetch the latest 'limit' OHLCV candles for a given futures symbol, product type, and timeframe
+        from Bitget's Futures Market API.
+
+        Args:
+            symbol (str): Trading symbol (e.g., "BTCUSDT").
+            product_type (str): Product type (e.g., "umcbl", "dmcbl", etc.).
+            timeframe (str): Candle timeframe (e.g., "1d", "1h", etc.). Default is "1d".
+            limit (int): Number of candles to fetch.
+
+        Returns:
+            list: A list of candles (each typically a list or dict depending on API response),
+                  or None if an error occurred.
+        """
+
+        base_url = "https://api.bitget.com"
+        endpoint = "/api/v2/mix/market/candles"
+        url = base_url + endpoint
+
+        # Map common timeframe abbreviations to the API-required format.
+        timeframe_mapping = {
+            "1m": "1m",
+            "3m": "3m",
+            "5m": "5m",
+            "15m": "15m",
+            "30m": "30m",
+            "1h": "1H",
+            "4h": "4H",
+            "6h": "6H",
+            "12h": "12H",
+            "1d": "1D",
+            "1w": "1W",
+            "1M": "1Mutc"
+        }
+        timeframe = "1h"
+        period = timeframe_mapping.get(timeframe, timeframe)
+
+        params = {
+            "symbol": "BTCUSDT",
+            "granularity": period,
+            "limit": str(limit),
+            "productType": product_type  # added productType parameter for futures
+        }
+
+        try:
+            response = requests.get(url, params=params)
+            response.raise_for_status()  # Raises an HTTPError for unsuccessful responses
+            data = response.json()
+            if data.get("code") != "00000":
+                raise Exception(f"API error: {data.get('msg', 'Unknown error')} (code: {data.get('code')})")
+
+            candle_data = data.get("data", [])
+            # Assuming each candle is in the format:
+            # [timestamp, open, high, low, close, volume]
+            df = pd.DataFrame(candle_data, columns=["timestamp", "open", "high", "low", "close", "volume", "volume_2"])
+            # Convert timestamp from milliseconds to Python datetime objects.
+            df["timestamp"] = pd.to_datetime(df["timestamp"], unit='ms').dt.to_pydatetime()
+            return df
+        except Exception as e:
+            print("Error fetching futures OHLCV data:", e)
+            return None
+
+def _get_ohlcv_legacy(exchange, symbol, start, end=None, timeframe="1d", limit=None):
 
     if exchange == None or symbol == None or start == None:
         return None
