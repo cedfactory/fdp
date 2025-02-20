@@ -7,7 +7,6 @@ from datetime import datetime
 from sklearn.linear_model import LinearRegression
 
 import datetime
-#import utils  # assumed from your code
 
 def get_date_range(start, end, timeframe, length=100):
     """
@@ -70,8 +69,8 @@ def get_date_range(start, end, timeframe, length=100):
 
     # 2) If start/end is provided, parse them and adjust end forward by `length` intervals
     else:
-        start = utils.convert_string_to_datetime(start)
-        end = utils.convert_string_to_datetime(end)
+        start = convert_string_to_datetime(start)
+        end = convert_string_to_datetime(end)
 
         # As we want the end date included, we add the delta
         if timeframe == "1d":
