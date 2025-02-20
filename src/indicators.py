@@ -18,7 +18,7 @@ def get_window_size(indicator):
     ema_parsed = parse('ema_{}', indicator)
     wma_parsed = parse('wma_{}', indicator)
 
-    if indicator in ["open", "close", "high", "low"]:
+    if indicator in ["open", "close", "high", "low", "volume"]:
         return 1
 
     elif trend_parsed != None and trend_parsed[0].isdigit():
