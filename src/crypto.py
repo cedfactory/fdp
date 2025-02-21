@@ -67,8 +67,14 @@ def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1h", limit=100, pro
             # Assuming each candle is in the format:
             # [timestamp, open, high, low, close, volume]
             df = pd.DataFrame(candle_data, columns=["timestamp", "open", "high", "low", "close", "volume", "volume_2"])
-            # Convert timestamp from milliseconds to Python datetime objects.
-            df["timestamp"] = pd.to_datetime(df["timestamp"], unit='ms').dt.to_pydatetime()
+            df = df.drop(columns=['volume_2'])
+            df = df.rename(columns={0: 'timestamp', 1: 'open', 2: 'high', 3: 'low', 4: 'close', 5: 'volume'})
+
+            if df.empty:
+                return "no data"
+            df = df.set_index(df['timestamp'])
+            df.index = pd.to_datetime(df.index, unit='ms')
+
             return df
         except Exception as e:
             print("Error fetching futures OHLCV data:", e)
