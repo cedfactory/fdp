@@ -69,6 +69,8 @@ def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1h", limit=100, pro
             df = pd.DataFrame(candle_data, columns=["timestamp", "open", "high", "low", "close", "volume", "volume_2"])
             df = df.drop(columns=['volume_2'])
             df = df.rename(columns={0: 'timestamp', 1: 'open', 2: 'high', 3: 'low', 4: 'close', 5: 'volume'})
+            cols = ["open", "high", "low", "close", "volume"]
+            df[cols] = df[cols].astype(float)
 
             if df.empty:
                 return "no data"
