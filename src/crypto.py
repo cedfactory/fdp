@@ -11,14 +11,13 @@ import concurrent.futures
 
 import requests
 
-def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1h", limit=100, product_type="USDT-FUTURES"):
+def _get_ohlcv_bitget(symbol, timeframe="1h", limit=100):
         """
         Fetch the latest 'limit' OHLCV candles for a given futures symbol, product type, and timeframe
         from Bitget's Futures Market API.
 
         Args:
             symbol (str): Trading symbol (e.g., "BTCUSDT").
-            product_type (str): Product type (e.g., "umcbl", "dmcbl", etc.).
             timeframe (str): Candle timeframe (e.g., "1d", "1h", etc.). Default is "1d".
             limit (int): Number of candles to fetch.
 
@@ -26,6 +25,9 @@ def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1h", limit=100, pro
             list: A list of candles (each typically a list or dict depending on API response),
                   or None if an error occurred.
         """
+
+        # if we receive BTC/USDT, we convert it into BTCUSDT
+        symbol = symbol.replace("/", "")
 
         base_url = "https://api.bitget.com"
         endpoint = "/api/v2/mix/market/candles"
@@ -50,10 +52,10 @@ def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1h", limit=100, pro
         period = timeframe_mapping.get(timeframe, timeframe)
 
         params = {
-            "symbol": "BTCUSDT",
+            "symbol": symbol,
             "granularity": period,
             "limit": str(limit),
-            "productType": product_type  # added productType parameter for futures
+            "productType": "USDT-FUTURES"  # added productType parameter for futures
         }
 
         try:
@@ -81,6 +83,9 @@ def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1h", limit=100, pro
         except Exception as e:
             print("Error fetching futures OHLCV data:", e)
             return None
+
+def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1h", limit=100):
+    return _get_ohlcv_bitget(symbol, timeframe, limit)
 
 def _get_ohlcv_legacy(exchange, symbol, start, end=None, timeframe="1d", limit=None):
 
