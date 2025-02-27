@@ -1,4 +1,5 @@
 from abc import ABCMeta
+import pandas as pd
 from . import crypto
 
 class FDP(metaclass=ABCMeta):
