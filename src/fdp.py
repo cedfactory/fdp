@@ -17,12 +17,15 @@ class FDP(metaclass=ABCMeta):
     def get_symbol_ohlcv(self, symbol, start, end=None, timeframe="1d", length = None, indicators = {}):
         return crypto.get_symbol_ohlcv(self.exchange_name, symbol, start, end, timeframe, length, indicators, self.exchange)
 
-    def get_symbol_ohlcv_last(self, symbol, start=None, end=None, timeframe="1d", indicators=None, candle_stick="released"):
+    def get_symbol_ohlcv_last(self, symbol, start=None, end=None, timeframe="1h", indicators=None, candle_stick="released"):
         if indicators is None:
             indicators = {}
+            window_size = 100 # CEDE DEFAULT
+        else:
+            window_size = list(indicators.values())[0]["window_size"]
         return crypto.get_symbol_ohlcv_last(
             self.exchange_name,
             symbol,
-            start, end, timeframe, 1,
+            start, end, timeframe, window_size,
             indicators, exchange=self.exchange,
             candle_stick=candle_stick)

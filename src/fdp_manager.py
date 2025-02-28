@@ -105,10 +105,10 @@ class FDPSource:
                 symbol = params.get("symbol", None)
                 start = params.get("start", None)
                 end = params.get("end", None)
-                timeframe = params.get("timeframe", "1d")
+                timeframe = params.get("interval", "1h")
                 features = params.get("indicators", None)
                 candle_stick = params.get("candle_stick", "released")
-                response_json = self.source.get_symbol_ohlcv_last(symbol, start, end, timeframe, features, candle_stick)
+                result = self.source.get_symbol_ohlcv_last(symbol, start, end, timeframe, features, candle_stick)
 
         return result
 
