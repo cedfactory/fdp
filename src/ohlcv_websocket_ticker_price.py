@@ -13,7 +13,7 @@ async def subscribe_ticker():
             "args": [{
                 "instType": "SPOT",
                 "channel": "ticker",
-                "instId": "BTCUSDT"
+                "instId": lst_ticker[0]
             }]
         }
         await websocket.send(json.dumps(sub_req))
@@ -34,7 +34,7 @@ async def subscribe_ticker():
 # https://bitgetlimited.github.io/apidoc/en/mix/#public-channels
 async def subscribe_ticker_future():
     uri = "wss://ws.bitget.com/mix/v1/stream"
-    lst_ticker = ["BTCUSDT"]
+    lst_ticker = ["BTCUSDT", "ETHUSDT"]
     async with websockets.connect(uri) as websocket:
         # Subscribe to BTCUSDT ticker updates (spot)
         sub_req = {
@@ -42,7 +42,7 @@ async def subscribe_ticker_future():
             "args": [{
                 "instType": "mc",
                 "channel": "ticker",
-                "instId": "BTCUSDT"
+                "instId": lst_ticker[0]
             }]
         }
         await websocket.send(json.dumps(sub_req))
