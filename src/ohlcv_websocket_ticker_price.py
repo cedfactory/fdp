@@ -11,7 +11,7 @@ async def subscribe_ticker():
         sub_req = {
             "op": "subscribe",
             "args": [{
-                "instType": "SPOT",
+                "instType": "USDT-FUTURES",
                 "channel": "ticker",
                 "instId": lst_ticker[0]
             }]
@@ -20,7 +20,6 @@ async def subscribe_ticker():
         # Await confirmation (subscribe event) and then continuously read data
         while True:
             message = await websocket.recv()
-            # print("Received:", message)
             try:
                 lst_data = json.loads(message)["data"]
                 for ticker in lst_ticker:
@@ -28,13 +27,13 @@ async def subscribe_ticker():
                         if data['instId'] == ticker:
                             print("symbol: ", ticker, " - last price: ", data['lastPr'])
             except:
-                pass
+                print("Received:", message)
 
 # USING V1 API & entry point
 # https://bitgetlimited.github.io/apidoc/en/mix/#public-channels
 async def subscribe_ticker_future():
     uri = "wss://ws.bitget.com/mix/v1/stream"
-    lst_ticker = ["BTCUSDT", "ETHUSDT"]
+    lst_ticker = ["BTCUSDT"]
     async with websockets.connect(uri) as websocket:
         # Subscribe to BTCUSDT ticker updates (spot)
         sub_req = {
@@ -61,5 +60,5 @@ async def subscribe_ticker_future():
 
 
 # Run the coroutine
-# asyncio.run(subscribe_ticker())
-asyncio.run(subscribe_ticker_future())
+asyncio.run(subscribe_ticker())
+# asyncio.run(subscribe_ticker_future())
