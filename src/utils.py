@@ -8,6 +8,23 @@ from sklearn.linear_model import LinearRegression
 
 import datetime
 
+
+def convert_symbol_to_bitget(symbol, margin="USDT"):
+    """
+    Convert a symbol like 'BTC/USDT' to the Bitget futures symbol format.
+
+    margin: "USDT" or "COIN"
+    """
+    base, quote = symbol.split("/")
+
+    if margin.upper() == "USDT":
+        # e.g. 'BTC/USDT' -> 'BTCUSDT_UMCBL'
+        return base + quote + "_UMCBL"
+    else:
+        # e.g. 'BTC/USD' -> 'BTCUSD_DMCBL' for coin-margined
+        return base + quote + "_DMCBL"
+
+
 def get_date_range(start, end, timeframe, length=100):
     """
     If no start/end is provided, generate them by subtracting `length` intervals from now.
@@ -116,7 +133,9 @@ def print_exception_info(exception):
     caller = getframeinfo(stack()[2][0])
     print("[{}:{}] - {}".format(caller.filename, caller.lineno, exception))
 
-def make_df_stock_info(list_stock, list_company_name, list_isin,list_sectors, list_industry, list_country, list_exchange):
+
+def make_df_stock_info(list_stock, list_company_name, list_isin, list_sectors, list_industry, list_country,
+                       list_exchange):
     return (pd.DataFrame({'symbol': list_stock,
                           'name': list_company_name,
                           'isin': list_isin,
@@ -126,6 +145,7 @@ def make_df_stock_info(list_stock, list_company_name, list_isin,list_sectors, li
                           'exchange': list_exchange,
                           }))
 
+
 def convert_string_to_datetime(str):
     if str == None:
         return None
@@ -133,14 +153,14 @@ def convert_string_to_datetime(str):
         return str
 
     if isinstance(str, int):
-        return datetime.fromtimestamp(str/1000)
+        return datetime.fromtimestamp(str / 1000)
 
     try:
         result = datetime.strptime(str, "%Y-%m-%d")
         return result
     except ValueError:
         pass
-    
+
     try:
         if "." in str:
             str = str.split(".")[0]
@@ -150,13 +170,14 @@ def convert_string_to_datetime(str):
         pass
 
     try:
-        timestamp = int(int(str)/1000)
+        timestamp = int(int(str) / 1000)
         result = datetime.fromtimestamp(timestamp)
         return result
     except ValueError:
         pass
 
     return None
+
 
 def max_from_dict_values(indicators):
     v = list(indicators.values())
@@ -165,6 +186,7 @@ def max_from_dict_values(indicators):
     v = [int(x) for x in v]
     return max(v) + 1
 
+
 def clear_directory(path):
     if not os.path.exists(path):
         os.makedirs(path)
@@ -172,11 +194,13 @@ def clear_directory(path):
         shutil.rmtree(path)
         os.makedirs(path)
 
+
 def get_n_columns(df, columns, n=1):
     dt = df.copy()
     for col in columns:
-        dt["n"+str(n)+"_"+col] = dt[col].shift(n)
+        dt["n" + str(n) + "_" + col] = dt[col].shift(n)
     return dt
+
 
 def predict_next_LinearRegression(df, str_col, pred_window):
     df_y = pd.DataFrame()
@@ -199,6 +223,7 @@ def predict_next_LinearRegression(df, str_col, pred_window):
     y_new = model.predict(x_new[:, np.newaxis])
 
     return y_new[len(y_new) - 1][0], model.coef_[0][0]
+
 
 def discret_coef(coef):
     if coef > 0:
