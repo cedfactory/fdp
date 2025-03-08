@@ -1,5 +1,6 @@
 import asyncio, json, hmac, hashlib, base64, time
 import websockets
+import pandas as pd
 
 API_KEY = "YOUR_API_KEY"
 PASSPHRASE = "YOUR_API_PASSPHRASE"
@@ -7,7 +8,7 @@ SECRET_KEY = "YOUR_API_SECRET"
 
 async def subscribe_account_balance():
     uri = "wss://ws.bitget.com/v2/ws/private"
-    lst_ticker = ["BTCUSDT"]
+    lst_ticker = ["BTCUSDT", "ETHUSDT", "XRPUSDT"]
     async with websockets.connect(uri) as websocket:
         # Prepare login message with API credentials
         timestamp = str(int(time.time()))
@@ -41,6 +42,17 @@ async def subscribe_account_balance():
             }]
         }
         await websocket.send(json.dumps(sub_req))
+
+        sub_req = {
+            "op": "subscribe",
+            "args": [{
+                "instType": "USDT-FUTURES",
+                "channel": "positions",
+                "coin": "default"
+            }]
+        }
+        await websocket.send(json.dumps(sub_req))
+
         # Listen for balance updates
         while True:
             message = await websocket.recv()
@@ -52,7 +64,15 @@ async def subscribe_account_balance():
                       " usdtEquity: ", data['usdtEquity']
                       )
             except:
-                print("Received:", message)
+                try:
+                    data = json.loads(message)["data"]
+                    # Convert the list of dictionaries to a DataFrame
+                    df = pd.DataFrame(data)
+
+                    # Print the DataFrame as a string (without the index if you prefer)
+                    print(df.to_string(index=False))
+                except:
+                    print("Received:", message)
 
 # Run the coroutine
 asyncio.run(subscribe_account_balance())

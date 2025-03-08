@@ -5,18 +5,18 @@ import websockets  # install with: pip install websockets
 # https://www.bitget.com/api-doc/spot/websocket/public/Tickers-Channel#:~:text=action%20String%20Push%20data%20action%3A,trading%20volume%20in%20left%20coin
 async def subscribe_ticker():
     uri = "wss://ws.bitget.com/v2/ws/public"
-    lst_ticker = ["BTCUSDT"]
+    lst_ticker = ["BTCUSDT", "ETHUSDT", "XRPUSDT"]
     async with websockets.connect(uri) as websocket:
-        # Subscribe to BTCUSDT ticker updates (spot)
-        sub_req = {
-            "op": "subscribe",
-            "args": [{
-                "instType": "USDT-FUTURES",
-                "channel": "ticker",
-                "instId": lst_ticker[0]
-            }]
-        }
-        await websocket.send(json.dumps(sub_req))
+        for symbol in lst_ticker:
+            sub_req = {
+                "op": "subscribe",
+                "args": [{
+                    "instType": "USDT-FUTURES",
+                    "channel": "ticker",
+                    "instId": symbol
+                }]
+            }
+            await websocket.send(json.dumps(sub_req))
         # Await confirmation (subscribe event) and then continuously read data
         while True:
             message = await websocket.recv()
@@ -33,18 +33,18 @@ async def subscribe_ticker():
 # https://bitgetlimited.github.io/apidoc/en/mix/#public-channels
 async def subscribe_ticker_future():
     uri = "wss://ws.bitget.com/mix/v1/stream"
-    lst_ticker = ["BTCUSDT"]
+    lst_ticker = ["BTCUSDT", "ETHUSDT"]
     async with websockets.connect(uri) as websocket:
-        # Subscribe to BTCUSDT ticker updates (spot)
-        sub_req = {
-            "op": "subscribe",
-            "args": [{
-                "instType": "mc",
-                "channel": "ticker",
-                "instId": lst_ticker[0]
-            }]
-        }
-        await websocket.send(json.dumps(sub_req))
+        for symbol in lst_ticker:
+            sub_req = {
+                "op": "subscribe",
+                "args": [{
+                    "instType": "mc",
+                    "channel": "ticker",
+                    "instId": symbol
+                }]
+            }
+            await websocket.send(json.dumps(sub_req))
         # Await confirmation (subscribe event) and then continuously read data
         while True:
             message = await websocket.recv()
