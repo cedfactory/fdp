@@ -1,5 +1,6 @@
 import time
 from . import fdp
+from . import bitget_ws_ticker, bitget_ws_positions
 
 class FDPManager:
     def __init__(self, sources=None):
@@ -9,20 +10,34 @@ class FDPManager:
                 if not source_params:
                     continue
 
+                source = None
                 source_type = source_params.get("type", None)
                 if source_type == "ccxt":
                     source = fdp.FDPCCXT(source_params)
                 elif source_type == "url":
                     source = fdp.FDPURL(source_params)
-                elif source_type == "ws":
-                    source = None
+                elif source_type == "ws_ticker":
+                    source = bitget_ws_ticker.FDPWSTicker(source_params)
+                elif source_type == "ws_positions":
+                    source = bitget_ws_positions.FDPWSPositions(source_params)
                 elif source_type == "api":
                     source = None
                 if source:
                     self.lstSources.append(source)
 
-    def request(self, service, params):
+    def __del__(self):
+        for source in self.lstSources:
+            if source.__class__.__name__ in ["FDPWSTicker", "FDPWSPositions"]:
+                del source
+
+    def request(self, service, params, ws_id=None):
         result = None
+
+        if ws_id:
+            for source in self.lstSources:
+                if source.id == ws_id:
+                    result = source.request(service, params)
+                    return result
 
         result_done = False
         while not result_done:

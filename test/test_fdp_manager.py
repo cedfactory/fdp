@@ -1,7 +1,7 @@
 import pytest
 import pandas as pd
 import threading
-
+import time
 from src import fdp_manager
 
 class TestFDPManager:
@@ -73,3 +73,57 @@ class TestFDPManager:
         # expectations
         print("Done")
 
+    def test_fdp_manager_bitget_ws_ticker(self):
+        # context
+        params = [
+                {"type": "ws_ticker", "id": "ws1", "exchange": "bitget", "symbols": "BTC", "timeframe": "1m"}
+            ]
+        my_fdp_manager = fdp_manager.FDPManager(params)
+
+        # action
+        params = {
+            "exchange": "bitget",
+            "symbol": "XRP",
+            "interval": "1m",
+            "candle_stick": "released",
+            "start": None,
+            "end": None
+        }
+        time.sleep(2)
+        result = my_fdp_manager.request("last", params, "ws1")
+        print(result)
+
+        # expectations
+        assert(isinstance(result, pd.DataFrame))
+
+        # cleaning
+        del my_fdp_manager
+
+    def test_fdp_manager_bitget_ws_positions(self):
+        # context
+        params = [
+                {"type": "ws_positions", "id": "ws1", "exchange": "bitget", "symbols": "BTC", "timeframe": "1m",
+                    "api_key": "XXX",
+                    "api_secret": "XXX",
+                    "api_passphrase": "XXX"}
+            ]
+        my_fdp_manager = fdp_manager.FDPManager(params)
+
+        # action
+        params = {
+            "exchange": "bitget",
+            "symbol": "XRP",
+            "interval": "1m",
+            "candle_stick": "released",
+            "start": None,
+            "end": None
+        }
+        time.sleep(2)
+        result = my_fdp_manager.request("usdt_equity", params, "ws1")
+        print("result : ", result)
+
+        # expectations
+        #assert(isinstance(result, pd.DataFrame))
+
+        # cleaning
+        del my_fdp_manager
