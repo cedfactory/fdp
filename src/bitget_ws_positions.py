@@ -58,7 +58,6 @@ class FDPWSPositions:
 
     def __del__(self):
         print("destructor")
-        self.client.close()
 
     def dump(self):
         print("marginCoin : ", self.marginCoin)
