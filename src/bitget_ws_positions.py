@@ -1,10 +1,5 @@
-import time
 from . import bitget_ws
 import json
-import pandas as pd
-import threading
-
-g_usdtEquity = 0
 
 class FDPWSPositions:
 
@@ -43,26 +38,23 @@ class FDPWSPositions:
 
         def on_message_equity(message):
             try:
-                print(">>>>>", message)
                 json_obj = json.loads(message)
                 data = json_obj["data"][0]
-                print(data)
-                '''marginCoin = data.get("marginCoin", None)
+                '''self.marginCoin = data.get("marginCoin", None)
                 self.frozen = float(data["frozen"])
                 self.available = float(data["available"])
                 self.maxOpenPosAvailable = float(data["maxOpenPosAvailable"])
                 self.maxTransferOut = float(data["maxTransferOut"])
-                self.equity = float(data["equity"])
-                '''
-                global g_usdtEquity
-                g_usdtEquity = float(data["equity"])
-                '''self.dump()'''
+                self.equity = float(data["equity"])'''
+                self.usdtEquity = float(data["usdtEquity"])
                 return
             except Exception as ex:
                 print(ex)
 
-
         self.client.subscribe(channels, on_message_equity)
+
+    def stop(self):
+        self.client.close()
 
     def __del__(self):
         print("destructor")
@@ -79,6 +71,6 @@ class FDPWSPositions:
 
     def request(self, service, params=None):
         if service == "usdt_equity":
-            return g_usdtEquity
+            return self.usdtEquity
         return 0
 

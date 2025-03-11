@@ -89,7 +89,7 @@ class TestFDPManager:
             "start": None,
             "end": None
         }
-        time.sleep(2)
+        time.sleep(1)
         result = my_fdp_manager.request("last", params, "ws1")
         print(result)
 
@@ -97,7 +97,7 @@ class TestFDPManager:
         assert(isinstance(result, pd.DataFrame))
 
         # cleaning
-        del my_fdp_manager
+        my_fdp_manager.stop()
 
     def test_fdp_manager_bitget_ws_positions(self):
         # context
@@ -118,7 +118,7 @@ class TestFDPManager:
             "start": None,
             "end": None
         }
-        time.sleep(2)
+        time.sleep(1)
         result = my_fdp_manager.request("usdt_equity", params, "ws1")
         print("result : ", result)
 
@@ -126,4 +126,4 @@ class TestFDPManager:
         #assert(isinstance(result, pd.DataFrame))
 
         # cleaning
-        del my_fdp_manager
+        my_fdp_manager.stop()

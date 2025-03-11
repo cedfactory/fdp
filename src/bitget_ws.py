@@ -77,7 +77,7 @@ class BitgetWsClient:
         self.__timer_thread = None
 
         if ws_url is None:
-            self.STREAM_URL = CONTRACT_WS_URL
+            self.STREAM_URL = CONTRACT_WS_URL_PUBLIC
         else:
             self.STREAM_URL = ws_url
         self.verbose = verbose

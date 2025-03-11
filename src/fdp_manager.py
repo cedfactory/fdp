@@ -25,10 +25,13 @@ class FDPManager:
                 if source:
                     self.lstSources.append(source)
 
-    def __del__(self):
+    def stop(self):
         for source in self.lstSources:
             if source.__class__.__name__ in ["FDPWSTicker", "FDPWSPositions"]:
-                del source
+                if callable(getattr(source, "stop", None)):
+                    source.stop()
+                else:
+                    print("!!! Warning : {} needs to be closed".format(source.__class__.__name__))
 
     def request(self, service, params, ws_id=None):
         result = None
