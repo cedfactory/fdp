@@ -68,6 +68,9 @@ class FDPWSPositions:
         print("equity : ", self.equity)
         print("usdtEquity : ", self.usdtEquity)
 
+    def can_request(self):
+        return True
+
     def request(self, service, params=None):
         if service == "usdt_equity":
             return self.usdtEquity
