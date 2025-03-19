@@ -2,6 +2,7 @@ from . import bitget_ws
 import json
 import pandas as pd
 from datetime import datetime
+import utils
 
 class FDPWSAccountTickers:
 
@@ -9,6 +10,8 @@ class FDPWSAccountTickers:
         self.client_account = None
         self.client_tickers = None
         self.id = None
+
+        self.status = "Off"
 
         if not params:
             return
@@ -37,8 +40,8 @@ class FDPWSAccountTickers:
 
         self.dict_data_description = params.get("data_description", [])
         self.lst_tickers = params.get("tickers", [])
-        self.verbose = True
-        self.state = {
+        self.verbose = False
+        self.reset_state = {
             "ticker_prices": {},
             "positions": None,
             "orders": None,
@@ -50,6 +53,14 @@ class FDPWSAccountTickers:
                 "usdtEquity": None
             },
         }
+        self.state = self.reset_state
+        """
+        lst_channels = [
+            {"inst_type": "USDT-FUTURES", "channel": "account", "coin": "default"},
+            {"inst_type": "USDT-FUTURES", "channel": "positions", "inst_id": "default"},
+            {"inst_type": "USDT-FUTURES", "channel": "orders", "inst_id": "default"},
+            {"inst_type": "USDT-FUTURES", "channel": "orders-algo", "inst_id": "default"}
+        ]
 
         channels = [
             bitget_ws.SubscribeReqCoin("USDT-FUTURES", "account", "default"),
@@ -57,9 +68,23 @@ class FDPWSAccountTickers:
             bitget_ws.SubscribeReq("USDT-FUTURES", "orders", "default"),
             bitget_ws.SubscribeReq("USDT-FUTURES", "orders-algo", "default"),
         ]
+        """
+        self.lst_channels = [
+            {"inst_type": "USDT-FUTURES", "channel": "account", "param": "default"},
+            {"inst_type": "USDT-FUTURES", "channel": "positions", "param": "default"},
+            {"inst_type": "USDT-FUTURES", "channel": "orders", "param": "default"},
+            {"inst_type": "USDT-FUTURES", "channel": "orders-algo", "param": "default"}
+        ]
+        channels = [
+            bitget_ws.SubscribeReqCoin(info["inst_type"], info["channel"], info["param"])
+            if info["channel"] == "account"
+            else bitget_ws.SubscribeReq(info["inst_type"], info["channel"], info["param"])
+            for info in self.lst_channels
+        ]
 
         def on_message_account(message):
-            print(">> ACCOUNT >>", message)
+            if self.verbose:
+                print(">> ACCOUNT >>", message)
             if "event" in json.loads(message) and "arg" in json.loads(message):
                 if self.verbose:
                     print(message)
@@ -76,10 +101,10 @@ class FDPWSAccountTickers:
                               " maxOpenPosAvailable: ", data['maxOpenPosAvailable'],
                               " usdtEquity: ", data['usdtEquity']
                               )
-                    self.state["account"]["marginCoin"] = data['marginCoin']
-                    self.state["account"]["available"] = data['available']
-                    self.state["account"]["maxOpenPosAvailable"] = data['maxOpenPosAvailable']
-                    self.state["account"]["usdtEquity"] = data['usdtEquity']
+                    # self.state["account"]["marginCoin"] = data['marginCoin']
+                    self.state["account"]["available"] = float(data['available'])
+                    self.state["account"]["maxOpenPosAvailable"] = float(data['maxOpenPosAvailable'])
+                    self.state["account"]["usdtEquity"] = float(data['usdtEquity'])
 
                 elif data and isinstance(arg, dict) and arg["channel"] == "positions":   # CEDE TEST LST OF DCT POSITIONS
                     self.state["positions"] = pd.DataFrame(data)
@@ -103,17 +128,21 @@ class FDPWSAccountTickers:
                                 and arg["channel"] != "positions" \
                                 and arg["channel"] != "orders" \
                                 and arg["channel"] != "orders-algo":
-                            print("Received:", message)
+                            if self.verbose:
+                                print("Received missed:", message)
                     except:
-                        print("Received nok:", message)
+                        if self.verbose:
+                            print("Received nok:", message)
 
         self.client_account.subscribe(channels, on_message_account) # TORESTORE
 
         # Tickers
         def on_message_ticker(message):
-            print(">> TICKER >>", message)
+            if self.verbose:
+                print(">> TICKER >>", message)
             if "event" in json.loads(message) and "arg" in json.loads(message):
-                print(message)
+                if self.verbose:
+                    print(message)
                 pass
             elif "data" in json.loads(message) and "arg" in json.loads(message):
                 data = json.loads(message)["data"]
@@ -129,11 +158,25 @@ class FDPWSAccountTickers:
                         }
 
                 elif json.loads(message)["arg"]["channel"] != "ticker":
-                    print("Received:", message)
+                    if self.verbose:
+                        print("Received:", message)
 
-        for dd in self.dict_data_description:
-            channels = [bitget_ws.SubscribeReq("USDT-FUTURES", "candle"+dd["timeframe"], dd["symbol"]+"USDT")]
+        for symbol in self.dict_data_description:
+            channels = [bitget_ws.SubscribeReq("USDT-FUTURES", "ticker", symbol)]
             self.client_tickers.subscribe(channels, on_message_ticker)
+            self.lst_channels.append({
+                "inst_type": "USDT-FUTURES",
+                "channel": "ticker",
+                "inst_id": symbol
+            })
+
+        lst_subscribed_account_channels = self.client_account.get_subscribed_channels()
+        lst_subscribed_tickers_channels = self.client_tickers.get_subscribed_channels()
+        if utils.dict_lists_equal(lst_subscribed_account_channels + lst_subscribed_tickers_channels,
+                                  self.lst_channels):
+            self.status = "On"
+        else:
+            self.status = "Failed"
 
     def stop(self):
         self.client_account.close()
@@ -144,4 +187,6 @@ class FDPWSAccountTickers:
         #self.client.close()
 
     def get_state(self):
-        return self.state
+        state = self.state.copy()
+        self.state = self.reset_state  # CEDE TBC
+        return state
