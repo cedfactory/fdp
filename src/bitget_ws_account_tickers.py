@@ -35,6 +35,7 @@ class FDPWSAccountTickers:
             .error_listener(bitget_ws.handel_error) \
             .build()
 
+        self.dict_data_description = params.get("data_description", [])
         self.lst_tickers = params.get("tickers", [])
         self.verbose = True
         self.state = {
@@ -130,8 +131,8 @@ class FDPWSAccountTickers:
                 elif json.loads(message)["arg"]["channel"] != "ticker":
                     print("Received:", message)
 
-        for symbol in self.lst_tickers:
-            channels = [bitget_ws.SubscribeReq("USDT-FUTURES", "candle1m", symbol)]
+        for dd in self.dict_data_description:
+            channels = [bitget_ws.SubscribeReq("USDT-FUTURES", "candle"+dd["timeframe"], dd["symbol"]+"USDT")]
             self.client_tickers.subscribe(channels, on_message_ticker)
 
     def stop(self):
