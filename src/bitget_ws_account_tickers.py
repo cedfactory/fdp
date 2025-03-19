@@ -38,7 +38,6 @@ class FDPWSAccountTickers:
             .error_listener(bitget_ws.handel_error) \
             .build()
 
-        self.dict_data_description = params.get("data_description", [])
         self.lst_tickers = params.get("tickers", [])
         self.verbose = False
         self.reset_state = {
