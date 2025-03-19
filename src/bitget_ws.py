@@ -230,6 +230,20 @@ class BitgetWsClient:
             return SubscribeReqCoin(a_dict['instType'], a_dict['channel'], a_dict['coin'])
         return None
 
+    def get_subscribed_channels(self):
+        lst = []
+        for channel in self.__all_suribe:
+            d = {
+                "inst_type": channel.inst_type,
+                "channel": channel.channel,
+            }
+            if hasattr(channel, "coin"):
+                d["coin"] = channel.coin
+            else:
+                d["inst_id"] = channel.inst_id
+            lst.append(d)
+        return lst
+
     def get_listener(self, json_obj):
         try:
             if json_obj.get('arg'):
