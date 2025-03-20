@@ -494,11 +494,11 @@ def get_symbol_ohlcv_last(exchange_name, symbol, start=None, end=None, timeframe
         if exchange == None:
             return "exchange not found"
         exchange.load_markets()
-    '''
+
     if symbol not in exchange.symbols or exchange.has['fetchOHLCV'] == False:
         print("symbol not found: ", symbol)
         return "symbol not found"
-
+    '''
 
     start, end = utils.get_date_range(start, end, timeframe, length)
 
