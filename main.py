@@ -4,6 +4,7 @@ from flask import Flask, request, jsonify
 from src import api
 from src import data_recorder
 from src import config
+from src import crypto
 
 app = Flask(__name__)
 
@@ -110,6 +111,8 @@ def get_portfolio():
     return response
 
 if __name__ == "__main__":
+
+    api.g_exchange, api.g_markets = crypto.get_exchange_and_markets("bitget")
 
     if len(sys.argv) >= 2 and (sys.argv[1] == "--sim"):
         if len(sys.argv) != 4:

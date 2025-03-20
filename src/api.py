@@ -284,8 +284,8 @@ def api_last(history_params):
         else:
             get_symbol_ohlcv_fn = crypto.get_symbol_ohlcv_last
         global g_exchange, g_markets
-        if not g_exchange:
-            g_exchange, g_markets = crypto.get_exchange_and_markets(str_exchange)
+        # if not g_exchange:
+        #     g_exchange, g_markets = crypto.get_exchange_and_markets(str_exchange)
         futures = {executor.submit(get_symbol_ohlcv_fn, exchange_name=str_exchange, symbol=real_symbol, start=str_start, end=str_end, timeframe=str_interval, length=length, candle_stick=candle_stick, indicators=indicators, exchange=g_exchange): real_symbol for real_symbol in real_symbols}
 
         for future in concurrent.futures.as_completed(futures):
