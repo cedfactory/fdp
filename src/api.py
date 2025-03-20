@@ -258,6 +258,8 @@ def api_history(history_params):
 
     return final_response
 
+g_exchange = None
+g_markets = None
 def api_last(history_params):
     str_exchange = history_params.get("str_exchange")
     str_symbol = history_params.get("str_symbol")
@@ -281,8 +283,10 @@ def api_last(history_params):
             get_symbol_ohlcv_fn = config.g_data.get_symbol_ohlcv_last
         else:
             get_symbol_ohlcv_fn = crypto.get_symbol_ohlcv_last
-        exchange, markets = crypto.get_exchange_and_markets(str_exchange)
-        futures = {executor.submit(get_symbol_ohlcv_fn, exchange_name=str_exchange, symbol=real_symbol, start=str_start, end=str_end, timeframe=str_interval, length=length, candle_stick=candle_stick, indicators=indicators, exchange=exchange): real_symbol for real_symbol in real_symbols}
+        global g_exchange, g_markets
+        if not g_exchange:
+            g_exchange, g_markets = crypto.get_exchange_and_markets(str_exchange)
+        futures = {executor.submit(get_symbol_ohlcv_fn, exchange_name=str_exchange, symbol=real_symbol, start=str_start, end=str_end, timeframe=str_interval, length=length, candle_stick=candle_stick, indicators=indicators, exchange=g_exchange): real_symbol for real_symbol in real_symbols}
 
         for future in concurrent.futures.as_completed(futures):
             real_symbol = futures[future]
