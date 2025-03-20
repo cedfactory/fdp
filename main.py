@@ -113,6 +113,7 @@ def get_portfolio():
 if __name__ == "__main__":
 
     api.g_exchange, api.g_markets = crypto.get_exchange_and_markets("bitget")
+    api.g_exchange.load_markets()
 
     if len(sys.argv) >= 2 and (sys.argv[1] == "--sim"):
         if len(sys.argv) != 4:
