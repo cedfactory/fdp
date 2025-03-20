@@ -186,9 +186,6 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
   
 
     for indicator, parameters in oindicators.items():
-        if indicator in columns:
-            continue
-    
         # check if one deals with a postprocess
         if indicator.startswith("postprocess"):
             if "input" in parameters and "indicator" in parameters and "n" in parameters:
@@ -231,6 +228,9 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
                 if isinstance(seq, str):
                     seq = int(seq)
             df["sma"+ suffix] = TA.SMA(stock, seq).copy()
+
+        elif indicator == "close":
+            df["close" + suffix] = df["close"]
 
         elif indicator == "ema":
             period = 10
@@ -569,94 +569,6 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
 
             df['envelope' + suffix] = True # bollinger indicator trigger
 
-        elif indicator == 'synthetic_bollinger':
-            df.reset_index(inplace=True)
-            # TEST SCENARIO
-            df['close'] = 10
-            df["lower_band"+ suffix] = 9
-            df["higher_band"+ suffix] = 11
-            df["ma_band"+ suffix] = 9.5
-            df["long_ma"+ suffix] = 7
-
-            t = 1000 + 50
-            t_plus = 25
-            df.at[t, "close"] = df["higher_band"+ suffix].iloc[t] + 0.01
-            # OPEN LONG
-            df['close'] = np.where(df.index >= t, df["higher_band"+ suffix] + 0.5, df['close'])
-            t = t + t_plus
-            df['close'] = np.where(df.index >= t, df["higher_band"+ suffix] + 1, df['close'])
-            t = t + t_plus
-            df['close'] = np.where(df.index >= t, df["higher_band"+ suffix] + 1.5, df['close'])
-            # CLOSE LONG
-            t = t + t_plus
-            df['ma_band' + suffix] = np.where(df.index >= t, df["close"] + 1, df['ma_band' + suffix])
-
-            # OPEN SHORT
-            t = t + t_plus
-            df['lower_band' + suffix] = np.where(df.index >= t, df["close"] + 0.6, df['lower_band' + suffix])
-            df['long_ma+ suffix'] = np.where(df.index >= t, df["close"] + 0.3, df['long_ma' + suffix])
-
-            t = t + t_plus
-            df['close'] = np.where(df.index >= t, df["close"] - 0.5, df['close'])
-            t = t + t_plus
-            df['close'] = np.where(df.index >= t, df["close"] - 1, df['close'])
-            t = t + t_plus
-            df['close'] = np.where(df.index >= t, df["close"] - 1.5, df['close'])
-            t = t + t_plus
-            # CLOSE SHORT
-            df['ma_band' + suffix] = np.where(df.index >= t, df["close"] - 2.5, df['ma_band' + suffix])
-
-            # OPEN LONG
-            t = t + t_plus
-            df['long_ma' + suffix] = np.where(df.index >= t, df["close"] - 0.3, df['long_ma' + suffix])
-            t = t + t_plus
-            df['close'] = np.where(df.index >= t, df["higher_band"+ suffix] + 0.5, df['close'])
-            t = t + t_plus
-            df['close'] = np.where(df.index >= t, df["close"] - 0.5, df['close'])
-            t = t + t_plus
-            df['close'] = np.where(df.index >= t, df["close"] - 1, df['close'])
-            t = t + t_plus
-            df['close'] = np.where(df.index >= t, df["close"] - 1.5, df['close'])
-            # CLOSE LONG
-            t = t + t_plus
-            df['ma_band' + suffix] = np.where(df.index >= t, df["close"] + 2, df['ma_band' + suffix])
-
-            t = t + t_plus
-            df['higher_band' + suffix] = np.where(df.index >= t, df["higher_band"+ suffix] + 4, df['higher_band' + suffix])
-
-            # OPEN SHORT
-            t = t + t_plus
-            df['lower_band' + suffix] = np.where(df.index >= t, df["close"] - 1, df['lower_band' + suffix])
-            t = t + t_plus
-            df['lower_band' + suffix] = np.where(df.index >= t, df["close"] + 1, df['lower_band' + suffix])
-            t = t + t_plus
-            df['close'] = np.where(df.index >= t, df["close"] + 0.5, df['close'])
-            t = t + t_plus
-            df['close'] = np.where(df.index >= t, df["close"] + 1, df['close'])
-            t = t + t_plus
-            df['close'] = np.where(df.index >= t, df["close"] + 1.5, df['close'])
-            # CLOSE SHORT BY MA_BAND ALREADY BELOW CLOSE
-
-            # OPEN LONG
-            t = t + t_plus
-            df['higher_band' + suffix] = np.where(df.index >= t, df["higher_band"+ suffix] - 4, df['higher_band' + suffix])
-            t = t + t_plus
-            df['close'] = np.where(df.index >= t, df["close"] + 0.5, df['close'])
-            t = t + t_plus
-            df['close'] = np.where(df.index >= t, df["close"] + 1, df['close'])
-            t = t + t_plus
-            df['close'] = np.where(df.index >= t, df["close"] + 1.5, df['close'])
-
-            # CLOSE LONG
-            t = t + t_plus
-            df['ma_band' + suffix] = np.where(df.index >= t, df["close"] + 0.5, df['ma_band' + suffix])
-
-            # END OF SCENARIO
-            df.set_index(['timestamp'], inplace=True, drop=True)
-            df = utils.get_n_columns(df, ["ma_band"+ suffix, "lower_band"+ suffix, "higher_band"+ suffix, "close"], 1)
-
-            df['syntheticbollinger' + suffix] = True  # bollinger indicator trigger
-
         elif indicator == 'cci_30':
             df['cci_30' + suffix] = stock.get('cci_30').copy()
         
@@ -736,61 +648,6 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
             df = utils.get_n_columns(df, ["super_trend_direction"+ suffix, "ema_short"+ suffix, "ema_long"+ suffix], 1)
             df['superreversal' + suffix] = True  # super_reversal indicator trigger
             df['super_reversal' + suffix] = True  # super_reversal indicator trigger
-
-        elif indicator == 'syntheticsuperreversal':
-            df.reset_index(inplace=True)
-            # TEST SCENARIO
-            df['close'] = 5
-            df["high"] = 10
-            df["low"] = 17
-            df["n1_ema_short"+ suffix] = 14
-            df["n1_ema_long"+ suffix] = 15
-            df["n1_super_trend_direction"+ suffix] = False
-
-            # OPEN LONG AT t
-            t = 100 + 400
-            df['n1_ema_short' + suffix] = np.where(df.index >= t, df["n1_ema_long"+ suffix] + 1, df['n1_ema_short' + suffix])
-            df['n1_super_trend_direction+ suffix'] = np.where(df.index >= t, True, df['n1_super_trend_direction' + suffix])
-            df['low'] = np.where(df.index >= t, df["n1_ema_short"+ suffix] - 1, df['low'])
-
-            df['close'] = np.where(df.index >= t + 10, df["close"] + 1, df['close'])
-
-            # CLOSING SHORT
-            t = t + 100
-            df['n1_ema_short' + suffix] = np.where(df.index >= t, df["n1_ema_long"+ suffix] - 1, df['n1_ema_short' + suffix])
-            df['n1_super_trend_direction' + suffix] = np.where(df.index >= t, False, df['n1_super_trend_direction' + suffix])
-            df['high'] = np.where(df.index >= t, df["n1_ema_short"+ suffix] + 5, df['high'])
-
-            # CLOSING SHORT
-            t = t + 100
-            df['n1_ema_short' + suffix] = np.where(df.index >= t, 20, df['n1_ema_short' + suffix])
-            df['n1_ema_long' + suffix] = np.where(df.index >= t, df['n1_ema_short' + suffix] -1, df['n1_ema_long' + suffix])
-            df['n1_super_trend_direction' + suffix] = np.where(df.index >= t, True, df['n1_super_trend_direction' + suffix])
-            df['low'] = np.where(df.index >= t,  df['n1_ema_short' + suffix] -1, df['low'])
-
-            # OPENING SHORT
-            t = t + 100
-            df['n1_ema_short' + suffix] = np.where(df.index >= t, 25, df['n1_ema_short' + suffix])
-            df['n1_ema_long' + suffix] = np.where(df.index >= t, df['n1_ema_short' + suffix] +1, df['n1_ema_long' + suffix])
-            df['n1_super_trend_direction' + suffix] = np.where(df.index >= t, False, df['n1_super_trend_direction' + suffix])
-            df['high'] = np.where(df.index >= t,  df['n1_ema_short' + suffix] +2, df['high'])
-
-            df['close'] = np.where(df.index >= t + 10, df["close"] - 1, df['close'])
-
-            # CLOSING SHORT
-            t = t + 100
-            df['n1_ema_short' + suffix] = np.where(df.index >= t, 30, df['n1_ema_short' + suffix])
-            df['n1_ema_long' + suffix] = np.where(df.index >= t, df['n1_ema_short' + suffix] -1, df['n1_ema_long' + suffix])
-            df['n1_super_trend_direction' + suffix] = np.where(df.index >= t, True, df['n1_super_trend_direction' + suffix])
-            df['low'] = np.where(df.index >= t,  df['n1_ema_short' + suffix] -1, df['low'])
-
-            df["ema_short"+ suffix] = df["n1_ema_short"+ suffix]
-            df["ema_long"+ suffix] =  df["n1_ema_long"+ suffix]
-            df["super_trend_direction"+ suffix] =  df["n1_super_trend_direction"+ suffix]
-
-            df['syntheticsuperreversal' + suffix] = True
-
-            df.set_index(['timestamp'], inplace=True, drop=True)
 
     # keep only the requested indicators
     if keep_only_requested_indicators:
