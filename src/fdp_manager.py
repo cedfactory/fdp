@@ -3,7 +3,8 @@ from . import fdp
 from . import bitget_ws_ticker, bitget_ws_positions
 
 class FDPManager:
-    def __init__(self, sources=None):
+    def __init__(self, fdp_data=None):
+        sources = fdp_data["fdp_sources"]
         self.lstSources = []
         if sources:
             for source_params in sources:
@@ -16,10 +17,8 @@ class FDPManager:
                     source = fdp.FDPCCXT(source_params)
                 elif source_type == "url":
                     source = fdp.FDPURL(source_params)
-                elif source_type == "ws_ticker":
-                    source = bitget_ws_ticker.FDPWSTicker(source_params)
-                elif source_type == "ws_positions":
-                    source = bitget_ws_positions.FDPWSPositions(source_params)
+                elif source_type == "ws_candle":
+                    source = bitget_ws_ticker.FDPWSTicker(source_params, fdp_data["ws_data_description"])
                 elif source_type == "api":
                     source = None
                 if source:

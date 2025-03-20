@@ -53,21 +53,7 @@ class FDPWSAccountTickers:
             },
         }
         self.state = self.reset_state
-        """
-        lst_channels = [
-            {"inst_type": "USDT-FUTURES", "channel": "account", "coin": "default"},
-            {"inst_type": "USDT-FUTURES", "channel": "positions", "inst_id": "default"},
-            {"inst_type": "USDT-FUTURES", "channel": "orders", "inst_id": "default"},
-            {"inst_type": "USDT-FUTURES", "channel": "orders-algo", "inst_id": "default"}
-        ]
 
-        channels = [
-            bitget_ws.SubscribeReqCoin("USDT-FUTURES", "account", "default"),
-            bitget_ws.SubscribeReq("USDT-FUTURES", "positions", "default"),
-            bitget_ws.SubscribeReq("USDT-FUTURES", "orders", "default"),
-            bitget_ws.SubscribeReq("USDT-FUTURES", "orders-algo", "default"),
-        ]
-        """
         self.lst_channels = [
             {"inst_type": "USDT-FUTURES", "channel": "account", "param": "default"},
             {"inst_type": "USDT-FUTURES", "channel": "positions", "param": "default"},
@@ -189,3 +175,6 @@ class FDPWSAccountTickers:
         state = self.state.copy()
         self.state = self.reset_state  # CEDE TBC
         return state
+
+    def get_status(self):
+        return self.status
