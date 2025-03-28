@@ -6,7 +6,7 @@ from src import data_recorder
 from src import config
 from src import crypto
 
-import ws_global
+from src import ws_global
 
 app = Flask(__name__)
 
