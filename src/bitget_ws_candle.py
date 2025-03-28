@@ -1,7 +1,7 @@
 from . import bitget_ws_client
 import json
 import pandas as pd
-import utils
+from . import utils
 
 from . import bitget_ws_candle_data
 
