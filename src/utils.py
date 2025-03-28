@@ -7,7 +7,47 @@ from datetime import datetime
 from sklearn.linear_model import LinearRegression
 
 import datetime
+import xml.etree.ElementTree as ET
+import logging
 
+
+def xml_to_list(file_path):
+    """
+    Read an XML file (with <items><item> structure) and convert it into
+    a list of {'symbol': ..., 'timeframe': ...} dictionaries.
+    """
+    try:
+        tree = ET.parse(file_path)
+    except FileNotFoundError as e:
+        logging.error("File not found: %s", file_path)
+        # Return an empty list to indicate no data could be read
+        return []
+    except ET.ParseError as e:
+        logging.error("Failed to parse XML file '%s': %s", file_path, e)
+        # Return an empty list if XML is malformed
+        return []
+
+    # If parse succeeded, get the root element
+    root = tree.getroot()
+    result_list = []
+
+    # Iterate over each <item> element in the root
+    for item_elem in root.findall('item'):
+        # Find sub-elements and get their text (if not found, use None or skip)
+        symbol_elem = item_elem.find('symbol')
+        timeframe_elem = item_elem.find('timeframe')
+        if symbol_elem is None or timeframe_elem is None:
+            # Skip this item if required sub-elements are missing
+            logging.warning("Skipping an <item> with missing <symbol> or <timeframe>")
+            continue
+        # Construct dictionary for the item
+        entry = {
+            'symbol': symbol_elem.text if symbol_elem.text is not None else "",
+            'timeframe': timeframe_elem.text if timeframe_elem.text is not None else ""
+        }
+        result_list.append(entry)
+
+    return result_list
 
 def convert_symbol_to_bitget(symbol, margin="USDT"):
     """

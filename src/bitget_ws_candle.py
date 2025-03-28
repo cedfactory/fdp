@@ -1,40 +1,59 @@
-from . import bitget_ws
+import bitget_ws_client
 import json
 import pandas as pd
 import utils
 
 from bitget_ws_candle_data import WSCandleData
 
-class FDPWSTicker:
+class WSCandle:
 
-    def __init__(self, source, params=None):
+    def __init__(self, params=None):
         self.id = None
         self.status = "Off"
 
         self.candle_data = WSCandleData(params)
 
-        if source:
-            self.id = source.get("id", self.id)
-
-        self.client = bitget_ws.BitgetWsClient(
-            ws_url=bitget_ws.CONTRACT_WS_URL_PUBLIC,
+        self.client = bitget_ws_client.BitgetWsClient(
+            ws_url=bitget_ws_client.CONTRACT_WS_URL_PUBLIC,
             verbose=True) \
-            .error_listener(bitget_ws.handel_error) \
+            .error_listener(bitget_ws_client.handel_error) \
             .build()
 
+        """
         timeframe_map = {
+            "1m": "candle1m",
+            "5m": "candle5m",
+            "15m": "candle15m",
+            "30m": "candle30m",
+            "1h": "candle1H",
+            "4h": "candle4H",
+        }
+        """
+        self.timeframe_map = {
             "1m": "1m",
             "5m": "5m",
             "15m": "15m",
             "30m": "30m",
             "1h": "1H",
             "4h": "4H",
+            "12h": "4H",
+            "1d": "1D",
+        }
+        self.reverse_timeframe_map = {
+            "1m": "1m",
+            "5m": "5m",
+            "15m": "15m",
+            "30m": "30m",
+            "1H": "1h",
+            "4H": "4h",
+            "12H": "4h",
+            "1D": "1d",
         }
 
         channels = [
-            bitget_ws.SubscribeReq(
+            bitget_ws_client.SubscribeReq(
                 "USDT-FUTURES",
-                f"candle{timeframe_map.get(d['timeframe'], d['timeframe'])}",
+                f"candle{self.timeframe_map.get(d['timeframe'], d['timeframe'])}",
                 f"{d['symbol']}USDT"
             )
             for d in params
@@ -44,7 +63,7 @@ class FDPWSTicker:
         self.lst_channels = [
             {
                 "inst_type": "USDT-FUTURES",
-                "channel": f"candle{timeframe_map.get(item['timeframe'], item['timeframe'])}",
+                "channel": f"candle{self.timeframe_map.get(item['timeframe'], item['timeframe'])}",
                 "inst_id": f"{item['symbol']}USDT"
             }
             for item in params
@@ -59,7 +78,6 @@ class FDPWSTicker:
                         and arg['channel'].startswith("candle"):
                     symbol = arg['instId']
                     timeframe = arg['channel'].replace("candle", "", 1)
-                    data = json_obj.get('data')
                     candle_data = json_obj.get("data", [])
                     # Assuming each candle is in the format:
                     # [timestamp, open, high, low, close, volume]
@@ -73,7 +91,9 @@ class FDPWSTicker:
                         df = df.set_index(df['timestamp'])
                         df.index = df.index.str.replace(r'0{3}$', '', regex=True)
                         df.index = pd.to_datetime(df.index.astype(int), unit='s', utc=True, errors='coerce')
-                        self.candle_data.set_value(symbol, timeframe, df)
+                        self.candle_data.set_value(symbol,
+                                                   self.reverse_timeframe_map.get(timeframe),
+                                                   df)
                 else:
                     exit(73492)
             else:
@@ -100,4 +120,7 @@ class FDPWSTicker:
         # if service == "last":
         #     return self.df
         return None
+
+    def get_ohlcv(self, symbol_key, timeframe, length):
+        return self.candle_data.get_ohlcv(symbol_key.replace("/", ""), timeframe, length)
 

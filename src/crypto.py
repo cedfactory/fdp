@@ -11,6 +11,8 @@ import concurrent.futures
 
 import requests
 
+import ws_global
+
 def _get_ohlcv_bitget_v1(symbol, timeframe="1h", limit=100):
     """
     Fetch the latest 'limit' OHLCV candles for a given futures symbol, product type, and timeframe
@@ -248,6 +250,9 @@ def _get_ohlcv_bitget_v2(symbol, timeframe="1h", limit=100):
             return None
 
 def _get_ohlcv_bitget(symbol, timeframe, limit):
+    df_ohlv = ws_global.ws_candle.get_ohlcv(symbol, timeframe, limit)
+    if not df_ohlv is None:
+        return df_ohlv
     # df_v1 = _get_ohlcv_bitget_v1(symbol, timeframe, limit)
     return _get_ohlcv_bitget_v2(symbol, timeframe, limit)
 

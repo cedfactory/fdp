@@ -6,6 +6,8 @@ from src import data_recorder
 from src import config
 from src import crypto
 
+import ws_global
+
 app = Flask(__name__)
 
 def add_headers(response):
