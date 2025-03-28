@@ -8,10 +8,11 @@ import datetime
 from . import utils
 from . import indicators as inc_indicators
 import concurrent.futures
+from . import ws_global
 
 import requests
 
-import ws_global
+
 
 def _get_ohlcv_bitget_v1(symbol, timeframe="1h", limit=100):
     """
