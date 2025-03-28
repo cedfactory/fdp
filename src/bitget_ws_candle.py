@@ -1,9 +1,9 @@
-import bitget_ws_client
+from . import bitget_ws_client
 import json
 import pandas as pd
 import utils
 
-from bitget_ws_candle_data import WSCandleData
+from . import bitget_ws_candle_data
 
 class WSCandle:
 
@@ -11,7 +11,7 @@ class WSCandle:
         self.id = None
         self.status = "Off"
 
-        self.candle_data = WSCandleData(params)
+        self.candle_data = bitget_ws_candle_data.WSCandleData(params)
 
         self.client = bitget_ws_client.BitgetWsClient(
             ws_url=bitget_ws_client.CONTRACT_WS_URL_PUBLIC,
