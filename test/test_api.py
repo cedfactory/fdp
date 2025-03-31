@@ -182,7 +182,7 @@ class TestApi:
         params_history = {"str_exchange": "bitget",
                           "str_symbol": symbol,
                           "length": "20",
-                          "str_interval": "1d"}
+                          "str_interval": "1h"}
         response = api.api_last(params_history)
         symbol = "XRP"
         assert("status" in response)
@@ -196,7 +196,7 @@ class TestApi:
         df_data = response["result"][symbol]["info"]
         ohlcv = pd.read_json(df_data)
         assert(isinstance(ohlcv, pd.DataFrame))
-        assert(len(ohlcv.index) == 20)
+        assert(len(ohlcv.index) == 1)
 
 
     def test_api_indicators(self):

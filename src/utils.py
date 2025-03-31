@@ -2,11 +2,9 @@ import pandas as pd
 import numpy as np
 import os, shutil
 from inspect import getframeinfo, stack
-from datetime import datetime
-
+from datetime import datetime, timedelta
 from sklearn.linear_model import LinearRegression
 
-import datetime
 import xml.etree.ElementTree as ET
 import logging
 
@@ -73,52 +71,52 @@ def get_date_range(start, end, timeframe, length=100):
 
     # 1) If start/end is not provided, auto-generate them
     if (not start or start == 'None') and (not end or end == 'None'):
-        end = datetime.datetime.now().replace(second=0, microsecond=0)
+        end = datetime.now().replace(second=0, microsecond=0)
 
         if timeframe == "1d":
             # Round to 00:00:00
             end = end.replace(hour=0, minute=0, second=0, microsecond=0)
-            start = end + datetime.timedelta(days=-length)
+            start = end + timedelta(days=-length)
 
         elif timeframe == "1h":
             # Round to XX:00:00
             end = end.replace(minute=0, second=0, microsecond=0)
-            start = end + datetime.timedelta(hours=-length)
+            start = end + timedelta(hours=-length)
 
         elif timeframe == "1m":
             # Round to XX:XX:00
             end = end.replace(second=0, microsecond=0)
-            start = end + datetime.timedelta(minutes=-length)
+            start = end + timedelta(minutes=-length)
 
         elif timeframe == "5m":
             # Round to a multiple of 5 minutes (optional)
             # end = end.replace(minute=(end.minute // 5) * 5, second=0, microsecond=0)
             end = end.replace(second=0, microsecond=0)
-            start = end + datetime.timedelta(minutes=-length * 5)
+            start = end + timedelta(minutes=-length * 5)
 
         elif timeframe == "15m":
             # Round to a multiple of 15 minutes (optional)
             # end = end.replace(minute=(end.minute // 15) * 15, second=0, microsecond=0)
             end = end.replace(second=0, microsecond=0)
-            start = end + datetime.timedelta(minutes=-length * 15)
+            start = end + timedelta(minutes=-length * 15)
 
         elif timeframe == "30m":
             # Round to a multiple of 30 minutes (optional)
             # end = end.replace(minute=(end.minute // 30) * 30, second=0, microsecond=0)
             end = end.replace(second=0, microsecond=0)
-            start = end + datetime.timedelta(minutes=-length * 30)
+            start = end + timedelta(minutes=-length * 30)
 
         elif timeframe == "2h":
             # Round to nearest multiple of 2 hours (optional)
             # end = end.replace(hour=(end.hour // 2) * 2, minute=0, second=0, microsecond=0)
             end = end.replace(minute=0, second=0, microsecond=0)
-            start = end + datetime.timedelta(hours=-length * 2)
+            start = end + timedelta(hours=-length * 2)
 
         elif timeframe == "4h":
             # Round to nearest multiple of 4 hours (optional)
             # end = end.replace(hour=(end.hour // 4) * 4, minute=0, second=0, microsecond=0)
             end = end.replace(minute=0, second=0, microsecond=0)
-            start = end + datetime.timedelta(hours=-length * 4)
+            start = end + timedelta(hours=-length * 4)
 
         else:
             # Default fallback if needed
@@ -132,36 +130,36 @@ def get_date_range(start, end, timeframe, length=100):
         # As we want the end date included, we add the delta
         if timeframe == "1d":
             end = end.replace(hour=0, minute=0, second=0, microsecond=0)
-            end += datetime.timedelta(days=length)
+            end += timedelta(days=length)
 
         elif timeframe == "1h":
             end = end.replace(minute=0, second=0, microsecond=0)
-            end += datetime.timedelta(hours=length)
+            end += timedelta(hours=length)
 
         elif timeframe == "1m":
             end = end.replace(second=0, microsecond=0)
-            end += datetime.timedelta(minutes=length)
+            end += timedelta(minutes=length)
 
         elif timeframe == "5m":
             # Round down or simply remove seconds
             end = end.replace(second=0, microsecond=0)
-            end += datetime.timedelta(minutes=length * 5)
+            end += timedelta(minutes=length * 5)
 
         elif timeframe == "15m":
             end = end.replace(second=0, microsecond=0)
-            end += datetime.timedelta(minutes=length * 15)
+            end += timedelta(minutes=length * 15)
 
         elif timeframe == "30m":
             end = end.replace(second=0, microsecond=0)
-            end += datetime.timedelta(minutes=length * 30)
+            end += timedelta(minutes=length * 30)
 
         elif timeframe == "2h":
             end = end.replace(minute=0, second=0, microsecond=0)
-            end += datetime.timedelta(hours=length * 2)
+            end += timedelta(hours=length * 2)
 
         elif timeframe == "4h":
             end = end.replace(minute=0, second=0, microsecond=0)
-            end += datetime.timedelta(hours=length * 4)
+            end += timedelta(hours=length * 4)
 
         else:
             # Default fallback if needed
@@ -186,31 +184,31 @@ def make_df_stock_info(list_stock, list_company_name, list_isin, list_sectors, l
                           }))
 
 
-def convert_string_to_datetime(str):
-    if str == None:
+def convert_string_to_datetime(string):
+    if string == None:
         return None
-    if isinstance(str, datetime):
-        return str
+    if isinstance(string, datetime):
+        return string
 
-    if isinstance(str, int):
-        return datetime.fromtimestamp(str / 1000)
+    if isinstance(string, int):
+        return datetime.fromtimestamp(string / 1000)
 
     try:
-        result = datetime.strptime(str, "%Y-%m-%d")
+        result = datetime.strptime(string, "%Y-%m-%d")
         return result
     except ValueError:
         pass
 
     try:
-        if "." in str:
-            str = str.split(".")[0]
-        result = datetime.strptime(str, "%Y-%m-%d %H:%M:%S")
+        if "." in string:
+            string = string.split(".")[0]
+        result = datetime.strptime(string, "%Y-%m-%d %H:%M:%S")
         return result
     except ValueError:
         pass
 
     try:
-        timestamp = int(int(str) / 1000)
+        timestamp = int(int(string) / 1000)
         result = datetime.fromtimestamp(timestamp)
         return result
     except ValueError:

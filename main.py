@@ -114,6 +114,8 @@ def get_portfolio():
 
 if __name__ == "__main__":
 
+    ws_global.ws_candle_start()
+
     api.g_exchange, api.g_markets = crypto.get_exchange_and_markets("bitget")
     api.g_exchange.load_markets()
 

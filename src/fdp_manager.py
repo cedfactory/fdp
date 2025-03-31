@@ -1,6 +1,6 @@
 import time
 from . import fdp
-from . import bitget_ws_ticker, bitget_ws_positions
+from . import bitget_ws_candle
 
 class FDPManager:
     def __init__(self, fdp_data=None):
@@ -18,7 +18,7 @@ class FDPManager:
                 elif source_type == "url":
                     source = fdp.FDPURL(source_params)
                 elif source_type == "ws_candle":
-                    source = bitget_ws_ticker.FDPWSTicker(source_params, fdp_data["ws_data_description"])
+                    source = bitget_ws_candle.WSCandle(source_params, fdp_data["ws_data_description"])
                 elif source_type == "api":
                     source = None
                 if source:
