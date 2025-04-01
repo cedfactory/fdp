@@ -8,7 +8,13 @@ from src import crypto
 
 from src import ws_global
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
+
+
+@app.before_request
+def init_ws():
+    ws_global.ws_candle_start()
+
 
 def add_headers(response):
     response.headers.add("Access-Control-Allow-Origin", "*")
@@ -113,8 +119,6 @@ def get_portfolio():
     return response
 
 if __name__ == "__main__":
-
-    #ws_global.ws_candle_start()
 
     api.g_exchange, api.g_markets = crypto.get_exchange_and_markets("bitget")
     api.g_exchange.load_markets()
