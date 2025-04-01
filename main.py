@@ -1,6 +1,6 @@
 import sys
 sys.path.insert(0, '../')
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from src import api
 from src import data_recorder
 from src import config
@@ -14,6 +14,10 @@ app = Flask(__name__, static_folder='static')
 @app.before_request
 def init_ws():
     ws_global.ws_candle_start()
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory('static', 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
 def add_headers(response):
