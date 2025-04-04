@@ -88,57 +88,33 @@ def _get_ohlcv_bitget_v1(symbol, timeframe="1h", limit=100):
         return None
 
 def _get_ohlcv_bitget_v2(symbol, timeframe="1h", limit=100):
-        """
-        Fetch the latest 'limit' OHLCV candles for a given futures symbol, product type, and timeframe
-        from Bitget's Futures Market API.
-
-        Args:
-            symbol (str): Trading symbol (e.g., "BTCUSDT").
-            timeframe (str): Candle timeframe (e.g., "1d", "1h", etc.). Default is "1d".
-            limit (int): Number of candles to fetch.
-
-        Returns:
-            list: A list of candles (each typically a list or dict depending on API response),
-                  or None if an error occurred.
-        """
-
-        symbol = utils.convert_symbol_to_bitget(symbol)
+        # symbol = utils.convert_symbol_to_bitget(symbol)
+        symbol = symbol.replace("/", "")
 
         base_url = "https://api.bitget.com"
-        endpoint = "/api/mix/v1/market/candles"
+        endpoint = "/api/v2/mix/market/candles"
 
         url = base_url + endpoint
 
-        timeframe_mapping = {
-            "1m": "60",
-            "3m": "180",
-            "5m": "300",
-            "15m": "900",
-            "30m": "1800",
-            "1h": "3600",
-            "4h": "14400",
-            "6h": "21600",
-            "12h": "43200",
-            "1d": "86400",
-            "1w": "604800"
+        granularity_mapping = {
+            "1m": "1m",
+            "3m": "3m",
+            "5m": "5m",
+            "15m": "15m",
+            "30m": "30m",
+            "1h": "1H",
+            "4h": "4H",
+            "6h": "6H",
+            "12h": "12H",
+            "1d": "1D",
+            "1w": "1W"
         }
-
-        # 3) Convert timeframe to numeric seconds
-        period_in_seconds = int(timeframe_mapping[timeframe])
-
-        # 4) Calculate start/end in milliseconds
-        now_ms = int(time.time() * 1000)
-        one_candle_ms = period_in_seconds * 1000
-        start_time = now_ms - (limit * one_candle_ms)
-        end_time = now_ms
-
 
         params = {
             "symbol": symbol,
-            "granularity": period_in_seconds,
-            "startTime": str(start_time),
-            "endTime": str(end_time)
-            # "limit": str(limit),
+            "productType": "USDT-FUTURES",
+            "granularity": granularity_mapping[timeframe],
+            "limit": str(limit)
         }
 
         try:
@@ -148,7 +124,7 @@ def _get_ohlcv_bitget_v2(symbol, timeframe="1h", limit=100):
 
             # Assuming each candle is in the format:
             # [timestamp, open, high, low, close, volume]
-            df = pd.DataFrame(candle_data, columns=["timestamp", "open", "high", "low", "close", "volume", "volume_2"])
+            df = pd.DataFrame(candle_data["data"], columns=["timestamp", "open", "high", "low", "close", "volume", "volume_2"])
             df = df.drop(columns=['volume_2'])
             df = df.rename(columns={0: 'timestamp', 1: 'open', 2: 'high', 3: 'low', 4: 'close', 5: 'volume'})
             cols = ["open", "high", "low", "close", "volume"]
@@ -171,91 +147,12 @@ def _get_ohlcv_bitget(symbol, timeframe, limit, version="V2"):
     else:
         return _get_ohlcv_bitget_v1(symbol, timeframe, limit)
 
-
-def _get_ohlcv_bitget_v2(symbol, timeframe="1h", limit=100):
-        """
-        Fetch the latest 'limit' OHLCV candles for a given futures symbol, product type, and timeframe
-        from Bitget's Futures Market API.
-
-        Args:
-            symbol (str): Trading symbol (e.g., "BTCUSDT").
-            timeframe (str): Candle timeframe (e.g., "1d", "1h", etc.). Default is "1d".
-            limit (int): Number of candles to fetch.
-
-        Returns:
-            list: A list of candles (each typically a list or dict depending on API response),
-                  or None if an error occurred.
-        """
-
-        symbol = utils.convert_symbol_to_bitget(symbol)
-
-        base_url = "https://api.bitget.com"
-        endpoint = "/api/mix/v1/market/candles"
-
-        url = base_url + endpoint
-
-        timeframe_mapping = {
-            "1m": "60",
-            "3m": "180",
-            "5m": "300",
-            "15m": "900",
-            "30m": "1800",
-            "1h": "3600",
-            "4h": "14400",
-            "6h": "21600",
-            "12h": "43200",
-            "1d": "86400",
-            "1w": "604800"
-        }
-
-        # 3) Convert timeframe to numeric seconds
-        period_in_seconds = int(timeframe_mapping[timeframe])
-
-        # 4) Calculate start/end in milliseconds
-        now_ms = int(time.time() * 1000)
-        one_candle_ms = period_in_seconds * 1000
-        start_time = now_ms - (limit * one_candle_ms)
-        end_time = now_ms
-
-
-        params = {
-            "symbol": symbol,
-            "granularity": period_in_seconds,
-            "startTime": str(start_time),
-            "endTime": str(end_time)
-            # "limit": str(limit),
-        }
-
-        try:
-            response = requests.get(url, params=params)
-            response.raise_for_status()  # Raises an HTTPError for unsuccessful responses
-            candle_data = response.json()
-
-            # Assuming each candle is in the format:
-            # [timestamp, open, high, low, close, volume]
-            df = pd.DataFrame(candle_data, columns=["timestamp", "open", "high", "low", "close", "volume", "volume_2"])
-            df = df.drop(columns=['volume_2'])
-            df = df.rename(columns={0: 'timestamp', 1: 'open', 2: 'high', 3: 'low', 4: 'close', 5: 'volume'})
-            cols = ["open", "high", "low", "close", "volume"]
-            df[cols] = df[cols].astype(float)
-            cols = ["timestamp"]
-
-            if df.empty:
-                return "no data"
-            df = df.set_index(df['timestamp'])
-            df.index = df.index.str.replace(r'0{3}$', '', regex=True)
-            df.index = pd.to_datetime(df.index.astype(int), unit='s', utc=True, errors='coerce')
-            return df
-        except Exception as e:
-            print("Error fetching futures OHLCV data:", e)
-            return None
-
 def _get_ohlcv_bitget(symbol, timeframe, limit):
-    df_ohlv = ws_global.ws_candle.get_ohlcv(symbol, timeframe, limit)
-    if not df_ohlv is None:
-        return df_ohlv
-    # df_v1 = _get_ohlcv_bitget_v1(symbol, timeframe, limit)
-    return _get_ohlcv_bitget_v2(symbol, timeframe, limit)
+    df_ws_ohlv = ws_global.ws_candle.get_ohlcv(symbol, timeframe, limit)
+    if not df_ws_ohlv is None:
+        return df_ws_ohlv
+    df_api_ohlv = _get_ohlcv_bitget_v2(symbol, timeframe, limit+1).iloc[:-1]
+    return df_api_ohlv
 
 def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1h", limit=100):
     return _get_ohlcv_bitget(symbol, timeframe, limit)
@@ -533,9 +430,6 @@ def get_symbol_ohlcv_last(exchange_name, symbol, start=None, end=None, timeframe
     ohlcv = _get_ohlcv(exchange, symbol, start_with_period, end, timeframe, length)
     if not isinstance(ohlcv, pd.DataFrame):
         return ohlcv
-
-    if candle_stick == "released":
-        ohlcv = ohlcv.iloc[:-1]
 
     # remove dupicates
     ohlcv = ohlcv[~ohlcv.index.duplicated()]
