@@ -5,7 +5,7 @@ from . import bitget_ws_candle
 ws_candle = None
 _lock = threading.Lock()
 
-ws_global_cpt = None
+ws_global_traces = None
 _cpt_lock = threading.Lock()
 
 def ws_candle_start(conf_param=""):
@@ -30,22 +30,22 @@ def ws_candle_stop():
             ws_candle.stop()
             ws_candle = None
 
-def ws_cpt_start():
-    global ws_global_cpt
+def ws_traces_start():
+    global ws_global_traces
 
-    if ws_global_cpt is not None:
+    if ws_global_traces is not None:
         return
 
-    ws_global_cpt = utils.debug_cpt()
+    ws_global_traces = utils.traces_cpt()
 
-def ws_cpt_increment_success():
-    global ws_global_cpt
-
-    with _cpt_lock:
-        ws_global_cpt.increment_success()
-
-def ws_cpt_increment_failure():
-    global ws_global_cpt
+def ws_traces_increment_success():
+    global ws_global_traces
 
     with _cpt_lock:
-        ws_global_cpt.increment_failure()
+        ws_global_traces.increment_success()
+
+def ws_traces_increment_failure():
+    global ws_global_traces
+
+    with _cpt_lock:
+        ws_global_traces.increment_failure()

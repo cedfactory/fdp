@@ -290,7 +290,7 @@ def normalize(d):
             nd["inst_id"] = nd.pop("param")
     return nd
 
-class debug_cpt:
+class traces_cpt:
     def __init__(self):
         self.success = 0
         self.failure = 0

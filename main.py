@@ -13,7 +13,7 @@ app = Flask(__name__, static_folder='static')
 
 @app.before_request
 def init_ws():
-    ws_global.ws_cpt_start()
+    ws_global.ws_traces_start()
     ws_global.ws_candle_start()
 
 @app.route('/favicon.ico')
