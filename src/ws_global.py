@@ -49,3 +49,9 @@ def ws_traces_increment_failure():
 
     with _cpt_lock:
         ws_global_traces.increment_failure()
+
+def ws_traces_get_status():
+    global ws_global_traces
+
+    with _cpt_lock:
+        return ws_global_traces.get_status()

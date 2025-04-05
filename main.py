@@ -71,6 +71,26 @@ def get_history():
     
     return response
 
+@app.route('/status', methods=['OPTIONS', 'GET', 'POST'])
+def get_ws_status():
+    status = api.api_parse_status_parameters(request)
+    if status == "ws_status":
+        response = {
+            "result": ws_global.ws_traces_get_status(),
+            "status": "ok",
+            "elapsed_time":"0.0"
+        }
+    else:
+        response = {
+            "result": {},
+            "status": "nok",
+            "elapsed_time":"0.0"
+        }
+    response = jsonify(response)
+    response = add_headers(response)
+
+    return response
+
 @app.route('/last', methods=['OPTIONS', 'GET', 'POST'])
 def get_last():
     history_params = api.api_history_parse_parameters(request, True)

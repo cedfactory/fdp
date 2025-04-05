@@ -350,3 +350,10 @@ class traces_cpt:
             f"Percentage of Failure: {self.percentage_of_failure:.2f}%, "
             f"Duration: {formatted_elapsed}"
         )
+
+    def get_status(self):
+        return {
+            "percentage_of_failure": self.percentage_of_failure,
+            "success": self.success,
+            "failure": self.failure
+        }

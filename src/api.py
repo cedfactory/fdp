@@ -98,6 +98,15 @@ def api_symbol(str_screener, str_exchange, str_symbols):
 
     return final_response
 
+def api_parse_status_parameters(request):
+    if request.method == 'POST':
+        if request.is_json:
+            params = request.get_json()
+            str_service = params.get("service", None)
+            if str_service == "ws_status":
+                return str_service
+    return None
+
 def api_history_parse_parameters(request, last=False):
     status = "ok"
     reason = ""
