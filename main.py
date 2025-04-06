@@ -1,4 +1,5 @@
 import sys
+import time
 sys.path.insert(0, '../')
 from flask import Flask, request, jsonify, send_from_directory
 from src import api
@@ -73,18 +74,19 @@ def get_history():
 
 @app.route('/status', methods=['OPTIONS', 'GET', 'POST'])
 def get_ws_status():
+    start_time = time.time()
     status = api.api_parse_status_parameters(request)
     if status == "ws_status":
         response = {
             "result": ws_global.ws_traces_get_status(),
             "status": "ok",
-            "elapsed_time":"0.0"
+            "elapsed_time": str(time.time() - start_time)
         }
     else:
         response = {
             "result": {},
             "status": "nok",
-            "elapsed_time":"0.0"
+            "elapsed_time": str(time.time() - start_time)
         }
     response = jsonify(response)
     response = add_headers(response)
