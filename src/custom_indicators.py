@@ -207,9 +207,10 @@ class ZeroLagMa():
             self.zerolag_ma_sell_adj = zlema_sell * self.high_offset
 
         elif self.ma_type == "ZLMA":
-            zlma_buy = pandas_ta.zlma(self.close, length=self.zema_len_buy)
+            zlma_buy = pandas_ta.zlma(self.close)
             self.zerolag_ma_buy_adj = zlma_buy * self.low_offset
-            zlma_sell = pandas_ta.zlma(self.close, length=self.zema_len_sell)
+            # zlma_sell = pandas_ta.zlma(self.close)
+            zlma_sell = zlma_buy
             self.zerolag_ma_sell_adj = zlma_sell * self.high_offset
 
         elif self.ma_type == "TEMA":
@@ -242,9 +243,14 @@ class ZeroLagMa():
             self.zerolag_ma_sell_adj = kama_sell * self.high_offset
 
         elif self.ma_type == "HMA":
-            hma_buy = pandas_ta.hma(self.close, length=self.zema_len_buy)
+            # hma_buy = pandas_ta.hma(self.close, timeperiod=self.zema_len_buy)
+            # hma_buy = pandas_ta.hma(self.close, length=self.zema_len_buy)
+            # hma_sell = pandas_ta.hma(self.close, length=self.zema_len_sell)
+
+            hma_buy = pandas_ta.hma(self.close)
+            hma_sell = hma_buy
+
             self.zerolag_ma_buy_adj = hma_buy * self.low_offset
-            hma_sell = pandas_ta.hma(self.close, length=self.zema_len_sell)
             self.zerolag_ma_sell_adj = hma_sell * self.high_offset
 
     def get_zerolag_ma_buy_adj(self) -> pd.Series:
