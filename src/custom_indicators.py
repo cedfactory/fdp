@@ -243,10 +243,6 @@ class ZeroLagMa():
             self.zerolag_ma_sell_adj = kama_sell * self.high_offset
 
         elif self.ma_type == "HMA":
-            # hma_buy = pandas_ta.hma(self.close, timeperiod=self.zema_len_buy)
-            # hma_buy = pandas_ta.hma(self.close, length=self.zema_len_buy)
-            # hma_sell = pandas_ta.hma(self.close, length=self.zema_len_sell)
-
             hma_buy = pandas_ta.hma(self.close)
             hma_sell = hma_buy
 
