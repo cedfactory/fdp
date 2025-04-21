@@ -1,9 +1,9 @@
-from . import bitget_ws_client
+from src import bitget_ws_client
 import json
 import pandas as pd
-from . import utils
+from src import utils
 
-from . import bitget_ws_candle_data
+from src import bitget_ws_candle_data
 
 class WSCandle:
 

@@ -1,4 +1,6 @@
 import pandas as pd
+import datetime
+import utils
 
 class WSCandleData:
     def __init__(self, params):
@@ -22,33 +24,48 @@ class WSCandleData:
             self.state[symbol_key][item["timeframe"]] = None
 
     def set_value(self, symbol_key, timeframe, df):
-        """
-        Set the value for a given symbol + timeframe combination.
-        symbol: "BTC", "ETH", etc. (without "USDT")
-        timeframe: e.g. "1m", "1h"
-        df: the DataFrame to store or append
-        """
-        try:
-            if not symbol_key.endswith("USDT"):
-                symbol_key += "USDT"
+        # 1) Normalize symbol_key and init state
+        if not symbol_key.endswith("USDT"):
+            symbol_key += "USDT"
+        self.state.setdefault(symbol_key, {})
 
-            if symbol_key not in self.state:
-                self.state[symbol_key] = {}
+        # 2) First‐time load: drop the very last row and store
+        if self.state[symbol_key][timeframe] is None:
+            self.state[symbol_key][timeframe] = df.iloc[:-1].copy()
+            return  # nothing else to do on first load
 
-            if self.state[symbol_key].get(timeframe) is None:
-                self.state[symbol_key][timeframe] = df.iloc[:-1].copy()
+        existing_df = self.state[symbol_key][timeframe]
+
+        # 3) Separate new rows into update vs append
+        to_update = []
+        to_append = []
+
+        for idx, row in df.iterrows():
+            if idx in existing_df.index:
+                to_update.append((idx, row))
             else:
-                if len(df) == 2:
-                    df = df.iloc[:1]
-                    existing_df = self.state[symbol_key][timeframe]
-                    self.state[symbol_key][timeframe] = pd.concat([existing_df, df])
-                    if len(self.state[symbol_key][timeframe]) > 1000:
-                        self.state[symbol_key][timeframe] = self.state[symbol_key][timeframe].tail(1000)
-                elif len(df) > 2:
-                    exit(834)
-        except:
-            exit(834)
+                to_append.append(row)
 
+        # 4) Bulk‐update existing rows
+        for idx, row in to_update:
+            existing_df.loc[idx] = row
+            # print(f"+ {symbol_key} {timeframe} updated: {idx} at now (UTC): {datetime.datetime.now(datetime.timezone.utc)}")  # CEDE DEBUG
+
+        # 5) Bulk‐append new rows (as a single concat)
+        if to_append:
+            append_df = pd.DataFrame(to_append, index=[r.name for r in to_append])
+            existing_df = pd.concat([existing_df, append_df], axis=0)
+            existing_df.sort_index(inplace=True)
+            # for idx in append_df.index: # CEDE DEBUG
+            #     print(f"- {symbol_key} {timeframe} added: {idx} at now (UTC): {datetime.datetime.now(datetime.timezone.utc)}") # CEDE DEBUG
+
+        # 6) Final dedupe & trim
+        existing_df = existing_df[~existing_df.index.duplicated(keep='last')]
+        if len(existing_df) > 1000:
+            existing_df = existing_df.tail(1000)
+
+        # 7) Save back into state
+        self.state[symbol_key][timeframe] = existing_df
 
     def get_value(self, symbol_key, timeframe):
         """

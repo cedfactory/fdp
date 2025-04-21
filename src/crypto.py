@@ -3,6 +3,7 @@ import numpy as np
 import ccxt
 import time
 from datetime import datetime, timedelta
+from datetime import datetime, timezone
 from datetime import date
 import datetime
 from . import utils
@@ -146,13 +147,26 @@ def _get_ohlcv_bitget(symbol, timeframe, limit, version="V2"):
         return _get_ohlcv_bitget_v1(symbol, timeframe, limit)
 
 def _get_ohlcv_bitget(symbol, timeframe, limit):
+    """
+    DEBUG CEDE
+    last_dt = utils.get_last_tick_datetime(timeframe)
+    released_dt = utils.get_released_tick_datetime(timeframe)
+    print("now (UTC):", datetime.datetime.now(datetime.timezone.utc))
+    print("now:", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    print("last_dt: ", last_dt)
+    print("released_dt: ", released_dt)
+    """
+    released_dt = utils.get_released_tick_datetime(timeframe)
     df_ws_ohlv = ws_global.ws_candle.get_ohlcv(symbol, timeframe, limit)
     if not df_ws_ohlv is None \
-            and len(df_ws_ohlv) == limit:
+            and len(df_ws_ohlv) >= limit \
+            and utils.is_released_tick_in_df(df_ws_ohlv, timeframe):
+        df_ws_ohlv = df_ws_ohlv.loc[:released_dt]
         ws_global.ws_traces_increment_success()
         return df_ws_ohlv
     ws_global.ws_traces_increment_failure()
-    df_api_ohlv = _get_ohlcv_bitget_v2(symbol, timeframe, limit+1).iloc[:-1]
+    df_api_ohlv = _get_ohlcv_bitget_v2(symbol, timeframe, limit)
+    df_api_ohlv = df_api_ohlv.loc[:released_dt]
     return df_api_ohlv
 
 def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1h", limit=100):
@@ -440,6 +454,8 @@ def get_symbol_ohlcv_last(exchange_name, symbol, start=None, end=None, timeframe
         ohlcv = inc_indicators.compute_indicators(ohlcv, indicators, True, indicator_params)
 
     ohlcv = ohlcv.iloc[[-1]]
+    # CEDE DEBUG
+    print("ohlcv: ", ohlcv.to_string())
     return ohlcv
 
 ###

@@ -4,7 +4,11 @@ import os, shutil
 import time
 from inspect import getframeinfo, stack
 from datetime import datetime, timedelta
+from datetime import datetime, timezone
 from sklearn.linear_model import LinearRegression
+
+from datetime import datetime, timezone, timedelta
+import pytz
 
 import xml.etree.ElementTree as ET
 import logging
@@ -289,6 +293,71 @@ def normalize(d):
         if "param" in nd:
             nd["inst_id"] = nd.pop("param")
     return nd
+
+def get_last_tick_datetime(timeframe: str, now: datetime = None) -> datetime:
+    """
+    (Re‑include for context) Return the start of the current bar as a UTC datetime.
+    """
+    if now is None:
+        now = datetime.now(timezone.utc)
+    else:
+        now = now.astimezone(timezone.utc) if now.tzinfo else now.replace(tzinfo=timezone.utc)
+
+    unit = timeframe[-1]
+    value = int(timeframe[:-1])
+
+    if unit == "m":
+        floored = (now.minute // value) * value
+        return now.replace(minute=floored, second=0, microsecond=0)
+    elif unit == "h":
+        floored = (now.hour // value) * value
+        return now.replace(hour=floored, minute=0, second=0, microsecond=0)
+    else:
+        raise ValueError(f"Unsupported timeframe unit: {unit!r}")
+
+def get_released_tick_datetime(timeframe: str, now: datetime = None) -> datetime:
+    """
+    Return the start of the *previous* bar as a UTC datetime,
+    based on the given timeframe.
+    """
+    last_tick = get_last_tick_datetime(timeframe, now)
+    unit = timeframe[-1]
+    value = int(timeframe[:-1])
+
+    if unit == "m":
+        delta = timedelta(minutes=value)
+    elif unit == "h":
+        delta = timedelta(hours=value)
+    else:
+        raise ValueError(f"Unsupported timeframe unit: {unit!r}")
+
+    return last_tick - delta
+
+def is_last_tick_in_df(df: pd.DataFrame, timeframe: str, now: datetime = None) -> bool:
+    """
+    True if the current bar’s start timestamp is in df.index.
+    """
+    # normalize index to UTC
+    if df.index.tzinfo is None:
+        df = df.tz_localize('UTC')
+    else:
+        df = df.tz_convert('UTC')
+
+    last_tick = get_last_tick_datetime(timeframe, now)
+    return pd.Timestamp(last_tick) in df.index
+
+def is_released_tick_in_df(df: pd.DataFrame, timeframe: str, now: datetime = None) -> bool:
+    """
+    True if the *previous* bar’s start timestamp is in df.index.
+    """
+    # normalize index to UTC
+    if df.index.tzinfo is None:
+        df = df.tz_localize('UTC')
+    else:
+        df = df.tz_convert('UTC')
+
+    released_tick = get_released_tick_datetime(timeframe, now)
+    return pd.Timestamp(released_tick) in df.index
 
 class traces_cpt:
     def __init__(self):
