@@ -156,18 +156,40 @@ def _get_ohlcv_bitget(symbol, timeframe, limit):
     print("last_dt: ", last_dt)
     print("released_dt: ", released_dt)
     """
+    details = {
+        "success": False,
+        "source": "",
+        "message": ""
+    }
     released_dt = utils.get_released_tick_datetime(timeframe)
     df_ws_ohlv = ws_global.ws_candle.get_ohlcv(symbol, timeframe, limit)
-    if not df_ws_ohlv is None \
+    if isinstance(df_ws_ohlv, pd.DataFrame) \
             and len(df_ws_ohlv) >= limit \
             and utils.is_released_tick_in_df(df_ws_ohlv, timeframe):
         df_ws_ohlv = df_ws_ohlv.loc[:released_dt]
         ws_global.ws_traces_increment_success()
-        return df_ws_ohlv
+        details["success"] = True
+        details["source"] = "ws"
+        return df_ws_ohlv, details
+
+    # fill the info
+    if not isinstance(df_ws_ohlv, pd.DataFrame):
+        details["message"] += "-> df_ws_ohlv is not a dataframe\n"
+    else:
+        if df_ws_ohlv and len(df_ws_ohlv) > limit:
+            details["message"] += "-> len(df_ws_ohlv) > " + str(limit) + "\n"
+        if df_ws_ohlv and not utils.is_released_tick_in_df(df_ws_ohlv, timeframe):
+            details["message"] += "-> not utils.is_released_tick_in_df(df_ws_ohlv, "+timeframe+")\n"
+
     ws_global.ws_traces_increment_failure()
     df_api_ohlv = _get_ohlcv_bitget_v2(symbol, timeframe, limit)
     df_api_ohlv = df_api_ohlv.loc[:released_dt]
-    return df_api_ohlv
+    if isinstance(df_api_ohlv, pd.DataFrame):
+        details["success"] = True
+        details["source"] = "api"
+        return df_api_ohlv, details
+
+    return None, details
 
 def _get_ohlcv(exchange, symbol, start, end=None, timeframe="1h", limit=100):
     return _get_ohlcv_bitget(symbol, timeframe, limit)
@@ -331,18 +353,26 @@ def get_symbol_ticker(exchange_market, symbol):
 
 def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d", length=None, indicators={}, exchange=None):
 
+    details = {
+        "success": False,
+        "source": "",
+        "message": ""
+    }
+
     # hack : find a better way
     if exchange_name == "bitget":
         symbol = symbol + "/USDT"
 
     # manage some errors
     if exchange_name == "hitbtc" and length and length > 1000:
-        return "for hitbtc, length must be in [1, 1000]"
+        details["message"] = str(length) + " > 1000"
+        return "for hitbtc, length must be in [1, 1000]", details
 
     if exchange == None:
         exchange = _get_exchange(exchange_name)
         if exchange == None:
-            return "exchange not found"
+            details["message"] = "exchange not found"
+            return "exchange not found", details
         exchange.load_markets()
 
     # CEDE DEBUG:
@@ -353,8 +383,8 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d"
     # print(lst_symbol)
 
     if symbol not in exchange.symbols or exchange.has['fetchOHLCV'] == False:
-        print("symbol not found: ", symbol)
-        return "symbol not found"
+        details["message"] = "symbol " + symbol + " not found"
+        return "symbol not found", details
 
     start, end = utils.get_date_range(start, end, timeframe, length)
 
@@ -380,9 +410,9 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d"
         elif timeframe == "30m":
             start_with_period = start_with_period + datetime.timedelta(minutes=-30 * max_period)
 
-    ohlcv = _get_ohlcv(exchange, symbol, start_with_period, end, timeframe, length)
+    ohlcv, details = _get_ohlcv(exchange, symbol, start_with_period, end, timeframe, length)
     if not isinstance(ohlcv, pd.DataFrame):
-        return ohlcv
+        return ohlcv, details
 
     # remove dupicates
     ohlcv = ohlcv[~ohlcv.index.duplicated()]
@@ -395,9 +425,15 @@ def get_symbol_ohlcv(exchange_name, symbol, start=None, end=None, timeframe="1d"
         ohlcv = ohlcv.iloc[max_period-1:-1] # WARNING CEDE to get the second to last candle instead of the last
 
     # ohlcv.interpolate(inplace=True) # CEDE WORKAROUND TO BE DISCUSSED WITH CL
-    return ohlcv
+    return ohlcv, details
 
 def get_symbol_ohlcv_last(exchange_name, symbol, start=None, end=None, timeframe="1d", length=1, indicators={}, exchange=None, candle_stick="released"):
+
+    details = {
+        "success": False,
+        "source": "",
+        "message": ""
+    }
 
     # hack : find a better way
     if exchange_name == "bitget":
@@ -405,7 +441,8 @@ def get_symbol_ohlcv_last(exchange_name, symbol, start=None, end=None, timeframe
 
     # manage some errors
     if exchange_name == "hitbtc" and length and length > 1000:
-        return "for hitbtc, length must be in [1, 1000]"
+        details["message"] = str(length) + " > 1000"
+        return "for hitbtc, length must be in [1, 1000]", details
 
     '''if exchange == None:
         exchange = _get_exchange(exchange_name)
@@ -442,9 +479,9 @@ def get_symbol_ohlcv_last(exchange_name, symbol, start=None, end=None, timeframe
         elif timeframe == "30m":
             start_with_period = start_with_period + datetime.timedelta(minutes=-30 * max_period)
 
-    ohlcv = _get_ohlcv(exchange, symbol, start_with_period, end, timeframe, length)
+    ohlcv, details = _get_ohlcv(exchange, symbol, start_with_period, end, timeframe, length)
     if not isinstance(ohlcv, pd.DataFrame):
-        return ohlcv
+        return ohlcv, details
 
     # remove dupicates
     ohlcv = ohlcv[~ohlcv.index.duplicated()]
@@ -456,7 +493,7 @@ def get_symbol_ohlcv_last(exchange_name, symbol, start=None, end=None, timeframe
     ohlcv = ohlcv.iloc[[-1]]
     # CEDE DEBUG
     print("ohlcv: ", ohlcv.to_string())
-    return ohlcv
+    return ohlcv, details
 
 ###
 ### gainers
