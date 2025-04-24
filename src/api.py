@@ -300,25 +300,21 @@ def api_last(history_params):
         for future in concurrent.futures.as_completed(futures):
             real_symbol = futures[future]
             symbol = real_symbol.replace('/', '_')
-            df, details = future.result()
+            df = future.result()
             # Rollback red alert
             # if False and isinstance(df, pd.DataFrame):
             if isinstance(df, pd.DataFrame):
                 df.reset_index(inplace=True, drop=True)
                 result_for_response[symbol] = {
                     "status": "ok",
-                    "info": df.to_json(),
-                    "message": details["message"],
-                    "source": details["source"]
+                    "info": df.to_json()
                 }
             else:
                 # Rollback red alert
                 # df = "red alert"
                 result_for_response[symbol] = {
                     "status": "ko",
-                    "info": df,
-                    "message": details["message"],
-                    "source": details["source"]
+                    "info": df
                 }
               
     end = datetime.now()
