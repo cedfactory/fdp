@@ -193,7 +193,7 @@ def _get_ohlcv_bitget(symbol, timeframe, limit):
 
     df_api_ohlv = _get_ohlcv_bitget_v2(symbol, timeframe, limit)
     df_api_ohlv = df_api_ohlv.loc[:released_dt]
-    df_ws_ohlv["source"] = "API" + error_code
+    df_api_ohlv["source"] = "API" + error_code
     if isinstance(df_api_ohlv, pd.DataFrame):
         return df_api_ohlv
 
