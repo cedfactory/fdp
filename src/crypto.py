@@ -184,12 +184,17 @@ def _get_ohlcv_bitget(symbol, timeframe, limit):
     }
 
     error_code = next((code for code, failed in error_map.items() if failed), None)
-    ws_global.ws_traces_increment_failure(
-        is_not_none=checks["is_not_none"],
-        is_dataframe=checks["is_dataframe"],
-        limit=checks["limit"],
-        tick_in=checks["tick_in"],
-    )
+
+    if df_ws_ohlv is None:
+        ws_global.ws_traces_increment_failure(
+            is_not_none=True
+        )
+    else:
+        ws_global.ws_traces_increment_failure(
+            is_dataframe= not checks["is_dataframe"],
+            limit= not checks["limit"],
+            tick_in= not checks["tick_in"]
+        )
 
     df_api_ohlv = _get_ohlcv_bitget_v2(symbol, timeframe, limit)
     df_api_ohlv = df_api_ohlv.loc[:released_dt]

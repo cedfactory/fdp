@@ -380,10 +380,10 @@ class traces_cpt:
     def _update_percentage(self):
         total = self.success + self.failure
         self.percentage_of_failure = (self.failure / total * 100) if total > 0 else 0.0
-        self.percentage_of_failure_is_not_none = (self.failure_is_not_none / self.failure * 100) if total > 0 else 0.0
-        self.percentage_of_failure_is_dataframe = (self.failure_is_dataframe / self.failure * 100) if total > 0 else 0.0
-        self.percentage_of_failure_under_limit = (self.failure_under_limit / self.failure * 100) if total > 0 else 0.0
-        self.percentage_of_failure_no_tick_in = (self.failure_no_tick_in / self.failure * 100) if total > 0 else 0.0
+        self.percentage_of_failure_is_not_none = (self.failure_is_not_none / self.failure * 100) if self.failure > 0 else 0.0
+        self.percentage_of_failure_is_dataframe = (self.failure_is_dataframe / self.failure * 100) if self.failure > 0 else 0.0
+        self.percentage_of_failure_under_limit = (self.failure_under_limit / self.failure * 100) if self.failure > 0 else 0.0
+        self.percentage_of_failure_no_tick_in = (self.failure_no_tick_in / self.failure * 100) if self.failure > 0 else 0.0
 
 
     def _maybe_print(self):
