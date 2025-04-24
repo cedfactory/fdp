@@ -352,6 +352,7 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
 
             df[indicator + suffix] = df["close"]
             df["close" + suffix] = df["close"]
+            df["source" + suffix] = df["source"]
             df["zerolag_ma_buy_adj" + suffix] = zerolag_ma_obj.get_zerolag_ma_buy_adj()
             df["zerolag_ma_sell_adj" + suffix] = zerolag_ma_obj.get_zerolag_ma_sell_adj()
 
@@ -366,6 +367,7 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
             )
 
             df[indicator + suffix] = df["close"]
+            df["source" + suffix] = df["source"]
             df[parameters['output'][0] + suffix] = trend_indicator_obj.get_trend()
 
         elif indicator == "ichimoku":
