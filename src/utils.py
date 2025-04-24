@@ -363,13 +363,28 @@ class traces_cpt:
     def __init__(self):
         self.success = 0
         self.failure = 0
+        self.failure_is_not_none = 0
+        self.failure_is_dataframe = 0
+        self.failure_under_limit = 0
+        self.failure_no_tick_in = 0
         self.percentage_of_failure = 0.0
+        self.percentage_of_failure_is_not_none = 0.0
+        self.percentage_of_failure_is_dataframe = 0.0
+        self.percentage_of_failure_under_limit = 0.0
+        self.percentage_of_failure_no_tick_in = 0.0
         self.start_time = None  # Time of the first event
         self.last_print_time = None  # Time when stats were last printed
+
+
 
     def _update_percentage(self):
         total = self.success + self.failure
         self.percentage_of_failure = (self.failure / total * 100) if total > 0 else 0.0
+        self.percentage_of_failure_is_not_none = (self.failure_is_not_none / self.failure * 100) if total > 0 else 0.0
+        self.percentage_of_failure_is_dataframe = (self.failure_is_dataframe / self.failure * 100) if total > 0 else 0.0
+        self.percentage_of_failure_under_limit = (self.failure_under_limit / self.failure * 100) if total > 0 else 0.0
+        self.percentage_of_failure_no_tick_in = (self.failure_no_tick_in / self.failure * 100) if total > 0 else 0.0
+
 
     def _maybe_print(self):
         current_time = time.time()
@@ -391,10 +406,28 @@ class traces_cpt:
         self._update_percentage()
         self._maybe_print()
 
-    def increment_failure(self):
+    def increment_failure(self,
+                          is_not_none=False,
+                          is_dataframe=False,
+                          limit=False,
+                          tick_in=False):
         if self.start_time is None:
             self.start_time = time.time()
         self.failure += 1
+
+        # define a mapping of your boolean flags to the corresponding counter names
+        flag_to_counter = {
+            is_not_none: "failure_is_not_none",
+            is_dataframe: "failure_is_dataframe",
+            limit: "failure_under_limit",
+            tick_in: "failure_no_tick_in",
+        }
+
+        # iterate once, bumping only the ones whose flag is True
+        for flag, counter_name in flag_to_counter.items():
+            if flag:
+                setattr(self, counter_name, getattr(self, counter_name) + 1)
+
         self._update_percentage()
         self._maybe_print()
 
@@ -423,6 +456,10 @@ class traces_cpt:
     def get_status(self):
         return {
             "percentage_of_failure": self.percentage_of_failure,
+            "percentage_of_failure_is_not_none": self.percentage_of_failure_is_not_none,
+            "percentage_of_failure_is_dataframe": self.percentage_of_failure_is_dataframe,
+            "percentage_of_failure_under_limit": self.percentage_of_failure_under_limit,
+            "percentage_of_failure_no_tick_in": self.percentage_of_failure_no_tick_in,
             "success": self.success,
             "failure": self.failure
         }

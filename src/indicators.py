@@ -337,6 +337,9 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
                 df["close"], window=long_ma_length
             )
 
+        elif indicator == "source":
+            df[indicator + suffix] = df["source"]
+
         elif indicator == "zerolag_ma":
             zerolag_ma_obj = ci.ZeroLagMa(
                 close=df["close"],
