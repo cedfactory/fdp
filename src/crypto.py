@@ -6,10 +6,10 @@ from datetime import datetime, timedelta
 from datetime import datetime, timezone
 from datetime import date
 import datetime
-from . import utils
-from . import indicators as inc_indicators
+from src import utils
+from src import indicators as inc_indicators
 import concurrent.futures
-from . import ws_global
+from src import ws_global
 
 import requests
 
@@ -175,9 +175,8 @@ def _get_ohlcv_bitget(symbol, timeframe, limit):
         ws_global.ws_traces_increment_success()
 
         df_ws_ohlv["source"] = "WS"
-        df_ws_ohlv["released_dt"] = released_dt
-        df_ws_ohlv["index_ws"] = df_ws_ohlv.index[-1]
-
+        df_ws_ohlv["released_dt"] = released_dt.strftime("%Y-%m-%d %H:%M:%S")
+        df_ws_ohlv["index_ws"] = df_ws_ohlv.index[-1].strftime("%Y-%m-%d %H:%M:%S")
         return df_ws_ohlv
 
     error_map = {
@@ -204,11 +203,11 @@ def _get_ohlcv_bitget(symbol, timeframe, limit):
     df_api_ohlv = df_api_ohlv.loc[:released_dt]
 
     df_api_ohlv["source"] = "API" + error_code
-    df_api_ohlv["released_dt"] = released_dt
+    df_api_ohlv["released_dt"] = released_dt.strftime("%Y-%m-%d %H:%M:%S")
     if df_ws_ohlv is None:
         df_api_ohlv["index_ws"] = None
     else:
-        df_api_ohlv["index_ws"] = df_ws_ohlv.index[-1]
+        df_api_ohlv["index_ws"] = df_ws_ohlv.index[-1].strftime("%Y-%m-%d %H:%M:%S")
 
     if isinstance(df_api_ohlv, pd.DataFrame):
         return df_api_ohlv

@@ -5,12 +5,12 @@ from finta import TA
 import ta
 from collections import OrderedDict
 import numpy as np
-from . import indicators_vsa as vsa
-from . import indicators_flabeling as flabeling
-from . import indicators_supertrend as supertrend
-from . import indicators_tradingview as tv
-from . import utils
-from . import custom_indicators as ci
+from src import indicators_vsa as vsa
+from src import indicators_flabeling as flabeling
+from src import indicators_supertrend as supertrend
+from src import indicators_tradingview as tv
+from src import utils
+from src import custom_indicators as ci
 
 def get_window_size(indicator):
     trend_parsed = parse('trend_{}d', indicator)
@@ -372,7 +372,10 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
 
             df[indicator + suffix] = df["close"]
             df["source" + suffix] = df["source"]
-            df[parameters['output'][0] + suffix] = trend_indicator_obj.get_trend()
+            df["trend_signal" + suffix] = trend_indicator_obj.get_trend()
+            df["s_highest_window" + suffix] = trend_indicator_obj.get_s_highest_window()
+            df["s_lowest_window" + suffix] = trend_indicator_obj.get_s_lowest_window()
+            df["high_tf_close" + suffix] = trend_indicator_obj.get_high_tf_close()
 
         elif indicator == "ichimoku":
             ichimoku_obj = ci.Ichimoku(

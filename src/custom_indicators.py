@@ -668,22 +668,31 @@ class TrendIndicator():
 
         elif self.trend_type == 'PRICE_ACTION':
             # Compute highest and lowest window over 10 periods
-            s_highest_window = self.high.rolling(window=10).max()
-            s_lowest_window = self.low.rolling(window=10).min()
+            self.s_highest_window = self.high.rolling(window=10).max()
+            self.s_lowest_window = self.low.rolling(window=10).min()
 
             # Identify buy and sell signals
-            buy_signal = self.close > s_highest_window.shift(1)
-            sell_signal = self.close < s_lowest_window.shift(1)
+            self.buy_signal = self.close > self.s_highest_window.shift(1)
+            self.sell_signal = self.close < self.s_lowest_window.shift(1)
 
             # Create trend array based on price action
-            trend_array = np.zeros(len(buy_signal), dtype=int)
-            trend_array[buy_signal] = 1  # Uptrend when close breaks highest_window
-            trend_array[sell_signal] = -1  # Downtrend when close breaks lowest_window
+            trend_array = np.zeros(len(self.buy_signal), dtype=int)
+            trend_array[self.buy_signal] = 1  # Uptrend when close breaks highest_window
+            trend_array[self.sell_signal] = -1  # Downtrend when close breaks lowest_window
 
         self.trend_series = pd.Series(trend_array, index=self.close.index)
 
     def get_trend(self) -> pd.Series:
         return self.trend_series
+
+    def get_s_highest_window(self) -> pd.Series:
+        return self.s_highest_window
+
+    def get_s_lowest_window(self) -> pd.Series:
+        return self.s_lowest_window
+
+    def get_high_tf_close(self) -> pd.Series:
+        return self.close
 
     def kalman_filter_numpy(self, series, process_variance=1e-5, measurement_variance=1e-1):
         x = series.values  # Convert to a Numpy array
