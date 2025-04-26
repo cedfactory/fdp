@@ -89,8 +89,11 @@ class WSCandle:
                     df[cols] = df[cols].astype(float)
                     if not df.empty:
                         df = df.set_index(df['timestamp'])
-                        df.index = df.index.str.replace(r'0{3}$', '', regex=True)
-                        df.index = pd.to_datetime(df.index.astype(int), unit='s', utc=True, errors='coerce')
+                        df.index = pd.to_datetime(
+                            df['timestamp'].values.astype('int64'),
+                            unit='ms',
+                            utc=True
+                        )
                         self.candle_data.set_value(symbol,
                                                    self.reverse_timeframe_map.get(timeframe),
                                                    df)
