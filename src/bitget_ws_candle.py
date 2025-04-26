@@ -89,11 +89,13 @@ class WSCandle:
                     df[cols] = df[cols].astype(float)
                     if not df.empty:
                         df = df.set_index(df['timestamp'])
-                        df.index = pd.to_datetime(
-                            df['timestamp'].values.astype('int64'),
-                            unit='ms',
-                            utc=True
-                        )
+                        ms_array = pd.to_numeric(df['timestamp'], errors='raise') \
+                            .astype('int64') \
+                            .values \
+                            .astype('datetime64[ms]')
+
+                        # 2) Build a timezone-aware UTC index from that
+                        df.index = pd.DatetimeIndex(ms_array, tz='UTC')
                         self.candle_data.set_value(symbol,
                                                    self.reverse_timeframe_map.get(timeframe),
                                                    df)
