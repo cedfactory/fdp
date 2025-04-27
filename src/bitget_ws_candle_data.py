@@ -2,6 +2,8 @@ import pandas as pd
 #import datetime
 #from src import utils
 
+import threading
+
 class WSCandleData:
     def __init__(self, params):
         """
@@ -15,6 +17,7 @@ class WSCandleData:
         ]
         """
         self.state = {}
+        self._lock = threading.Lock()
 
         # Build the nested dictionary
         for item in params:
@@ -65,7 +68,8 @@ class WSCandleData:
             existing_df = existing_df.tail(1000)
 
         # 7) Save back into state
-        self.state[symbol_key][timeframe] = existing_df
+        with self._lock:
+            self.state[symbol_key][timeframe] = existing_df
 
     def get_value(self, symbol_key, timeframe):
         """
@@ -85,7 +89,8 @@ class WSCandleData:
         if not symbol_key.endswith("USDT"):
             symbol_key += "USDT"
 
-        if self.state[symbol_key].get(timeframe) is None:
-            # return pd.DataFrame(columns=["open", "high", "low", "close", "volume"])
-            return None
-        return self.state[symbol_key].get(timeframe).tail(length)
+        with self._lock:
+            if self.state[symbol_key].get(timeframe) is None:
+                # return pd.DataFrame(columns=["open", "high", "low", "close", "volume"])
+                return None
+            return self.state[symbol_key].get(timeframe).tail(length)

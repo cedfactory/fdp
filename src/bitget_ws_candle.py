@@ -1,6 +1,7 @@
 from src import bitget_ws_client
 import json
 import pandas as pd
+from collections import defaultdict
 from src import utils
 
 from src import bitget_ws_candle_data
@@ -11,7 +12,17 @@ class WSCandle:
         self.id = None
         self.status = "Off"
 
-        self.candle_data = bitget_ws_candle_data.WSCandleData(params)
+        groups = defaultdict(list)
+        for entry in params:
+            groups[entry['symbol']].append(entry)
+
+        lst_params = list(groups.values())
+
+        self.dct_candle_data = {}
+        for group in lst_params:
+            symbol = group[0]['symbol']
+            candle_data = bitget_ws_candle_data.WSCandleData(group)
+            self.dct_candle_data[symbol] = candle_data
 
         self.client = bitget_ws_client.BitgetWsClient(
             ws_url=bitget_ws_client.CONTRACT_WS_URL_PUBLIC,
@@ -96,9 +107,10 @@ class WSCandle:
 
                         # 2) Build a timezone-aware UTC index from that
                         df.index = pd.DatetimeIndex(ms_array, tz='UTC')
-                        self.candle_data.set_value(symbol,
-                                                   self.reverse_timeframe_map.get(timeframe),
-                                                   df)
+                        self.dct_candle_data[symbol.removesuffix("USDT")].set_value(symbol,
+                                                                                    self.reverse_timeframe_map.get(timeframe),
+                                                                                    df)
+
                 else:
                     exit(73492)
             else:
@@ -127,5 +139,5 @@ class WSCandle:
         return None
 
     def get_ohlcv(self, symbol_key, timeframe, length):
-        return self.candle_data.get_ohlcv(symbol_key.replace("/", ""), timeframe, length)
+        return self.dct_candle_data[symbol_key.split("/")[0]].get_ohlcv(symbol_key.replace("/", ""), timeframe, length)
 
