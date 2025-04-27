@@ -17,7 +17,7 @@ class WSCandleData:
         ]
         """
         self.state = {}
-        self._lock = threading.Lock()
+        # self._lock = threading.Lock()
 
         # Build the nested dictionary
         for item in params:
@@ -51,16 +51,16 @@ class WSCandleData:
 
         # 4) Bulk‐update existing rows
         for idx, row in to_update:
-            with self._lock:
-                existing_df.loc[idx] = row
+            # with self._lock:
+            existing_df.loc[idx] = row
             # print(f"+ {symbol_key} {timeframe} updated: {idx} at now (UTC): {datetime.datetime.now(datetime.timezone.utc)}")  # CEDE DEBUG
 
         # 5) Bulk‐append new rows (as a single concat)
         if to_append:
             append_df = pd.DataFrame(to_append, index=[r.name for r in to_append])
-            with self._lock:
-                existing_df = pd.concat([existing_df, append_df], axis=0)
-                existing_df.sort_index(inplace=True)
+            # with self._lock:
+            existing_df = pd.concat([existing_df, append_df], axis=0)
+            existing_df.sort_index(inplace=True)
             # for idx in append_df.index: # CEDE DEBUG
             #     print(f"- {symbol_key} {timeframe} added: {idx} at now (UTC): {datetime.datetime.now(datetime.timezone.utc)}") # CEDE DEBUG
 
@@ -70,8 +70,8 @@ class WSCandleData:
             existing_df = existing_df.tail(1000)
 
         # 7) Save back into state
-        with self._lock:
-            self.state[symbol_key][timeframe] = existing_df
+        # with self._lock:
+        self.state[symbol_key][timeframe] = existing_df
 
     def get_value(self, symbol_key, timeframe):
         """
