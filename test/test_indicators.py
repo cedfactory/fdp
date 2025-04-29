@@ -142,7 +142,11 @@ class TestIndicators:
                 assert(np.allclose(gen_array, ref_array))
 
     def test_labeling_close_unbalanced(self):
-        dict_params = {'labeling_debug':True, 'labeling_t_final':10, 'labeling_upper_multiplier':"2.", 'labeling_lower_multiplier':"2."}
+        dict_params = {
+            'labeling_debug': True,
+            'labeling_t_final': 10,
+            'labeling_upper_multiplier': "2.",
+            'labeling_lower_multiplier': "2."}
         ref_csvfile = "./test/references/findicators_data_labeling_reference.csv"
         ref_barriers_csvfile = "./test/references/findicators_data_labeling_barriers_reference.csv"
         self.labeling_common(dict_params, ref_csvfile, ref_barriers_csvfile)
