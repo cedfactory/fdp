@@ -137,8 +137,8 @@ class TestApi:
 
         # expectations
         assert(history_params.get("status") == "ok")
-        assert(history_params.get("str_start") == history_params.get("str_end"))
-        assert(history_params.get("str_start").endswith(":00"))
+        assert(history_params.get("str_start") == "")
+        assert(history_params.get("str_end") == "")
 
     def test_api_history_last_parse_parameters_1h(self):
         # action
@@ -146,8 +146,8 @@ class TestApi:
 
         # expectations
         assert(history_params.get("status") == "ok")
-        assert(history_params.get("str_start") == history_params.get("str_end"))
-        assert(history_params.get("str_start").endswith(":00:00"))
+        assert(history_params.get("str_start") == "")
+        assert(history_params.get("str_end") == "")
 
     def test_api_history_last_parse_parameters_1d(self):
         # action
@@ -155,13 +155,19 @@ class TestApi:
 
         # expectations
         assert(history_params.get("status") == "ok")
-        assert(history_params.get("str_start") == history_params.get("str_end"))
-        assert(len(history_params.get("str_start")) == 10)
-
+        assert(history_params.get("str_start") == "")
+        assert(history_params.get("str_end") == "")
 
     def test_api_history(self):
-        symbol = "BTC/EURS"
-        params_history = {"str_exchange":"hitbtc", "str_symbol":symbol, "str_start":"2021-12-05", "str_end": "2022-01-05", "str_interval":"1d"}
+        symbol = "BTC"
+        params_history = {
+            "str_exchange": "bitget",
+            "str_symbol": symbol,
+            "str_start": "2021-12-05",
+            "str_end": "2022-01-05",
+            "length": 32,
+            "str_interval": "1h"
+        }
         response = api.api_history(params_history)
         symbol = "BTC_EURS"
         assert("status" in response)

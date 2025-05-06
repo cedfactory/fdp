@@ -8,12 +8,14 @@ class TestFDPManager:
 
     def test_fdp_manager(self):
         # context
-        params = [
+        params = {
+            "fdp_sources": [
                 {"type": "url", "url": "localhost:5000"},
                 {"type": "ccxt", "exchange": "bitget"},
                 {"type": "ws", "exchange": "bitget", "symbols": "BTC", "timeframe": "1h"},
                 {"type": "api", "exchange": "bitget"}
             ]
+        }
 
         # action
         my_fdp_manager = fdp_manager.FDPManager(params)
@@ -23,12 +25,13 @@ class TestFDPManager:
 
     def test_fdp_manager_request(self):
         # context
-        params = [
+        params = { "fdp_sources": [
                 {"type": "ccxt", "id": "ccxt1", "exchange": "bitget"},
                 {"type": "url", "id": "url1", "url": "localhost:5000"},
                 {"type": "ws", "id": "ws1", "exchange": "bitget", "symbols": "BTC", "timeframe": "1h"},
                 {"type": "api", "id": "api1", "exchange": "bitget"}
             ]
+        }
         my_fdp_manager = fdp_manager.FDPManager(params)
 
         # action

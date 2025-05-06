@@ -41,20 +41,25 @@ def ws_traces_start():
 def ws_traces_increment_success():
     global ws_global_traces
 
-    with _cpt_lock:
-        ws_global_traces.increment_success()
+    if ws_global_traces:
+        with _cpt_lock:
+            ws_global_traces.increment_success()
 
 def ws_traces_increment_failure(is_not_none=False, is_dataframe=False, limit=False, tick_in=False):
     global ws_global_traces
 
-    with _cpt_lock:
-        ws_global_traces.increment_failure(is_not_none=is_not_none,
-                                           is_dataframe=is_dataframe,
-                                           limit=limit,
-                                           tick_in=tick_in)
+    if ws_global_traces:
+        with _cpt_lock:
+            ws_global_traces.increment_failure(is_not_none=is_not_none,
+                                               is_dataframe=is_dataframe,
+                                               limit=limit,
+                                               tick_in=tick_in)
 
 def ws_traces_get_status():
     global ws_global_traces
 
-    with _cpt_lock:
-        return ws_global_traces.get_status()
+    if ws_global_traces:
+        with _cpt_lock:
+            return ws_global_traces.get_status()
+
+    return None
