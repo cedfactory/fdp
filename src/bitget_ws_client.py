@@ -126,6 +126,7 @@ class BitgetWsClient:
 
         except Exception as ex:
             error(ex)
+            print("WebSocketApp", ex)
 
     def __login(self):
         timestamp = int(round(time.time()))

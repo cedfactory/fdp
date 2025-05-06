@@ -24,11 +24,15 @@ class WSCandle:
             candle_data = bitget_ws_candle_data.WSCandleData(group)
             self.dct_candle_data[symbol] = candle_data
 
-        self.client = bitget_ws_client.BitgetWsClient(
-            ws_url=bitget_ws_client.CONTRACT_WS_URL_PUBLIC,
-            verbose=True) \
-            .error_listener(bitget_ws_client.handel_error) \
-            .build()
+        try:
+            self.client = bitget_ws_client.BitgetWsClient(
+                ws_url=bitget_ws_client.CONTRACT_WS_URL_PUBLIC,
+                verbose=True) \
+                .error_listener(bitget_ws_client.handel_error) \
+                .build()
+        except Exception as e:
+            print("constructor: ", e)
+
 
         """
         timeframe_map = {
