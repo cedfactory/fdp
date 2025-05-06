@@ -160,9 +160,9 @@ def _get_ohlcv_bitget(symbol, timeframe, limit):
     if not(ws_global is None):
         print("ws_global: ", ws_global)
     else:
-        print("df_ws_ohlv: None")
+        print("ws_global: None")
     df_ws_ohlv = ws_global.ws_candle.get_ohlcv(symbol, timeframe, limit)
-    if not(ws_global is None):
+    if not(df_ws_ohlv is None):
         print("df_ws_ohlv: ", df_ws_ohlv.tail(5).to_string())
     else:
         print("df_ws_ohlv: None")
