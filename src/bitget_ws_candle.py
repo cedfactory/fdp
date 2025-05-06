@@ -139,5 +139,8 @@ class WSCandle:
         return None
 
     def get_ohlcv(self, symbol_key, timeframe, length):
+        print("self.dct_candle_data: ", self.dct_candle_data)
+        print("symbol_key.split()[0]: ", symbol_key.split("/")[0])
+        print("self.dct_candle_data[symbol_key.split()[0]]: ", self.dct_candle_data[symbol_key.split("/")[0]])
         return self.dct_candle_data[symbol_key.split("/")[0]].get_ohlcv(symbol_key.replace("/", ""), timeframe, length)
 

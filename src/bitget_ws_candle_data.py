@@ -91,8 +91,11 @@ class WSCandleData:
         if not symbol_key.endswith("USDT"):
             symbol_key += "USDT"
 
+        print("self.state[symbol_key].get(timeframe): ", self.state[symbol_key].get(timeframe))
         # with self._lock:
         if self.state[symbol_key].get(timeframe) is None:
             # return pd.DataFrame(columns=["open", "high", "low", "close", "volume"])
+            print("retrun None #1")
             return None
+        print('self.state[symbol_key].get(timeframe).tail(length): ', self.state[symbol_key].get(timeframe).tail(5))
         return self.state[symbol_key].get(timeframe).tail(length)
