@@ -98,6 +98,7 @@ class WSCandle:
                     df = df.rename(columns={0: 'timestamp', 1: 'open', 2: 'high', 3: 'low', 4: 'close', 5: 'volume'})
                     cols = ["open", "high", "low", "close", "volume"]
                     df[cols] = df[cols].astype(float)
+                    print("on message")
                     if not df.empty:
                         df = df.set_index(df['timestamp'])
                         ms_array = pd.to_numeric(df['timestamp'], errors='raise') \

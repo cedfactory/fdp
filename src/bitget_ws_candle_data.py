@@ -27,6 +27,9 @@ class WSCandleData:
             self.state[symbol_key][item["timeframe"]] = None
 
     def set_value(self, symbol_key, timeframe, df):
+
+        print("set_value", symbol_key, timeframe)
+
         # 1) Normalize symbol_key and init state
         if not symbol_key.endswith("USDT"):
             symbol_key += "USDT"
@@ -95,7 +98,7 @@ class WSCandleData:
         # with self._lock:
         if self.state[symbol_key].get(timeframe) is None:
             # return pd.DataFrame(columns=["open", "high", "low", "close", "volume"])
-            print("retrun None #1")
+            print("retrun None #1", self.state)
             return None
         print('self.state[symbol_key].get(timeframe).tail(length): ', self.state[symbol_key].get(timeframe).tail(5))
         return self.state[symbol_key].get(timeframe).tail(length)
