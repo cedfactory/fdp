@@ -157,15 +157,7 @@ def _get_ohlcv_bitget(symbol, timeframe, limit):
     print("released_dt: ", released_dt)
     """
     released_dt = utils.get_released_tick_datetime(timeframe)
-    if not(ws_global is None):
-        print("ws_global: ", ws_global)
-    else:
-        print("ws_global: None")
     df_ws_ohlv = ws_global.ws_candle.get_ohlcv(symbol, timeframe, limit)
-    if not(df_ws_ohlv is None):
-        print("df_ws_ohlv: ", df_ws_ohlv.tail(5).to_string())
-    else:
-        print("df_ws_ohlv: None")
 
     checks = {
         "is_not_none": df_ws_ohlv is not None,
@@ -195,6 +187,10 @@ def _get_ohlcv_bitget(symbol, timeframe, limit):
     }
 
     error_code = next((code for code, failed in error_map.items() if failed), None)
+
+    if not(df_ws_ohlv is None):
+        print("df_ws_ohlv err code  ", error_code)
+        print(df_ws_ohlv.tail(5).to_string())
 
     if df_ws_ohlv is None:
         ws_global.ws_traces_increment_failure(
