@@ -213,6 +213,9 @@ def _get_ohlcv_bitget(symbol, timeframe, limit):
     else:
         df_api_ohlv["index_ws"] = df_ws_ohlv.index[-1].strftime("%Y-%m-%d %H:%M:%S")
 
+    if error_code == "_NO_TICK" or error_code == "_LIMIT":
+        ws_global.ws_candle.update_ohlcv_from_api(symbol, timeframe, df_api_ohlv)
+
     if isinstance(df_api_ohlv, pd.DataFrame):
         return df_api_ohlv
 

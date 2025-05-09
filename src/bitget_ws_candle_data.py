@@ -17,7 +17,7 @@ class WSCandleData:
         ]
         """
         self.state = {}
-        # self._lock = threading.Lock()
+        self._lock = threading.Lock()
 
         # Build the nested dictionary
         for item in params:
@@ -95,7 +95,21 @@ class WSCandleData:
         # with self._lock:
         if self.state[symbol_key].get(timeframe) is None:
             # return pd.DataFrame(columns=["open", "high", "low", "close", "volume"])
-            print("retrun None #1", self.state)
             return None
-        print('self.state[symbol_key].get(timeframe).tail(length): ', self.state[symbol_key].get(timeframe).tail(5))
+        # print('self.state[symbol_key].get(timeframe).tail(length): ', self.state[symbol_key].get(timeframe).tail(5))
         return self.state[symbol_key].get(timeframe).tail(length)
+
+    def update_ohlcv_from_api(self, symbol_key, timeframe, df_api_ohlv):
+        if (self.state[symbol_key].get(timeframe)) is None or (df_api_ohlv is None):
+            return
+
+        with self._lock:
+            df_existing = self.state[symbol_key].get(timeframe)
+            df_api_ohlv = df_api_ohlv[df_existing.columns]
+            missing_indices = df_api_ohlv.index.difference(df_existing.index)
+            df_missing = df_api_ohlv.loc[missing_indices]
+            df_combined = pd.concat([df_existing, df_missing])
+            df_combined = df_combined.sort_index()
+            self.state[symbol_key][timeframe] = df_combined
+
+
