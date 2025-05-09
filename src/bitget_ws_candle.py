@@ -6,6 +6,8 @@ from src import utils
 
 from src import bitget_ws_candle_data
 
+import time
+
 class WSCandle:
 
     def __init__(self, params=None):
@@ -87,39 +89,44 @@ class WSCandle:
         def on_message(message):
             json_obj = json.loads(message)
             action = str(json_obj.get('action')).replace("\'", "\"")
-            if action == "snapshot" or action == 'update':
-                arg = json_obj.get('arg')
-                if arg['instType'] == 'USDT-FUTURES' \
-                        and arg['channel'].startswith("candle"):
-                    symbol = arg['instId']
-                    timeframe = arg['channel'].replace("candle", "", 1)
-                    candle_data = json_obj.get("data", [])
-                    # Assuming each candle is in the format:
-                    # [timestamp, open, high, low, close, volume]
-                    df = pd.DataFrame(candle_data,
-                                      columns=["timestamp", "open", "high", "low", "close", "volume", "volume_2", "volume_3"])
-                    df = df.drop(columns=['volume_2', 'volume_3'])
-                    df = df.rename(columns={0: 'timestamp', 1: 'open', 2: 'high', 3: 'low', 4: 'close', 5: 'volume'})
-                    cols = ["open", "high", "low", "close", "volume"]
-                    df[cols] = df[cols].astype(float)
-                    print("on message")
-                    if not df.empty:
-                        df = df.set_index(df['timestamp'])
-                        ms_array = pd.to_numeric(df['timestamp'], errors='raise') \
-                            .astype('int64') \
-                            .values \
-                            .astype('datetime64[ms]')
 
-                        # 2) Build a timezone-aware UTC index from that
-                        df.index = pd.DatetimeIndex(ms_array, tz='UTC')
-                        self.dct_candle_data[symbol.removesuffix("USDT")].set_value(symbol,
-                                                                                    self.reverse_timeframe_map.get(timeframe),
-                                                                                    df)
+            timestamp_ms = json_obj["ts"]
+            timestamp_sec = timestamp_ms / 1000
+            current_time_sec = time.time()
+            time_difference = current_time_sec - timestamp_sec
+            if time_difference < 5:
+                if action == "snapshot" or action == 'update':
+                    arg = json_obj.get('arg')
+                    if arg['instType'] == 'USDT-FUTURES' \
+                            and arg['channel'].startswith("candle"):
+                        symbol = arg['instId']
+                        timeframe = arg['channel'].replace("candle", "", 1)
+                        candle_data = json_obj.get("data", [])
+                        # Assuming each candle is in the format:
+                        # [timestamp, open, high, low, close, volume]
+                        df = pd.DataFrame(candle_data,
+                                          columns=["timestamp", "open", "high", "low", "close", "volume", "volume_2", "volume_3"])
+                        df = df.drop(columns=['volume_2', 'volume_3'])
+                        df = df.rename(columns={0: 'timestamp', 1: 'open', 2: 'high', 3: 'low', 4: 'close', 5: 'volume'})
+                        cols = ["open", "high", "low", "close", "volume"]
+                        df[cols] = df[cols].astype(float)
+                        if not df.empty:
+                            df = df.set_index(df['timestamp'])
+                            ms_array = pd.to_numeric(df['timestamp'], errors='raise') \
+                                .astype('int64') \
+                                .values \
+                                .astype('datetime64[ms]')
 
+                            # 2) Build a timezone-aware UTC index from that
+                            df.index = pd.DatetimeIndex(ms_array, tz='UTC')
+                            self.dct_candle_data[symbol.removesuffix("USDT")].set_value(symbol,
+                                                                                        self.reverse_timeframe_map.get(timeframe),
+                                                                                        df)
+
+                    else:
+                        exit(73492)
                 else:
-                    exit(73492)
-            else:
-                exit(7392)
+                    exit(7392)
 
 
         self.client.subscribe(channels, on_message)

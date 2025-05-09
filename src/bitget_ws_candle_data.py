@@ -27,10 +27,7 @@ class WSCandleData:
             self.state[symbol_key][item["timeframe"]] = None
 
     def set_value(self, symbol_key, timeframe, df):
-
-        print("set_value", symbol_key, timeframe)
-
-        # 1) Normalize symbol_key and init state
+        # print("set_value", symbol_key, timeframe)
         if not symbol_key.endswith("USDT"):
             symbol_key += "USDT"
         self.state.setdefault(symbol_key, {})
