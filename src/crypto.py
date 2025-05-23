@@ -140,11 +140,13 @@ def _get_ohlcv_bitget_v2(symbol, timeframe="1h", limit=100):
             print("Error fetching futures OHLCV data:", e)
             return None
 
+"""
 def _get_ohlcv_bitget(symbol, timeframe, limit, version="V2"):
     if version == "V2":
         return _get_ohlcv_bitget_v2(symbol, timeframe, limit)
     else:
         return _get_ohlcv_bitget_v1(symbol, timeframe, limit)
+"""
 
 def _get_ohlcv_bitget(symbol, timeframe, limit):
     """

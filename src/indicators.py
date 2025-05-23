@@ -342,7 +342,7 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
 
         elif indicator == "zerolag_ma":
             zerolag_ma_obj = ci.ZeroLagMa(
-                close=df["close"],
+                close=df["close"].copy(),
                 ma_type=parameters["ma_type"],
                 high_offset=parameters["high_offset"],
                 low_offset=parameters["low_offset"],
@@ -359,6 +359,7 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
 
             df["zerolag_ma_buy_adj" + suffix] = zerolag_ma_obj.get_zerolag_ma_buy_adj()
             df["zerolag_ma_sell_adj" + suffix] = zerolag_ma_obj.get_zerolag_ma_sell_adj()
+            del zerolag_ma_obj
 
         elif indicator == "trend_indicator":
             trend_indicator_obj = ci.TrendIndicator(
