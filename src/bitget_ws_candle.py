@@ -23,7 +23,8 @@ class WSCandle:
         self.dct_candle_data = {}
         for group in lst_params:
             symbol = group[0]['symbol']
-            candle_data = bitget_ws_candle_data.WSCandleData(group)
+            # candle_data = bitget_ws_candle_data.WSCandleData(group)
+            candle_data = bitget_ws_candle_data.WSRedisCandleData(group)
             self.dct_candle_data[symbol] = candle_data
 
         try:
