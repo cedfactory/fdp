@@ -105,6 +105,8 @@ def get_last():
             }
     else:
         response = api.api_last(history_params)
+
+    response["ip_address"] = request.remote_addr
     response = jsonify(response)
     response = add_headers(response)
     
