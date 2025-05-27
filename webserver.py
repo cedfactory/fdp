@@ -59,6 +59,8 @@ def get_symbol():
 
 @app.route('/history', methods=['OPTIONS', 'GET', 'POST'])
 def get_history():
+    print("Request history from ", request.remote_addr)
+
     history_params = api.api_history_parse_parameters(request)
     if history_params.get("status") == "ko":
         response = {
@@ -68,7 +70,6 @@ def get_history():
     else:
         response = api.api_history(history_params)
 
-    response["ip_address"] = request.remote_addr
     response = jsonify(response)
     response = add_headers(response)
     
@@ -97,6 +98,8 @@ def get_ws_status():
 
 @app.route('/last', methods=['OPTIONS', 'GET', 'POST'])
 def get_last():
+    print("Request history from ", request.remote_addr)
+
     history_params = api.api_history_parse_parameters(request, True)
     if history_params.get("status") == "ko":
         response = {
@@ -106,7 +109,6 @@ def get_last():
     else:
         response = api.api_last(history_params)
 
-    response["ip_address"] = request.remote_addr
     response = jsonify(response)
     response = add_headers(response)
     
