@@ -62,11 +62,13 @@ def get_history():
     history_params = api.api_history_parse_parameters(request)
     if history_params.get("status") == "ko":
         response = {
-            "result":history_params.get("reason"),
-            "status":"ok"
+            "result": history_params.get("reason"),
+            "status": "ok"
             }
     else:
         response = api.api_history(history_params)
+
+    response["ip_address"] = request.remote_addr
     response = jsonify(response)
     response = add_headers(response)
     
