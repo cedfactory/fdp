@@ -721,11 +721,33 @@ class TrendIndicator():
 
 
 
+class ATR():
+    def __init__(
+            self,
+            df
+    ):
+        self.df = df
+        self._run()
+
+    def _run(self):
+        self.df['ATR'] = self.df.ta.atr(length=14)
+
+        # If you want a different period, just change `length`:
+        self.df['ATR_21'] = self.df.ta.atr(length=21)
+
+        # And if you’d like to inspect other ATR variants:
+        #   ma=True uses a simple MA instead of Wilder smoothing
+        self.df['ATR_SMA'] = self.df.ta.atr(length=14, mamode='sma')
 
 
+    def get_atr_14(self) -> pd.Series:
+        return self.df.ATR
 
+    def get_atr_21(self) -> pd.Series:
+        return self.df.ATR_21
 
-
+    def get_atr_sma(self) -> pd.Series:
+        return self.df.ATR_SMA
 
 
 

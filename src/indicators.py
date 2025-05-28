@@ -467,12 +467,18 @@ def compute_indicators(df, indicators, keep_only_requested_indicators = False, p
             df["stoch_rsi_d_trend" + suffix] = utils.discret_coef(coef)
 
         elif indicator == 'atr':
-            atr_window = 14
-            if "window_size" in parameters:
-                atr_window = parameters["window_size"]
-                if isinstance(atr_window, str):
-                    atr_window = int(atr_window)
-            df['atr' + suffix] = ta.volatility.AverageTrueRange(high=df["high"], low=df["low"], close=df["close"], window=atr_window).average_true_range()
+
+            atr_obj = ci.ATR(
+                df=df
+            )
+            df["close" + suffix] = df["close"]
+
+            df["released_dt" + suffix] = df["released_dt"]
+            df["index_ws" + suffix] = df["index_ws"]
+
+            df["atr" + suffix] = atr_obj.get_atr_14()
+            df["atr_21" + suffix] = atr_obj.get_atr_21()
+            df["atr_sma" + suffix] = atr_obj.get_atr_sma()
 
         elif indicator == 'ao':
             ao_window_1 = 6
